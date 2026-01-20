@@ -47,32 +47,9 @@ jobs:
         cp feed.xml docs/
         cp preview.html docs/index.html
 
-        # Create a simple redirect page
-        cat > docs/feed.xml.html << 'EOF'
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta http-equiv="refresh" content="0; url=feed.xml">
-          <title>RSS Feed</title>
-        </head>
-        <body>
-          <p>Redirecting to <a href="feed.xml">RSS feed</a>...</p>
-        </body>
-        </html>
-        EOF
-
-    - name: Commit updated database and feeds
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add jobs.db feed.xml preview.html docs/
-        git diff --quiet && git diff --staged --quiet || git commit -m "Update job postings - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+        # Add timestamp to the HTML
+        echo "<p><small>Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')</small></p>" >> docs/index.html
+        echo "</body></html>" >> docs/index.html
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
