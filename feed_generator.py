@@ -89,25 +89,35 @@ class RSSFeedGenerator:
         """Build HTML description for feed entry"""
         parts = []
 
-        if job.get('description'):
-            # Escape HTML entities
-            desc = job['description'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-            parts.append(f"<p>{desc}</p>")
-
+        # Add metadata box at the top
+        metadata = []
         if job.get('location'):
-            parts.append(f"<p><strong>Location:</strong> {job['location']}</p>")
-
+            metadata.append(f"📍 <strong>{job['location']}</strong>")
         if job.get('site_name'):
-            parts.append(f"<p><strong>Source:</strong> {job['site_name']}</p>")
-
-        if job.get('keywords'):
-            parts.append(f"<p><strong>Keywords:</strong> {job['keywords']}</p>")
-
+            metadata.append(f"🏢 {job['site_name']}")
         if job.get('posted_date'):
-            parts.append(f"<p><strong>Posted:</strong> {job['posted_date']}</p>")
+            metadata.append(f"📅 {job['posted_date']}")
 
+        if metadata:
+            parts.append(f"<div style='background: #f0f0f0; padding: 10px; margin-bottom: 15px; border-radius: 5px;'>{' | '.join(metadata)}</div>")
+
+        # Add full description
+        if job.get('description'):
+            # Escape HTML entities and preserve line breaks
+            desc = job['description'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            # Make description more readable with paragraphs
+            desc = desc.replace('\n', '<br>')
+            parts.append(f"<div style='margin: 15px 0;'>{desc}</div>")
+
+        # Add keywords if present
+        if job.get('keywords'):
+            keywords_list = [f"<span style='background: #e3f2fd; padding: 2px 8px; border-radius: 3px; margin-right: 5px;'>{kw.strip()}</span>"
+                           for kw in job['keywords'].split(',')]
+            parts.append(f"<div style='margin: 15px 0;'><strong>🔍 Keywords:</strong> {''.join(keywords_list)}</div>")
+
+        # Add link to full posting
         if job.get('url'):
-            parts.append(f"<p><a href=\"{job['url']}\">View Job Posting</a></p>")
+            parts.append(f"<div style='margin-top: 20px;'><a href=\"{job['url']}\" style='background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>→ View Full Job Posting</a></div>")
 
         return '\n'.join(parts) if parts else "No description available"
 

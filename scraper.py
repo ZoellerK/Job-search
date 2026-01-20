@@ -100,7 +100,7 @@ class JobScraper:
         # Get description (if available)
         desc_elem = element.find('p') or element.find('div', class_=re.compile('desc', re.I))
         if desc_elem:
-            job['description'] = desc_elem.get_text(strip=True)[:500]  # Limit length
+            job['description'] = desc_elem.get_text(strip=True)[:2000]  # Increased limit for more detail
 
         return job
 
