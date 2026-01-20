@@ -1,0 +1,21 @@
+{
+  "feed": {
+    "title": "Job Postings Aggregator",
+    "description": "Aggregated job postings from multiple sources",
+    "author": "Job Search Tool",
+    "link": "http://localhost:8000/feed.xml",
+    "language": "en"
+  },
+  "database": {
+    "path": "jobs.db"
+  },
+  "output": {
+    "feed_file": "feed.xml",
+    "max_items": 100
+  },
+  "scraping": {
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "timeout": 30,
+    "retry_attempts": 3
+  }
+}
