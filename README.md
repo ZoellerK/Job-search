@@ -12,8 +12,34 @@ A Python tool that scrapes job postings from multiple websites and generates an 
 - **Duplicate detection**: Tracks jobs you've already seen
 - **Keyword filtering**: Filter jobs by keywords per site
 - **Daily scheduling**: Optionally run on a schedule
+- **GitHub Actions automation**: Run automatically in the cloud (no computer needed!)
 
-## Installation
+## Two Ways to Use This
+
+### Option 1: Automated Cloud (Recommended for Phone Users)
+
+**Best if you want to manage everything from your phone.**
+
+- Runs automatically in GitHub's cloud (free)
+- Edit sites from GitHub mobile app or web browser
+- RSS feed published at a public URL
+- No computer needed, ever
+
+**[📱 See PHONE_SETUP.md for complete instructions](PHONE_SETUP.md)**
+
+### Option 2: Local Computer
+
+**Best if you have a computer and want more control.**
+
+- Run the Python script on your computer
+- More flexibility and customization
+- Can run offline
+
+**Continue reading below for local installation.**
+
+---
+
+## Installation (Local Computer)
 
 1. Clone or download this repository
 

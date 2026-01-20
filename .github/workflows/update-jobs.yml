@@ -1,0 +1,87 @@
+name: Update Job Postings
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC (adjust to your timezone)
+    - cron: '0 9 * * *'
+
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'sites.csv'  # Run when sites.csv is updated
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  update-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run job aggregator
+      run: |
+        python job_aggregator.py update
+
+    - name: Create docs directory for GitHub Pages
+      run: |
+        mkdir -p docs
+        cp feed.xml docs/
+        cp preview.html docs/index.html
+
+        # Create a simple redirect page
+        cat > docs/feed.xml.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta http-equiv="refresh" content="0; url=feed.xml">
+          <title>RSS Feed</title>
+        </head>
+        <body>
+          <p>Redirecting to <a href="feed.xml">RSS feed</a>...</p>
+        </body>
+        </html>
+        EOF
+
+    - name: Commit updated database and feeds
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add jobs.db feed.xml preview.html docs/
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update job postings - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: 'docs'
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2

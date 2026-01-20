@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Job Postings Aggregator</title>
+    <link>https://github.com/ZoellerK/Job-search</link>
+    <description>Aggregated job postings from multiple sources</description>
+    <language>en</language>
+    <lastBuildDate>Mon, 20 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Welcome - Setup Required</title>
+      <link>https://github.com/ZoellerK/Job-search/blob/main/PHONE_SETUP.md</link>
+      <guid>https://github.com/ZoellerK/Job-search/blob/main/PHONE_SETUP.md</guid>
+      <description>
+        <![CDATA[
+        <p><strong>This feed will populate once you run the GitHub Action.</strong></p>
+        <p>Steps:</p>
+        <ol>
+          <li>Go to Actions tab in your repository</li>
+          <li>Enable workflows if prompted</li>
+          <li>Run "Update Job Postings" workflow</li>
+          <li>Wait 2-3 minutes</li>
+          <li>Refresh your RSS reader</li>
+        </ol>
+        <p>See <a href="https://github.com/ZoellerK/Job-search/blob/main/PHONE_SETUP.md">PHONE_SETUP.md</a> for details.</p>
+        ]]>
+      </description>
+      <pubDate>Mon, 20 Jan 2026 00:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

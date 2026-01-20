@@ -2,9 +2,10 @@
 *.db
 jobs.db
 
-# Generated files
-feed.xml
-preview.html
+# Generated files (but allow docs/ folder for GitHub Pages)
+/feed.xml
+/preview.html
+/jobs.db
 
 # Python
 __pycache__/
