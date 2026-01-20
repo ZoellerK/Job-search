@@ -188,10 +188,41 @@ class JobDatabase:
         cursor.execute("SELECT COUNT(DISTINCT site_name) FROM jobs")
         total_sites = cursor.fetchone()[0]
 
+        cursor.execute("""
+            SELECT COUNT(*) FROM jobs
+            WHERE date(discovered_date) >= date('now', '-7 days')
+        """)
+        week_jobs = cursor.fetchone()[0]
+
         conn.close()
 
         return {
             'total_jobs': total_jobs,
             'jobs_today': today_jobs,
+            'jobs_this_week': week_jobs,
             'total_sites': total_sites
         }
+
+    def cleanup_old_jobs(self, days_to_keep: int = 90) -> int:
+        """
+        Delete jobs older than specified days
+
+        Args:
+            days_to_keep: Number of days to keep jobs (default: 90)
+
+        Returns:
+            Number of jobs deleted
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            DELETE FROM jobs
+            WHERE date(discovered_date) < date('now', '-' || ? || ' days')
+        """, (days_to_keep,))
+
+        deleted_count = cursor.rowcount
+        conn.commit()
+        conn.close()
+
+        return deleted_count

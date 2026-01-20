@@ -49,7 +49,7 @@ class JobAggregator:
             return []
         return sites
 
-    def scrape_site(self, site: Dict) -> int:
+    def scrape_site(self, site: Dict) -> Dict:
         """
         Scrape a single site and add new jobs to database
 
@@ -57,7 +57,12 @@ class JobAggregator:
             site: Dictionary with site_name, url, keywords
 
         Returns:
-            Number of new jobs found
+            Dictionary with scraping results: {
+                'site_name': str,
+                'success': bool,
+                'new_jobs': int,
+                'error': str or None
+            }
         """
         site_name = site['site_name']
         url = site['url']
@@ -66,74 +71,114 @@ class JobAggregator:
         print(f"\n🔍 Scraping {site_name}...")
         print(f"   URL: {url}")
 
-        # Check if we have a saved parser config for this site
-        parser_config = self.db.get_parser_config(site_name)
+        try:
+            # Check if we have a saved parser config for this site
+            parser_config = self.db.get_parser_config(site_name)
 
-        if parser_config:
-            print(f"   Using saved parser configuration")
-            jobs = self.scraper.scrape_with_config(url, parser_config)
-        else:
-            print(f"   Using auto-detection")
-            jobs = self.scraper.auto_detect_jobs(url)
+            if parser_config:
+                print(f"   Using saved parser configuration")
+                jobs = self.scraper.scrape_with_config(url, parser_config)
+            else:
+                print(f"   Using auto-detection")
+                jobs = self.scraper.auto_detect_jobs(url)
 
-        print(f"   Found {len(jobs)} potential job listings")
+            print(f"   Found {len(jobs)} potential job listings")
 
-        # Add new jobs to database
-        new_jobs_count = 0
-        for job in jobs:
-            # Filter by keywords if specified
-            if keywords:
-                job_text = f"{job.get('title', '')} {job.get('description', '')}".lower()
-                if not any(kw.strip().lower() in job_text for kw in keywords.split(',')):
-                    continue
+            # Add new jobs to database
+            new_jobs_count = 0
+            for job in jobs:
+                # Filter by keywords if specified
+                if keywords:
+                    job_text = f"{job.get('title', '')} {job.get('description', '')}".lower()
+                    if not any(kw.strip().lower() in job_text for kw in keywords.split(',')):
+                        continue
 
-            # Add to database
-            added = self.db.add_job(
-                site_name=site_name,
-                url=job.get('url', url),
-                title=job.get('title', 'Unknown Position'),
-                description=job.get('description'),
-                location=job.get('location'),
-                posted_date=job.get('posted_date'),
-                keywords=keywords
-            )
+                # Add to database
+                added = self.db.add_job(
+                    site_name=site_name,
+                    url=job.get('url', url),
+                    title=job.get('title', 'Unknown Position'),
+                    description=job.get('description'),
+                    location=job.get('location'),
+                    posted_date=job.get('posted_date'),
+                    keywords=keywords
+                )
 
-            if added:
-                new_jobs_count += 1
-                print(f"   ✓ New job: {job.get('title', 'Unknown')}")
+                if added:
+                    new_jobs_count += 1
+                    print(f"   ✓ New job: {job.get('title', 'Unknown')}")
 
-        print(f"   Added {new_jobs_count} new jobs to database")
-        return new_jobs_count
+            print(f"   Added {new_jobs_count} new jobs to database")
+            return {
+                'site_name': site_name,
+                'success': True,
+                'new_jobs': new_jobs_count,
+                'error': None
+            }
 
-    def scrape_all(self) -> int:
+        except Exception as e:
+            error_msg = str(e)
+            print(f"   ✗ Error: {error_msg}")
+            return {
+                'site_name': site_name,
+                'success': False,
+                'new_jobs': 0,
+                'error': error_msg
+            }
+
+    def scrape_all(self) -> Dict:
         """
         Scrape all active sites
 
         Returns:
-            Total number of new jobs found
+            Dictionary with results: {
+                'total_new_jobs': int,
+                'successful_sites': int,
+                'failed_sites': int,
+                'site_results': List[Dict]
+            }
         """
         sites = self.load_sites()
         if not sites:
             print("No active sites found in sites.csv")
-            return 0
+            return {
+                'total_new_jobs': 0,
+                'successful_sites': 0,
+                'failed_sites': 0,
+                'site_results': []
+            }
 
         print(f"\n{'='*60}")
         print(f"Starting job aggregation for {len(sites)} sites")
         print(f"{'='*60}")
 
+        site_results = []
         total_new_jobs = 0
+        successful_sites = 0
+        failed_sites = 0
+
         for site in sites:
-            try:
-                new_jobs = self.scrape_site(site)
-                total_new_jobs += new_jobs
-            except Exception as e:
-                print(f"   ✗ Error scraping {site['site_name']}: {e}")
+            result = self.scrape_site(site)
+            site_results.append(result)
+            total_new_jobs += result['new_jobs']
+            if result['success']:
+                successful_sites += 1
+            else:
+                failed_sites += 1
 
         print(f"\n{'='*60}")
         print(f"Scraping complete! Total new jobs: {total_new_jobs}")
+        print(f"Successful: {successful_sites}/{len(sites)} sites")
+        if failed_sites > 0:
+            print(f"Failed: {failed_sites} sites")
         print(f"{'='*60}\n")
 
-        return total_new_jobs
+        return {
+            'total_new_jobs': total_new_jobs,
+            'successful_sites': successful_sites,
+            'failed_sites': failed_sites,
+            'site_results': site_results
+        }
 
     def generate_feed(self, max_items: int = None) -> str:
         """
@@ -182,14 +227,22 @@ class JobAggregator:
         print(f"{'='*40}\n")
 
     def run_full_update(self):
-        """Run complete update cycle: scrape, generate feed, show stats"""
+        """Run complete update cycle: scrape, cleanup, generate feed, show stats"""
         print("\n🚀 Starting full update cycle...")
 
-        # Scrape all sites
-        new_jobs = self.scrape_all()
+        # Clean up old jobs (keep last 90 days)
+        print("\n🧹 Cleaning up old jobs...")
+        deleted = self.db.cleanup_old_jobs(days_to_keep=90)
+        if deleted > 0:
+            print(f"   Deleted {deleted} jobs older than 90 days")
+        else:
+            print(f"   No old jobs to delete")
 
-        # Generate RSS feed
-        self.generate_feed()
+        # Scrape all sites
+        scrape_results = self.scrape_all()
+
+        # Generate RSS feed with scraping summary
+        self.generate_feed_with_summary(scrape_results)
 
         # Generate HTML preview
         self.generate_preview()
@@ -197,7 +250,62 @@ class JobAggregator:
         # Show stats
         self.show_stats()
 
-        print(f"✅ Update complete! Found {new_jobs} new jobs.\n")
+        print(f"✅ Update complete! Found {scrape_results['total_new_jobs']} new jobs.\n")
+
+    def generate_feed_with_summary(self, scrape_results: Dict):
+        """Generate RSS feed with scraping summary at the top"""
+        print(f"\n📡 Generating RSS feed with summary...")
+
+        # Get recent jobs
+        max_items = self.config['output']['max_items']
+        jobs = self.db.get_recent_jobs(limit=max_items)
+
+        # Create summary entry
+        from datetime import datetime
+        import pytz
+
+        summary_parts = []
+        summary_parts.append(f"<h3>📊 Update Summary</h3>")
+        summary_parts.append(f"<p><strong>Total New Jobs:</strong> {scrape_results['total_new_jobs']}</p>")
+        summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
+
+        if scrape_results['failed_sites'] > 0:
+            summary_parts.append(f"<p><strong>⚠️ Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
+            summary_parts.append("<ul>")
+            for result in scrape_results['site_results']:
+                if not result['success']:
+                    error_short = result['error'][:100] if result['error'] else 'Unknown error'
+                    summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {error_short}</li>")
+            summary_parts.append("</ul>")
+
+        # Site breakdown
+        summary_parts.append("<h4>Site Breakdown:</h4>")
+        summary_parts.append("<ul>")
+        for result in scrape_results['site_results']:
+            if result['success']:
+                summary_parts.append(f"<li>✅ <strong>{result['site_name']}</strong>: {result['new_jobs']} new jobs</li>")
+            else:
+                summary_parts.append(f"<li>❌ <strong>{result['site_name']}</strong>: Failed</li>")
+        summary_parts.append("</ul>")
+
+        # Create summary job entry
+        summary_job = {
+            'title': f"📊 Scraping Summary - {datetime.now(pytz.UTC).strftime('%Y-%m-%d %H:%M UTC')}",
+            'url': self.config['feed']['link'],
+            'site_name': 'System',
+            'description': '\n'.join(summary_parts),
+            'discovered_date': datetime.now(pytz.UTC).isoformat()
+        }
+
+        # Insert summary at the beginning
+        jobs_with_summary = [summary_job] + jobs
+
+        print(f"   Including {len(jobs)} jobs + summary in feed")
+
+        output_file = self.config['output']['feed_file']
+        self.feed_gen.generate_feed(jobs_with_summary, output_file)
+
+        print(f"   ✓ RSS feed saved to {output_file}")
 
 
 def main():

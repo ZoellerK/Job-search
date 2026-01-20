@@ -43,12 +43,14 @@ class JobScraper:
         jobs = []
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
 
-        # Common patterns for job listings
+        # Enhanced patterns for job listings - more comprehensive
         job_patterns = [
-            {'container': 'div', 'class_patterns': ['job', 'position', 'opening', 'listing', 'career']},
-            {'container': 'li', 'class_patterns': ['job', 'position', 'opening', 'listing']},
-            {'container': 'article', 'class_patterns': ['job', 'position', 'opening']},
-            {'container': 'tr', 'class_patterns': ['job', 'position', 'opening']},
+            {'container': 'div', 'class_patterns': ['job', 'position', 'opening', 'listing', 'career', 'opportunity', 'vacancy', 'role', 'post']},
+            {'container': 'li', 'class_patterns': ['job', 'position', 'opening', 'listing', 'opportunity', 'role']},
+            {'container': 'article', 'class_patterns': ['job', 'position', 'opening', 'opportunity', 'post']},
+            {'container': 'tr', 'class_patterns': ['job', 'position', 'opening', 'row']},
+            {'container': 'section', 'class_patterns': ['job', 'position', 'listing']},
+            {'container': 'a', 'class_patterns': ['job-link', 'position-link', 'job-card', 'opportunity']},
         ]
 
         # Try each pattern
@@ -105,24 +107,54 @@ class JobScraper:
         return job
 
     def _extract_jobs_from_links(self, soup: BeautifulSoup, base_url: str) -> List[Dict]:
-        """Extract jobs from links that look like job postings"""
+        """Extract jobs from links that look like job postings - Enhanced version"""
         jobs = []
-        job_keywords = ['job', 'position', 'career', 'opening', 'vacancy', 'role', 'opportunity']
+        seen_urls = set()  # Track to avoid duplicates
+        job_keywords = ['job', 'position', 'career', 'opening', 'vacancy', 'role', 'opportunity', 'apply', 'hiring', 'employment']
+
+        # Exclude common non-job navigation keywords
+        exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category']
 
         links = soup.find_all('a', href=True)
         for link in links:
             href = link['href']
             text = link.get_text(strip=True)
+            full_url = urljoin(base_url, href)
+
+            # Skip if already seen this URL
+            if full_url in seen_urls:
+                continue
+
+            # Skip navigation/footer links
+            if any(exclude in href.lower() or exclude in text.lower() for exclude in exclude_keywords):
+                continue
 
             # Check if link text or href contains job-related keywords
             if any(keyword in href.lower() or keyword in text.lower() for keyword in job_keywords):
-                if text and len(text) > 5:  # Avoid empty or very short links
+                if text and len(text) > 5 and len(text) < 200:  # Reasonable title length
+                    # Try to extract more context from parent element
+                    parent = link.parent
+                    description = None
+                    location = None
+
+                    if parent:
+                        # Look for description in sibling or child elements
+                        desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary', re.I))
+                        if desc_elem:
+                            description = desc_elem.get_text(strip=True)[:2000]
+
+                        # Look for location
+                        loc_elem = parent.find(class_=re.compile('location|city|region', re.I))
+                        if loc_elem:
+                            location = loc_elem.get_text(strip=True)
+
                     jobs.append({
                         'title': text,
-                        'url': urljoin(base_url, href),
-                        'description': None,
-                        'location': None
+                        'url': full_url,
+                        'description': description,
+                        'location': location
                     })
+                    seen_urls.add(full_url)
 
         return jobs
 
