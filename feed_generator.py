@@ -1,7 +1,8 @@
-from feedgen.feed import FeedGenerator
 from datetime import datetime
 from typing import List, Dict
 import pytz
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
 
 class RSSFeedGenerator:
@@ -25,56 +26,73 @@ class RSSFeedGenerator:
         Returns:
             Path to the generated feed file
         """
-        fg = FeedGenerator()
-        fg.title(self.title)
-        fg.description(self.description)
-        fg.link(href=self.link, rel='self')
-        fg.language('en')
-        fg.author({'name': self.author})
+        # Create RSS root element
+        rss = ET.Element('rss', version='2.0')
+        channel = ET.SubElement(rss, 'channel')
 
-        # Add each job as a feed entry
+        # Channel metadata
+        ET.SubElement(channel, 'title').text = self.title
+        ET.SubElement(channel, 'link').text = self.link
+        ET.SubElement(channel, 'description').text = self.description
+        ET.SubElement(channel, 'language').text = 'en'
+        ET.SubElement(channel, 'lastBuildDate').text = self._format_rfc822_date(datetime.now(pytz.UTC))
+
+        # Add each job as an item
         for job in jobs:
-            fe = fg.add_entry()
+            item = ET.SubElement(channel, 'item')
 
-            # Required fields
+            # Title
             title = f"{job.get('title', 'Unknown Position')}"
             if job.get('site_name'):
                 title += f" - {job['site_name']}"
             if job.get('location'):
                 title += f" ({job['location']})"
+            ET.SubElement(item, 'title').text = title
 
-            fe.title(title)
-            fe.link(href=job.get('url', self.link))
-
-            # Generate unique ID for the entry
-            fe.id(job.get('url', f"job-{job.get('id', 'unknown')}"))
+            # Link
+            job_url = job.get('url', self.link)
+            ET.SubElement(item, 'link').text = job_url
+            ET.SubElement(item, 'guid', isPermaLink='true').text = job_url
 
             # Description
             description = self._build_description(job)
-            fe.description(description)
+            ET.SubElement(item, 'description').text = description
 
             # Publication date
             pub_date = self._parse_date(job.get('discovered_date') or job.get('posted_date'))
             if pub_date:
-                fe.pubDate(pub_date)
+                ET.SubElement(item, 'pubDate').text = self._format_rfc822_date(pub_date)
             else:
-                fe.pubDate(datetime.now(pytz.UTC))
+                ET.SubElement(item, 'pubDate').text = self._format_rfc822_date(datetime.now(pytz.UTC))
 
             # Categories/keywords
             if job.get('keywords'):
                 for keyword in job['keywords'].split(','):
-                    fe.category(term=keyword.strip())
+                    ET.SubElement(item, 'category').text = keyword.strip()
+
+        # Convert to pretty XML string
+        xml_str = self._prettify_xml(rss)
 
         # Write to file
-        fg.rss_file(output_file, pretty=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(xml_str)
+
         return output_file
+
+    def _prettify_xml(self, elem):
+        """Return a pretty-printed XML string"""
+        rough_string = ET.tostring(elem, encoding='unicode')
+        reparsed = minidom.parseString(rough_string)
+        return reparsed.toprettyxml(indent="  ", encoding='utf-8').decode('utf-8')
 
     def _build_description(self, job: Dict) -> str:
         """Build HTML description for feed entry"""
         parts = []
 
         if job.get('description'):
-            parts.append(f"<p>{job['description']}</p>")
+            # Escape HTML entities
+            desc = job['description'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            parts.append(f"<p>{desc}</p>")
 
         if job.get('location'):
             parts.append(f"<p><strong>Location:</strong> {job['location']}</p>")
@@ -107,6 +125,13 @@ class RSSFeedGenerator:
         except (ValueError, AttributeError):
             # Return current time if parsing fails
             return datetime.now(pytz.UTC)
+
+    def _format_rfc822_date(self, dt: datetime) -> str:
+        """Format datetime as RFC 822 date string for RSS"""
+        # Ensure timezone aware
+        if dt.tzinfo is None:
+            dt = pytz.UTC.localize(dt)
+        return dt.strftime('%a, %d %b %Y %H:%M:%S %z')
 
     def generate_html_preview(self, jobs: List[Dict], output_file: str = "preview.html") -> str:
         """
