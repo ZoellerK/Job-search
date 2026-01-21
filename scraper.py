@@ -170,6 +170,12 @@ class JobScraper:
             'location': {'tag': 'span', 'class': 'location'},
             'description': {'tag': 'p', 'class': 'description'}
         }
+
+        OR for URL pattern matching:
+        {
+            'url_pattern': '/en/nonprofit-job/',
+            'exclude_patterns': ['/apply', '/share']
+        }
         """
         soup = self.fetch_page(url)
         if not soup:
@@ -177,6 +183,10 @@ class JobScraper:
 
         jobs = []
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
+
+        # Check if this is a URL pattern-based config
+        if 'url_pattern' in parser_config:
+            return self._scrape_by_url_pattern(soup, base_url, parser_config)
 
         # Find all job containers
         container_config = parser_config.get('job_container', {})
@@ -206,6 +216,64 @@ class JobScraper:
 
             if job.get('title'):  # Only add if we found a title
                 jobs.append(job)
+
+        return jobs
+
+    def _scrape_by_url_pattern(self, soup: BeautifulSoup, base_url: str, config: Dict) -> List[Dict]:
+        """
+        Scrape jobs by filtering links that match URL patterns
+        Useful for sites where job URLs follow a specific pattern
+        """
+        jobs = []
+        seen_urls = set()
+
+        url_pattern = config.get('url_pattern', '')
+        exclude_patterns = config.get('exclude_patterns', [])
+
+        links = soup.find_all('a', href=True)
+
+        for link in links:
+            href = link['href']
+            full_url = urljoin(base_url, href)
+
+            # Skip if already seen
+            if full_url in seen_urls:
+                continue
+
+            # Check if URL matches the pattern
+            if url_pattern not in href:
+                continue
+
+            # Check exclude patterns
+            if any(exclude in href for exclude in exclude_patterns):
+                continue
+
+            # Extract job info
+            text = link.get_text(strip=True)
+            if text and len(text) > 5 and len(text) < 200:
+                # Try to get more context from parent
+                parent = link.parent
+                description = None
+                location = None
+
+                if parent:
+                    # Look for description nearby
+                    desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary|snippet', re.I))
+                    if desc_elem:
+                        description = desc_elem.get_text(strip=True)[:2000]
+
+                    # Look for location
+                    loc_elem = parent.find(class_=re.compile('location|city|region|where', re.I))
+                    if loc_elem:
+                        location = loc_elem.get_text(strip=True)
+
+                jobs.append({
+                    'title': text,
+                    'url': full_url,
+                    'description': description,
+                    'location': location
+                })
+                seen_urls.add(full_url)
 
         return jobs
 
