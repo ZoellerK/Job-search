@@ -1,9 +1,9 @@
 {
   "feed": {
     "title": "Job Postings RSS Feed",
-    "description": "RSS feed of job postings aggregated from multiple sources",
+    "description": "RSS feed of job postings aggregated from multiple sources - optimized for Feedly",
     "author": "Job Search Tool",
-    "link": "http://localhost:8000/feed.xml",
+    "link": "https://zoellerk.github.io/Job-search/feed.xml",
     "language": "en",
     "include_site_in_title": true,
     "simple_descriptions": false,
