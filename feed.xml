@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Job Postings Aggregator</title>
+    <link>http://localhost:8000/feed.xml</link>
+    <description>Aggregated job postings from multiple sources</description>
+    <language>en</language>
+    <lastBuildDate>Tue, 20 Jan 2026 03:31:23 +0000</lastBuildDate>
+  </channel>
+</rss>

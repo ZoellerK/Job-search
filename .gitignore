@@ -1,11 +1,9 @@
-# Database
-*.db
-jobs.db
+# Database - keep jobs.db for persistence across GitHub Actions runs
+# *.db  <- Commented out to allow jobs.db to be tracked
 
 # Generated files (but allow docs/ folder for GitHub Pages)
 /feed.xml
 /preview.html
-/jobs.db
 
 # Python
 __pycache__/

@@ -41,6 +41,14 @@ jobs:
       run: |
         python job_aggregator.py update
 
+    - name: Commit and push changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add jobs.db feed.xml preview.html
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update jobs feed - $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+        git push || echo "No changes to push"
+
     - name: Create docs directory for GitHub Pages
       run: |
         mkdir -p docs
