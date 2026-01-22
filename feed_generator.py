@@ -9,11 +9,14 @@ class RSSFeedGenerator:
     """Generates RSS feed from job postings"""
 
     def __init__(self, title: str = "Job Postings", description: str = "Aggregated job postings",
-                 link: str = "http://localhost:8000/feed.xml", author: str = "Job Search Tool"):
+                 link: str = "http://localhost:8000/feed.xml", author: str = "Job Search Tool",
+                 include_site_in_title: bool = True, simple_descriptions: bool = False):
         self.title = title
         self.description = description
         self.link = link
         self.author = author
+        self.include_site_in_title = include_site_in_title
+        self.simple_descriptions = simple_descriptions
 
     def generate_feed(self, jobs: List[Dict], output_file: str = "feed.xml") -> str:
         """
@@ -41,10 +44,14 @@ class RSSFeedGenerator:
         for job in jobs:
             item = ET.SubElement(channel, 'item')
 
-            # Title
+            # Title - cleaner format
             title = f"{job.get('title', 'Unknown Position')}"
-            if job.get('site_name'):
+
+            # Only add site name if configured to do so
+            if self.include_site_in_title and job.get('site_name'):
                 title += f" - {job['site_name']}"
+
+            # Add location to title if available
             if job.get('location'):
                 title += f" ({job['location']})"
             ET.SubElement(item, 'title').text = title
@@ -54,21 +61,36 @@ class RSSFeedGenerator:
             ET.SubElement(item, 'link').text = job_url
             ET.SubElement(item, 'guid', isPermaLink='true').text = job_url
 
-            # Description
-            description = self._build_description(job)
+            # Source - separate element for better RSS reader support
+            if job.get('site_name'):
+                source = ET.SubElement(item, 'source', url=job.get('url', self.link))
+                source.text = job['site_name']
+
+            # Author - use site name if available
+            if job.get('site_name'):
+                ET.SubElement(item, 'author').text = job['site_name']
+
+            # Description - use simple or rich HTML based on preference
+            if self.simple_descriptions:
+                description = self._build_simple_description(job)
+            else:
+                description = self._build_description(job)
             ET.SubElement(item, 'description').text = description
 
-            # Publication date
+            # Publication date - more robust handling
             pub_date = self._parse_date(job.get('discovered_date') or job.get('posted_date'))
             if pub_date:
                 ET.SubElement(item, 'pubDate').text = self._format_rfc822_date(pub_date)
-            else:
-                ET.SubElement(item, 'pubDate').text = self._format_rfc822_date(datetime.now(pytz.UTC))
+            # Skip pubDate if we don't have one rather than using "now"
 
             # Categories/keywords
             if job.get('keywords'):
                 for keyword in job['keywords'].split(','):
                     ET.SubElement(item, 'category').text = keyword.strip()
+
+            # Add site name as a category too for filtering
+            if job.get('site_name'):
+                ET.SubElement(item, 'category').text = job['site_name']
 
         # Convert to pretty XML string
         xml_str = self._prettify_xml(rss)
@@ -85,39 +107,77 @@ class RSSFeedGenerator:
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ", encoding='utf-8').decode('utf-8')
 
-    def _build_description(self, job: Dict) -> str:
-        """Build HTML description for feed entry"""
+    def _build_simple_description(self, job: Dict) -> str:
+        """Build simple plain-text description for feed readers that don't handle HTML well"""
         parts = []
 
-        # Add metadata box at the top
+        # Basic metadata
+        if job.get('location'):
+            parts.append(f"Location: {job['location']}")
+        if job.get('site_name'):
+            parts.append(f"Source: {job['site_name']}")
+        if job.get('posted_date'):
+            parts.append(f"Posted: {job['posted_date']}")
+
+        if parts:
+            parts.append("")  # Blank line
+
+        # Description
+        if job.get('description'):
+            # Truncate if very long
+            desc = job['description']
+            if len(desc) > 500:
+                desc = desc[:497] + "..."
+            parts.append(desc)
+
+        # URL
+        if job.get('url'):
+            parts.append(f"\nApply: {job['url']}")
+
+        return '\n'.join(parts) if parts else "No description available"
+
+    def _build_description(self, job: Dict) -> str:
+        """Build enhanced HTML description for feed entry"""
+        parts = []
+
+        # Cleaner metadata section
         metadata = []
         if job.get('location'):
-            metadata.append(f"📍 <strong>{job['location']}</strong>")
+            metadata.append(f"<strong>Location:</strong> {job['location']}")
         if job.get('site_name'):
-            metadata.append(f"🏢 {job['site_name']}")
+            metadata.append(f"<strong>Source:</strong> {job['site_name']}")
         if job.get('posted_date'):
-            metadata.append(f"📅 {job['posted_date']}")
+            metadata.append(f"<strong>Posted:</strong> {job['posted_date']}")
 
         if metadata:
-            parts.append(f"<div style='background: #f0f0f0; padding: 10px; margin-bottom: 15px; border-radius: 5px;'>{' | '.join(metadata)}</div>")
+            parts.append(f"<div style='background: #f8f9fa; padding: 12px; margin-bottom: 16px; border-left: 4px solid #0066cc; font-size: 14px;'>{' &nbsp;|&nbsp; '.join(metadata)}</div>")
 
-        # Add full description
+        # Add full description with better formatting
         if job.get('description'):
             # Escape HTML entities and preserve line breaks
             desc = job['description'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-            # Make description more readable with paragraphs
-            desc = desc.replace('\n', '<br>')
-            parts.append(f"<div style='margin: 15px 0;'>{desc}</div>")
 
-        # Add keywords if present
+            # Convert double line breaks to paragraphs
+            paragraphs = desc.split('\n\n')
+            if len(paragraphs) > 1:
+                desc = '</p><p>'.join(paragraphs)
+                desc = f"<p>{desc}</p>"
+            else:
+                # Single paragraph - just convert line breaks
+                desc = desc.replace('\n', '<br>')
+                desc = f"<p>{desc}</p>"
+
+            parts.append(f"<div style='margin: 16px 0; line-height: 1.6;'>{desc}</div>")
+
+        # Keywords as tags
         if job.get('keywords'):
-            keywords_list = [f"<span style='background: #e3f2fd; padding: 2px 8px; border-radius: 3px; margin-right: 5px;'>{kw.strip()}</span>"
+            keywords_list = [f"<span style='background: #e8f4f8; color: #0066cc; padding: 4px 10px; border-radius: 12px; margin-right: 6px; font-size: 13px; display: inline-block; margin-bottom: 4px;'>{kw.strip()}</span>"
                            for kw in job['keywords'].split(',')]
-            parts.append(f"<div style='margin: 15px 0;'><strong>🔍 Keywords:</strong> {''.join(keywords_list)}</div>")
+            parts.append(f"<div style='margin: 20px 0;'><strong>Tags:</strong><br/><div style='margin-top: 8px;'>{''.join(keywords_list)}</div></div>")
 
-        # Add link to full posting
+        # Prominent call-to-action button
         if job.get('url'):
-            parts.append(f"<div style='margin-top: 20px;'><a href=\"{job['url']}\" style='background: #0066cc; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>→ View Full Job Posting</a></div>")
+            parts.append(f"<div style='margin-top: 24px; padding-top: 16px; border-top: 1px solid #e0e0e0;'><a href=\"{job['url']}\" style='background: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;'>→ Apply Now</a></div>")
 
         return '\n'.join(parts) if parts else "No description available"
 

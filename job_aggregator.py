@@ -32,7 +32,9 @@ class JobAggregator:
             title=self.config['feed']['title'],
             description=self.config['feed']['description'],
             link=self.config['feed']['link'],
-            author=self.config['feed']['author']
+            author=self.config['feed']['author'],
+            include_site_in_title=self.config['feed'].get('include_site_in_title', True),
+            simple_descriptions=self.config['feed'].get('simple_descriptions', False)
         )
 
     def load_sites(self) -> List[Dict]:
@@ -253,57 +255,58 @@ class JobAggregator:
         print(f"✅ Update complete! Found {scrape_results['total_new_jobs']} new jobs.\n")
 
     def generate_feed_with_summary(self, scrape_results: Dict):
-        """Generate RSS feed with scraping summary at the top"""
-        print(f"\n📡 Generating RSS feed with summary...")
+        """Generate RSS feed with optional scraping summary at the top"""
+        print(f"\n📡 Generating RSS feed...")
 
         # Get recent jobs
         max_items = self.config['output']['max_items']
         jobs = self.db.get_recent_jobs(limit=max_items)
 
-        # Create summary entry
-        from datetime import datetime
-        import pytz
+        # Check if summary should be included
+        include_summary = self.config['feed'].get('include_summary', True)
 
-        summary_parts = []
-        summary_parts.append(f"<h3>📊 Update Summary</h3>")
-        summary_parts.append(f"<p><strong>Total New Jobs:</strong> {scrape_results['total_new_jobs']}</p>")
-        summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
+        if include_summary and scrape_results['total_new_jobs'] > 0:
+            # Create condensed summary entry
+            from datetime import datetime
+            import pytz
 
-        if scrape_results['failed_sites'] > 0:
-            summary_parts.append(f"<p><strong>⚠️ Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
-            summary_parts.append("<ul>")
-            for result in scrape_results['site_results']:
-                if not result['success']:
-                    error_short = result['error'][:100] if result['error'] else 'Unknown error'
-                    summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {error_short}</li>")
-            summary_parts.append("</ul>")
+            summary_parts = []
+            summary_parts.append(f"<h3>📊 Update Summary</h3>")
+            summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
+            summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
 
-        # Site breakdown
-        summary_parts.append("<h4>Site Breakdown:</h4>")
-        summary_parts.append("<ul>")
-        for result in scrape_results['site_results']:
-            if result['success']:
-                summary_parts.append(f"<li>✅ <strong>{result['site_name']}</strong>: {result['new_jobs']} new jobs</li>")
-            else:
-                summary_parts.append(f"<li>❌ <strong>{result['site_name']}</strong>: Failed</li>")
-        summary_parts.append("</ul>")
+            # Only show failures if there are any
+            if scrape_results['failed_sites'] > 0:
+                summary_parts.append(f"<p><strong>⚠️ Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
+                failed_sites = [r['site_name'] for r in scrape_results['site_results'] if not r['success']]
+                summary_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
 
-        # Create summary job entry
-        summary_job = {
-            'title': f"📊 Scraping Summary - {datetime.now(pytz.UTC).strftime('%Y-%m-%d %H:%M UTC')}",
-            'url': self.config['feed']['link'],
-            'site_name': 'System',
-            'description': '\n'.join(summary_parts),
-            'discovered_date': datetime.now(pytz.UTC).isoformat()
-        }
+            # Condensed site breakdown - only sites with new jobs
+            sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
+            if sites_with_jobs:
+                summary_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
+                summary_parts.append("<ul>")
+                for result in sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True):
+                    summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
+                summary_parts.append("</ul></details>")
 
-        # Insert summary at the beginning
-        jobs_with_summary = [summary_job] + jobs
+            # Create summary job entry
+            summary_job = {
+                'title': f"📊 Update - {scrape_results['total_new_jobs']} New Jobs Found",
+                'url': self.config['feed']['link'],
+                'site_name': 'System Update',
+                'description': '\n'.join(summary_parts),
+                'discovered_date': datetime.now(pytz.UTC).isoformat()
+            }
 
-        print(f"   Including {len(jobs)} jobs + summary in feed")
+            # Insert summary at the beginning
+            jobs = [summary_job] + jobs
+            print(f"   Including summary + {len(jobs)-1} jobs in feed")
+        else:
+            print(f"   Including {len(jobs)} jobs in feed")
 
         output_file = self.config['output']['feed_file']
-        self.feed_gen.generate_feed(jobs_with_summary, output_file)
+        self.feed_gen.generate_feed(jobs, output_file)
 
         print(f"   ✓ RSS feed saved to {output_file}")
 

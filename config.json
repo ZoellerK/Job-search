@@ -4,7 +4,10 @@
     "description": "Aggregated job postings from multiple sources",
     "author": "Job Search Tool",
     "link": "http://localhost:8000/feed.xml",
-    "language": "en"
+    "language": "en",
+    "include_site_in_title": true,
+    "simple_descriptions": false,
+    "include_summary": true
   },
   "database": {
     "path": "jobs.db"
