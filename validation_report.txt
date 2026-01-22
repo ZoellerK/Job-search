@@ -4,10 +4,10 @@ SITE VALIDATION REPORT
 
 SUMMARY
 --------------------------------------------------------------------------------
-Total sites checked: 56
+Total sites checked: 64
 ✅ Valid URLs: 0
 🔄 Redirects: 0
-❌ Errors/404s: 56
+❌ Errors/404s: 64
 💡 Better URLs found: 0
 
 ================================================================================
@@ -291,6 +291,46 @@ Camber Collective
 
 Berggruen Institute
   Current URL: https://www.berggruen.org/careers
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Vulcan Inc
+  Current URL: https://vulcan.com/careers
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Razom for Ukraine
+  Current URL: https://www.razomforukraine.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+United Help Ukraine
+  Current URL: https://unitedhelpukraine.org/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Nova Ukraine
+  Current URL: https://novaukraine.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Protect Democracy
+  Current URL: https://protectdemocracy.org/jobs
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+States United Democracy Center
+  Current URL: https://statesunited.org/about/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Internews
+  Current URL: https://internews.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Eurasia Foundation
+  Current URL: https://www.eurasia.org/work-with-us/careers/
   Status: error - Connection error
   Action: NEEDS NEW URL
 
