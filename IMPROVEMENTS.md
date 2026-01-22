@@ -212,7 +212,6 @@ This provides plain-text descriptions that work everywhere.
 ## Future Enhancements
 
 Potential additions:
-- Email notifications for new jobs
 - Slack/Discord webhook integration
 - Advanced filtering (salary, remote, etc.)
 - Job deduplication across sites

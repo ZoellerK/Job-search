@@ -1,4 +1,4 @@
-# Job Posting Aggregator
+# Job Posting RSS Feed
 
 A Python tool that scrapes job postings from multiple websites and generates an RSS feed you can subscribe to. Perfect for monitoring job boards and company career pages that don't offer their own RSS feeds.
 
@@ -331,26 +331,6 @@ parser_config = {
 db.save_parser_config('Site Name', 'https://example.com', parser_config)
 ```
 
-### Email Notifications
-
-To add email notifications, you can use the Python `smtplib`:
-
-```python
-# Add to job_aggregator.py
-import smtplib
-from email.mime.text import MIMEText
-
-def send_email(jobs):
-    msg = MIMEText(f"Found {len(jobs)} new jobs!")
-    msg['Subject'] = 'New Job Postings'
-    msg['From'] = 'you@example.com'
-    msg['To'] = 'you@example.com'
-
-    with smtplib.SMTP('smtp.gmail.com', 587) as server:
-        server.starttls()
-        server.login('you@example.com', 'your-password')
-        server.send_message(msg)
-```
 
 ## Tips
 
@@ -378,7 +358,6 @@ Feel free to modify and extend this tool for your needs! Some ideas:
 
 - Add support for Selenium/Playwright for JavaScript-heavy sites
 - Integrate with job board APIs (Indeed, LinkedIn, etc.)
-- Add email notifications
 - Create a web interface
 - Add more sophisticated filtering (salary ranges, experience level, etc.)
 - Export to different formats (JSON, CSV, etc.)

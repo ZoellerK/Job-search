@@ -1,7 +1,7 @@
 {
   "feed": {
-    "title": "Job Postings Aggregator",
-    "description": "Aggregated job postings from multiple sources",
+    "title": "Job Postings RSS Feed",
+    "description": "RSS feed of job postings aggregated from multiple sources",
     "author": "Job Search Tool",
     "link": "http://localhost:8000/feed.xml",
     "language": "en",
