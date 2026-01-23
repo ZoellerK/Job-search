@@ -1,0 +1,37 @@
+name: Validate Sites Against Rejected List
+
+on:
+  push:
+    paths:
+      - 'sites.csv'
+      - 'rejected_sites.txt'
+      - 'check_duplicates.py'
+  pull_request:
+    paths:
+      - 'sites.csv'
+      - 'rejected_sites.txt'
+      - 'check_duplicates.py'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Validate sites.csv against rejected list
+      run: |
+        echo "🔍 Validating that no active sites in sites.csv are in rejected_sites.txt..."
+        python check_duplicates.py --validate
+
+    - name: Validation passed
+      if: success()
+      run: |
+        echo "✅ All checks passed! No active sites found in rejected list."

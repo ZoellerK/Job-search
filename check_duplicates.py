@@ -96,14 +96,82 @@ def check_duplicates(new_suggestions: List[Tuple[str, str]]) -> List[Tuple[str, 
     return results
 
 
+def validate_sites_csv(sites_file: str = 'sites.csv', rejected_file: str = 'rejected_sites.txt') -> Tuple[bool, List[str]]:
+    """
+    Validate that no active sites in sites.csv are in the rejected list
+
+    Args:
+        sites_file: Path to the sites.csv file
+        rejected_file: Path to the rejected_sites.txt file
+
+    Returns:
+        Tuple of (is_valid, list_of_violations)
+        - is_valid: True if no violations found, False otherwise
+        - list_of_violations: List of site names that are both active and rejected
+    """
+    existing = load_existing_sites(sites_file)
+    rejected = load_rejected_sites(rejected_file)
+
+    violations = []
+
+    # Read sites.csv to get full details
+    try:
+        with open(sites_file, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                site_name = row.get('site_name', '').strip()
+                is_active = row.get('active', '').lower() in ['yes', 'true', '1']
+
+                if not is_active:
+                    continue
+
+                # Check if active site is in rejected list
+                normalized = normalize_name(site_name)
+
+                # Check exact match
+                if site_name.lower() in rejected:
+                    violations.append(f"{site_name} (exact match in rejected list)")
+                    continue
+
+                # Check normalized match
+                for rejected_name in rejected:
+                    if normalize_name(rejected_name) == normalized:
+                        violations.append(f"{site_name} (matches rejected: {rejected_name})")
+                        break
+
+    except FileNotFoundError:
+        return False, [f"File not found: {sites_file}"]
+
+    return len(violations) == 0, violations
+
+
 def main():
     """Example usage"""
     import sys
+
+    # Check if --validate flag is provided
+    if '--validate' in sys.argv:
+        is_valid, violations = validate_sites_csv()
+
+        if is_valid:
+            print("✅ VALIDATION PASSED: No active sites found in rejected list")
+            return 0
+        else:
+            print("❌ VALIDATION FAILED: Found active sites in rejected list:")
+            print("="*80)
+            for violation in violations:
+                print(f"  ❌ {violation}")
+            print("="*80)
+            print(f"\nTotal violations: {len(violations)}")
+            print("\nPlease remove these sites from sites.csv or mark them as inactive.")
+            return 1
 
     if len(sys.argv) < 2:
         print("Usage: python check_duplicates.py 'Foundation Name' [url]")
         print("\nOr provide multiple foundations:")
         print("  python check_duplicates.py 'Foundation 1' 'Foundation 2' ...")
+        print("\nOr validate sites.csv:")
+        print("  python check_duplicates.py --validate")
         return
 
     # Parse arguments as foundation names
@@ -155,4 +223,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    exit_code = main()
+    if exit_code is not None:
+        sys.exit(exit_code)
