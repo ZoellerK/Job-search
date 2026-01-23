@@ -313,32 +313,54 @@ class JobAggregator:
 
 def main():
     """Main entry point"""
-    aggregator = JobAggregator()
+    try:
+        aggregator = JobAggregator()
 
-    if len(sys.argv) > 1:
-        command = sys.argv[1].lower()
+        if len(sys.argv) > 1:
+            command = sys.argv[1].lower()
 
-        if command == "scrape":
-            aggregator.scrape_all()
-        elif command == "feed":
-            aggregator.generate_feed()
-        elif command == "preview":
-            aggregator.generate_preview()
-        elif command == "stats":
-            aggregator.show_stats()
-        elif command == "update":
-            aggregator.run_full_update()
+            if command == "scrape":
+                aggregator.scrape_all()
+            elif command == "feed":
+                aggregator.generate_feed()
+            elif command == "preview":
+                aggregator.generate_preview()
+            elif command == "stats":
+                aggregator.show_stats()
+            elif command == "update":
+                aggregator.run_full_update()
+            else:
+                print(f"Unknown command: {command}")
+                print("\nAvailable commands:")
+                print("  scrape  - Scrape all active sites")
+                print("  feed    - Generate RSS feed from database")
+                print("  preview - Generate HTML preview")
+                print("  stats   - Show database statistics")
+                print("  update  - Run full update (scrape + feed + preview)")
+                sys.exit(1)
         else:
-            print(f"Unknown command: {command}")
-            print("\nAvailable commands:")
-            print("  scrape  - Scrape all active sites")
-            print("  feed    - Generate RSS feed from database")
-            print("  preview - Generate HTML preview")
-            print("  stats   - Show database statistics")
-            print("  update  - Run full update (scrape + feed + preview)")
-    else:
-        # Default: run full update
-        aggregator.run_full_update()
+            # Default: run full update
+            aggregator.run_full_update()
+
+        print("\n✅ Job aggregator completed successfully!")
+        sys.exit(0)
+
+    except FileNotFoundError as e:
+        print(f"\n❌ Error: Required file not found: {e}")
+        print("Please ensure config.json and sites.csv exist in the working directory.")
+        sys.exit(1)
+    except KeyError as e:
+        print(f"\n❌ Error: Missing required configuration key: {e}")
+        print("Please check your config.json file.")
+        sys.exit(1)
+    except Exception as e:
+        print(f"\n❌ Error: Job aggregator failed with unexpected error:")
+        print(f"   {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
+        print("\nThe job aggregator encountered an error but this may not prevent feed generation.")
+        print("Check the error above for details.")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
