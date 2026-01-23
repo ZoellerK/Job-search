@@ -166,20 +166,55 @@ def main():
             print("\nPlease remove these sites from sites.csv or mark them as inactive.")
             return 1
 
-    if len(sys.argv) < 2:
-        print("Usage: python check_duplicates.py 'Foundation Name' [url]")
-        print("\nOr provide multiple foundations:")
-        print("  python check_duplicates.py 'Foundation 1' 'Foundation 2' ...")
-        print("\nOr validate sites.csv:")
-        print("  python check_duplicates.py --validate")
-        return
+    # Check for flags
+    new_only = '--new-only' in sys.argv
+    file_input = None
+
+    # Check for --file flag
+    for i, arg in enumerate(sys.argv):
+        if arg == '--file' and i + 1 < len(sys.argv):
+            file_input = sys.argv[i + 1]
+            break
 
     # Parse arguments as foundation names
     suggestions = []
-    for arg in sys.argv[1:]:
-        if arg.startswith('http'):
-            continue  # Skip URLs
-        suggestions.append((arg, ''))
+
+    # Read from file if specified
+    if file_input:
+        try:
+            with open(file_input, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        # Support format: "Name" or "Name - URL"
+                        if ' - ' in line:
+                            name, url = line.split(' - ', 1)
+                            suggestions.append((name.strip(), url.strip()))
+                        else:
+                            suggestions.append((line, ''))
+        except FileNotFoundError:
+            print(f"Error: File '{file_input}' not found")
+            return 1
+    else:
+        # Parse from command line arguments
+        for arg in sys.argv[1:]:
+            if arg.startswith('--'):
+                continue  # Skip flags
+            if arg.startswith('http'):
+                continue  # Skip URLs
+            suggestions.append((arg, ''))
+
+    if not suggestions and not file_input:
+        print("Usage: python check_duplicates.py 'Foundation Name' [url]")
+        print("\nOr provide multiple foundations:")
+        print("  python check_duplicates.py 'Foundation 1' 'Foundation 2' ...")
+        print("\nOr read from file:")
+        print("  python check_duplicates.py --file suggestions.txt")
+        print("\nOr validate sites.csv:")
+        print("  python check_duplicates.py --validate")
+        print("\nOptions:")
+        print("  --new-only    Only show NEW organizations (filter out active/rejected)")
+        return
 
     if not suggestions:
         print("No foundation names provided")
@@ -187,14 +222,20 @@ def main():
 
     results = check_duplicates(suggestions)
 
+    # Count all results before filtering
+    new_count = sum(1 for _, _, status in results if status == 'new')
+    active_count = sum(1 for _, _, status in results if status == 'active')
+    rejected_count = sum(1 for _, _, status in results if status == 'rejected')
+
+    # Filter if --new-only flag is set
+    display_results = results
+    if new_only:
+        display_results = [(name, url, status) for name, url, status in results if status == 'new']
+
     print("\nDuplicate Check Results:")
     print("="*80)
 
-    new_count = 0
-    active_count = 0
-    rejected_count = 0
-
-    for name, url, status in results:
+    for name, url, status in display_results:
         symbol = {
             'new': '✅',
             'active': '🔵',
@@ -210,15 +251,12 @@ def main():
         print(f"{symbol} {name}")
         print(f"   Status: {status_text}")
 
-        if status == 'new':
-            new_count += 1
-        elif status == 'active':
-            active_count += 1
-        elif status == 'rejected':
-            rejected_count += 1
-
     print("\n" + "="*80)
-    print(f"Summary: {new_count} new, {active_count} already active, {rejected_count} already rejected")
+    if new_only:
+        print(f"Showing: {new_count} new organizations")
+        print(f"Filtered out: {active_count} already active, {rejected_count} already rejected")
+    else:
+        print(f"Summary: {new_count} new, {active_count} already active, {rejected_count} already rejected")
     print("="*80 + "\n")
 
 

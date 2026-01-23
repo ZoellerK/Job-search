@@ -29,6 +29,7 @@ python check_duplicates.py --validate
 
 ### 2. Check New Site Suggestions
 
+#### Individual Organizations
 To check if new organizations are safe to add:
 
 ```bash
@@ -38,6 +39,26 @@ python check_duplicates.py "Organization Name 1" "Organization Name 2"
 Example:
 ```bash
 python check_duplicates.py "Ford Foundation" "Open Society Foundations"
+```
+
+#### Batch Check from File
+For checking many organizations at once, create a text file with one organization per line:
+
+```bash
+cat > suggestions.txt << EOF
+Organization Name 1
+Organization Name 2
+Organization Name 3
+EOF
+
+python check_duplicates.py --file suggestions.txt
+```
+
+#### Filter to Show Only New Organizations
+Use `--new-only` to see only organizations that are safe to add:
+
+```bash
+python check_duplicates.py --file suggestions.txt --new-only
 ```
 
 Output will show:
@@ -79,6 +100,30 @@ EOF
 2. Make it executable:
 ```bash
 chmod +x .git/hooks/pre-commit
+```
+
+## Available Options
+
+### Command-Line Flags
+
+- `--validate` - Validate that no active sites in sites.csv are in rejected_sites.txt
+- `--file <filename>` - Read organization names from a file (one per line)
+- `--new-only` - Show only NEW organizations (filter out active/rejected)
+
+### Usage Examples
+
+```bash
+# Validate sites.csv
+python check_duplicates.py --validate
+
+# Check individual organizations
+python check_duplicates.py "Org 1" "Org 2"
+
+# Check organizations from file
+python check_duplicates.py --file candidates.txt
+
+# Show only new organizations from file
+python check_duplicates.py --file candidates.txt --new-only
 ```
 
 ## What Happens When Validation Fails?
