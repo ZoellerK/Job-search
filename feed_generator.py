@@ -137,10 +137,11 @@ class RSSFeedGenerator:
         categories = []
 
         # Combine title, description, and location for text analysis
+        # Use 'or' to handle None values (job.get() returns None if key exists with None value)
         search_text = ' '.join([
-            job.get('title', '').lower(),
-            job.get('description', '').lower(),
-            job.get('location', '').lower()
+            (job.get('title') or '').lower(),
+            (job.get('description') or '').lower(),
+            (job.get('location') or '').lower()
         ])
 
         # Work arrangement
