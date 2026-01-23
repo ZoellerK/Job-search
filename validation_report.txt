@@ -4,10 +4,10 @@ SITE VALIDATION REPORT
 
 SUMMARY
 --------------------------------------------------------------------------------
-Total sites checked: 64
+Total sites checked: 70
 ✅ Valid URLs: 0
 🔄 Redirects: 0
-❌ Errors/404s: 64
+❌ Errors/404s: 70
 💡 Better URLs found: 0
 
 ================================================================================
@@ -331,6 +331,36 @@ Internews
 
 Eurasia Foundation
   Current URL: https://www.eurasia.org/work-with-us/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+IKEA Foundation
+  Current URL: https://ikeafoundation.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Lego Foundation
+  Current URL: https://www.legofoundation.com/en/about-us/jobs/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+New Profit
+  Current URL: https://www.newprofit.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Co-Impact
+  Current URL: https://www.co-impact.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+National Center for Family Philanthropy
+  Current URL: https://www.ncfp.org/careers/
+  Status: error - Connection error
+  Action: NEEDS NEW URL
+
+Exponent Philanthropy
+  Current URL: https://www.exponentphilanthropy.org/careers/
   Status: error - Connection error
   Action: NEEDS NEW URL
 
