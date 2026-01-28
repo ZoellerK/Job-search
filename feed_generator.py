@@ -3,6 +3,7 @@ from typing import List, Dict
 import pytz
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import html
 
 
 class RSSFeedGenerator:
@@ -60,7 +61,7 @@ class RSSFeedGenerator:
             item = ET.SubElement(channel, 'item')
 
             # Title - cleaner format
-            title = f"{job.get('title', 'Unknown Position')}"
+            title = job.get('title', 'Unknown Position')
 
             # Only add site name if configured to do so
             if self.include_site_in_title and job.get('site_name'):
@@ -78,7 +79,7 @@ class RSSFeedGenerator:
 
             # Source - separate element for better RSS reader support
             if job.get('site_name'):
-                source = ET.SubElement(item, 'source', url=job.get('url', self.link))
+                source = ET.SubElement(item, 'source', url=self.link)
                 source.text = job['site_name']
 
             # Author - use site name if available
@@ -231,8 +232,7 @@ class RSSFeedGenerator:
         if job.get('description'):
             desc = job['description']
 
-            # Escape HTML but preserve structure
-            desc = desc.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            desc = html.escape(desc)
 
             # Convert paragraphs
             paragraphs = desc.split('\n\n')
@@ -299,80 +299,6 @@ class RSSFeedGenerator:
 
         return ''.join(parts) if parts else "No details available"
 
-    def _build_simple_description(self, job: Dict) -> str:
-        """Build simple plain-text description for feed readers that don't handle HTML well"""
-        parts = []
-
-        # Basic metadata
-        if job.get('location'):
-            parts.append(f"Location: {job['location']}")
-        if job.get('site_name'):
-            parts.append(f"Source: {job['site_name']}")
-        if job.get('posted_date'):
-            parts.append(f"Posted: {job['posted_date']}")
-
-        if parts:
-            parts.append("")  # Blank line
-
-        # Description
-        if job.get('description'):
-            # Truncate if very long
-            desc = job['description']
-            if len(desc) > 500:
-                desc = desc[:497] + "..."
-            parts.append(desc)
-
-        # URL
-        if job.get('url'):
-            parts.append(f"\nApply: {job['url']}")
-
-        return '\n'.join(parts) if parts else "No description available"
-
-    def _build_description(self, job: Dict) -> str:
-        """Build enhanced HTML description for feed entry"""
-        parts = []
-
-        # Cleaner metadata section
-        metadata = []
-        if job.get('location'):
-            metadata.append(f"<strong>Location:</strong> {job['location']}")
-        if job.get('site_name'):
-            metadata.append(f"<strong>Source:</strong> {job['site_name']}")
-        if job.get('posted_date'):
-            metadata.append(f"<strong>Posted:</strong> {job['posted_date']}")
-
-        if metadata:
-            parts.append(f"<div style='background: #f8f9fa; padding: 12px; margin-bottom: 16px; border-left: 4px solid #0066cc; font-size: 14px;'>{' &nbsp;|&nbsp; '.join(metadata)}</div>")
-
-        # Add full description with better formatting
-        if job.get('description'):
-            # Escape HTML entities and preserve line breaks
-            desc = job['description'].replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
-            # Convert double line breaks to paragraphs
-            paragraphs = desc.split('\n\n')
-            if len(paragraphs) > 1:
-                desc = '</p><p>'.join(paragraphs)
-                desc = f"<p>{desc}</p>"
-            else:
-                # Single paragraph - just convert line breaks
-                desc = desc.replace('\n', '<br>')
-                desc = f"<p>{desc}</p>"
-
-            parts.append(f"<div style='margin: 16px 0; line-height: 1.6;'>{desc}</div>")
-
-        # Keywords as tags
-        if job.get('keywords'):
-            keywords_list = [f"<span style='background: #e8f4f8; color: #0066cc; padding: 4px 10px; border-radius: 12px; margin-right: 6px; font-size: 13px; display: inline-block; margin-bottom: 4px;'>{kw.strip()}</span>"
-                           for kw in job['keywords'].split(',')]
-            parts.append(f"<div style='margin: 20px 0;'><strong>Tags:</strong><br/><div style='margin-top: 8px;'>{''.join(keywords_list)}</div></div>")
-
-        # Prominent call-to-action button
-        if job.get('url'):
-            parts.append(f"<div style='margin-top: 24px; padding-top: 16px; border-top: 1px solid #e0e0e0;'><a href=\"{job['url']}\" style='background: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;'>→ Apply Now</a></div>")
-
-        return '\n'.join(parts) if parts else "No description available"
-
     def _parse_date(self, date_str: str) -> datetime:
         """Parse date string to datetime object"""
         if not date_str:
@@ -385,8 +311,7 @@ class RSSFeedGenerator:
                 dt = pytz.UTC.localize(dt)
             return dt
         except (ValueError, AttributeError):
-            # Return current time if parsing fails
-            return datetime.now(pytz.UTC)
+            return None
 
     def _format_rfc822_date(self, dt: datetime) -> str:
         """Format datetime as RFC 822 date string for RSS"""
@@ -424,12 +349,12 @@ class RSSFeedGenerator:
         ]
 
         for job in jobs:
-            title = job.get('title', 'Unknown Position')
-            url = job.get('url', '#')
-            site = job.get('site_name', 'Unknown Source')
-            location = job.get('location', 'Location not specified')
-            description = job.get('description', 'No description available')
-            discovered = job.get('discovered_date', 'Unknown')
+            title = html.escape(job.get('title', 'Unknown Position'))
+            url = html.escape(job.get('url', '#'))
+            site = html.escape(job.get('site_name', 'Unknown Source'))
+            location = html.escape(job.get('location', 'Location not specified'))
+            description = html.escape(job.get('description', 'No description available'))
+            discovered = html.escape(job.get('discovered_date', 'Unknown'))
 
             html_parts.extend([
                 "<div class='job'>",

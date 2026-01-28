@@ -41,6 +41,7 @@ class JobScraper:
             return []
 
         jobs = []
+        seen_urls = set()
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
 
         # Enhanced patterns for job listings - more comprehensive
@@ -57,12 +58,14 @@ class JobScraper:
         for pattern in job_patterns:
             containers = soup.find_all(pattern['container'])
             for container in containers:
-                # Check if any class contains job-related keywords
+                # Check if any class token matches job-related keywords
                 classes = container.get('class', [])
-                if any(keyword in ' '.join(classes).lower() for keyword in pattern['class_patterns']):
+                class_tokens = {token for cls in classes for token in re.split(r'[-_]', cls.lower())}
+                if any(keyword in class_tokens for keyword in pattern['class_patterns']):
                     job = self._extract_job_from_element(container, base_url)
-                    if job and job.get('title'):
+                    if job and job.get('title') and job.get('url') not in seen_urls:
                         jobs.append(job)
+                        seen_urls.add(job.get('url'))
 
         # If no jobs found with class patterns, look for common link patterns
         if not jobs:

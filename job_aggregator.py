@@ -7,7 +7,11 @@ Scrapes job postings from multiple sources and generates RSS feed
 import csv
 import json
 import sys
+from datetime import datetime
 from typing import List, Dict
+
+import pytz
+
 from database import JobDatabase
 from scraper import JobScraper
 from feed_generator import RSSFeedGenerator
@@ -266,10 +270,6 @@ class JobAggregator:
         include_summary = self.config['feed'].get('include_summary', True)
 
         if include_summary and scrape_results['total_new_jobs'] > 0:
-            # Create condensed summary entry
-            from datetime import datetime
-            import pytz
-
             summary_parts = []
             summary_parts.append(f"<h3>📊 Update Summary</h3>")
             summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
