@@ -7,6 +7,7 @@ Scrapes job postings from multiple sources and generates RSS feed
 import csv
 import json
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict
 
@@ -74,32 +75,21 @@ class JobAggregator:
         url = site['url']
         keywords = site.get('keywords', '')
 
-        print(f"\n🔍 Scraping {site_name}...")
-        print(f"   URL: {url}")
-
         try:
-            # Check if we have a saved parser config for this site
             parser_config = self.db.get_parser_config(site_name)
 
             if parser_config:
-                print(f"   Using saved parser configuration")
                 jobs = self.scraper.scrape_with_config(url, parser_config)
             else:
-                print(f"   Using auto-detection")
                 jobs = self.scraper.auto_detect_jobs(url)
 
-            print(f"   Found {len(jobs)} potential job listings")
-
-            # Add new jobs to database
             new_jobs_count = 0
             for job in jobs:
-                # Filter by keywords if specified
                 if keywords:
                     job_text = f"{job.get('title', '')} {job.get('description', '')}".lower()
                     if not any(kw.strip().lower() in job_text for kw in keywords.split(',')):
                         continue
 
-                # Add to database
                 added = self.db.add_job(
                     site_name=site_name,
                     url=job.get('url', url),
@@ -112,9 +102,7 @@ class JobAggregator:
 
                 if added:
                     new_jobs_count += 1
-                    print(f"   ✓ New job: {job.get('title', 'Unknown')}")
 
-            print(f"   Added {new_jobs_count} new jobs to database")
             return {
                 'site_name': site_name,
                 'success': True,
@@ -123,18 +111,16 @@ class JobAggregator:
             }
 
         except Exception as e:
-            error_msg = str(e)
-            print(f"   ✗ Error: {error_msg}")
             return {
                 'site_name': site_name,
                 'success': False,
                 'new_jobs': 0,
-                'error': error_msg
+                'error': str(e)
             }
 
     def scrape_all(self) -> Dict:
         """
-        Scrape all active sites
+        Scrape all active sites in parallel
 
         Returns:
             Dictionary with results: {
@@ -158,19 +144,22 @@ class JobAggregator:
         print(f"Starting job aggregation for {len(sites)} sites")
         print(f"{'='*60}")
 
-        site_results = []
-        total_new_jobs = 0
-        successful_sites = 0
-        failed_sites = 0
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {executor.submit(self.scrape_site, site): site for site in sites}
+            site_results = [f.result() for f in as_completed(futures)]
 
-        for site in sites:
-            result = self.scrape_site(site)
-            site_results.append(result)
-            total_new_jobs += result['new_jobs']
-            if result['success']:
-                successful_sites += 1
-            else:
-                failed_sites += 1
+        # Sort for deterministic output
+        site_results.sort(key=lambda r: r['site_name'])
+
+        for result in site_results:
+            status = "✓" if result['success'] else "✗"
+            jobs_str = f"{result['new_jobs']} new" if result['new_jobs'] else "no new jobs"
+            error_str = f" — {result['error']}" if result['error'] else ""
+            print(f"  {status} {result['site_name']}: {jobs_str}{error_str}")
+
+        total_new_jobs = sum(r['new_jobs'] for r in site_results)
+        successful_sites = sum(1 for r in site_results if r['success'])
+        failed_sites = sum(1 for r in site_results if not r['success'])
 
         print(f"\n{'='*60}")
         print(f"Scraping complete! Total new jobs: {total_new_jobs}")
@@ -262,44 +251,13 @@ class JobAggregator:
         """Generate RSS feed with optional scraping summary at the top"""
         print(f"\n📡 Generating RSS feed...")
 
-        # Get recent jobs
         max_items = self.config['output']['max_items']
         jobs = self.db.get_recent_jobs(limit=max_items)
 
-        # Check if summary should be included
         include_summary = self.config['feed'].get('include_summary', True)
 
         if include_summary and scrape_results['total_new_jobs'] > 0:
-            summary_parts = []
-            summary_parts.append(f"<h3>📊 Update Summary</h3>")
-            summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
-            summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
-
-            # Only show failures if there are any
-            if scrape_results['failed_sites'] > 0:
-                summary_parts.append(f"<p><strong>⚠️ Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
-                failed_sites = [r['site_name'] for r in scrape_results['site_results'] if not r['success']]
-                summary_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
-
-            # Condensed site breakdown - only sites with new jobs
-            sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
-            if sites_with_jobs:
-                summary_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
-                summary_parts.append("<ul>")
-                for result in sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True):
-                    summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
-                summary_parts.append("</ul></details>")
-
-            # Create summary job entry
-            summary_job = {
-                'title': f"📊 Update - {scrape_results['total_new_jobs']} New Jobs Found",
-                'url': self.config['feed']['link'],
-                'site_name': 'System Update',
-                'description': '\n'.join(summary_parts),
-                'discovered_date': datetime.now(pytz.UTC).isoformat()
-            }
-
-            # Insert summary at the beginning
+            summary_job = self.feed_gen.build_summary_item(scrape_results)
             jobs = [summary_job] + jobs
             print(f"   Including summary + {len(jobs)-1} jobs in feed")
         else:

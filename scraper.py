@@ -22,7 +22,7 @@ class JobScraper:
             try:
                 response = self.session.get(url, timeout=self.timeout)
                 response.raise_for_status()
-                return BeautifulSoup(response.content, 'html.parser')
+                return BeautifulSoup(response.content, 'lxml')
             except requests.RequestException as e:
                 print(f"Attempt {attempt + 1} failed for {url}: {e}")
                 if attempt < self.retry_attempts - 1:
@@ -134,7 +134,7 @@ class JobScraper:
 
             # Check if link text or href contains job-related keywords
             if any(keyword in href.lower() or keyword in text.lower() for keyword in job_keywords):
-                if text and len(text) > 5 and len(text) < 200:  # Reasonable title length
+                if text and 5 < len(text) < 200:  # Reasonable title length
                     # Try to extract more context from parent element
                     parent = link.parent
                     description = None
@@ -253,7 +253,7 @@ class JobScraper:
 
             # Extract job info
             text = link.get_text(strip=True)
-            if text and len(text) > 5 and len(text) < 200:
+            if text and 5 < len(text) < 200:
                 # Try to get more context from parent
                 parent = link.parent
                 description = None

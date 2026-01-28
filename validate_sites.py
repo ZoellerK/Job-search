@@ -68,7 +68,7 @@ class SiteValidator:
         }
 
         try:
-            response = self.session.get(url, timeout=self.timeout, allow_redirects=True)
+            response = self.session.get(url, timeout=self.timeout)
             result['status_code'] = response.status_code
             result['final_url'] = response.url
 

@@ -68,28 +68,20 @@ def check_duplicates(new_suggestions: List[Tuple[str, str]]) -> List[Tuple[str, 
     existing = load_existing_sites()
     rejected = load_rejected_sites()
 
+    # Pre-compute normalized sets for O(1) lookup
+    existing_normalized = {normalize_name(name) for name in existing}
+    rejected_normalized = {normalize_name(name) for name in rejected}
+
     results = []
     for name, url in new_suggestions:
         normalized = normalize_name(name)
-        status = 'new'
 
-        # Check exact match first
-        if name.lower() in existing:
+        if name.lower() in existing or normalized in existing_normalized:
             status = 'active'
-        elif name.lower() in rejected:
+        elif name.lower() in rejected or normalized in rejected_normalized:
             status = 'rejected'
         else:
-            # Check normalized name
-            for existing_name in existing:
-                if normalize_name(existing_name) == normalized:
-                    status = 'active'
-                    break
-
-            if status == 'new':
-                for rejected_name in rejected:
-                    if normalize_name(rejected_name) == normalized:
-                        status = 'rejected'
-                        break
+            status = 'new'
 
         results.append((name, url, status))
 
@@ -146,11 +138,22 @@ def validate_sites_csv(sites_file: str = 'sites.csv', rejected_file: str = 'reje
 
 
 def main():
-    """Example usage"""
-    import sys
+    import argparse
 
-    # Check if --validate flag is provided
-    if '--validate' in sys.argv:
+    parser = argparse.ArgumentParser(
+        description='Check organizations against active/rejected lists'
+    )
+    parser.add_argument('names', nargs='*', help='Organization names to check')
+    parser.add_argument('--validate', action='store_true',
+                        help='Validate sites.csv against rejected list')
+    parser.add_argument('--file', type=str,
+                        help='Read organization names from file (one per line)')
+    parser.add_argument('--new-only', action='store_true',
+                        help='Only show NEW organizations')
+
+    args = parser.parse_args()
+
+    if args.validate:
         is_valid, violations = validate_sites_csv()
 
         if is_valid:
@@ -166,82 +169,45 @@ def main():
             print("\nPlease remove these sites from sites.csv or mark them as inactive.")
             return 1
 
-    # Check for flags
-    new_only = '--new-only' in sys.argv
-    file_input = None
-
-    # Check for --file flag
-    for i, arg in enumerate(sys.argv):
-        if arg == '--file' and i + 1 < len(sys.argv):
-            file_input = sys.argv[i + 1]
-            break
-
-    # Parse arguments as foundation names
     suggestions = []
 
-    # Read from file if specified
-    if file_input:
+    if args.file:
         try:
-            with open(file_input, 'r') as f:
+            with open(args.file, 'r') as f:
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith('#'):
-                        # Support format: "Name" or "Name - URL"
                         if ' - ' in line:
                             name, url = line.split(' - ', 1)
                             suggestions.append((name.strip(), url.strip()))
                         else:
                             suggestions.append((line, ''))
         except FileNotFoundError:
-            print(f"Error: File '{file_input}' not found")
+            print(f"Error: File '{args.file}' not found")
             return 1
     else:
-        # Parse from command line arguments
-        for arg in sys.argv[1:]:
-            if arg.startswith('--'):
-                continue  # Skip flags
-            if arg.startswith('http'):
-                continue  # Skip URLs
-            suggestions.append((arg, ''))
-
-    if not suggestions and not file_input:
-        print("Usage: python check_duplicates.py 'Foundation Name' [url]")
-        print("\nOr provide multiple foundations:")
-        print("  python check_duplicates.py 'Foundation 1' 'Foundation 2' ...")
-        print("\nOr read from file:")
-        print("  python check_duplicates.py --file suggestions.txt")
-        print("\nOr validate sites.csv:")
-        print("  python check_duplicates.py --validate")
-        print("\nOptions:")
-        print("  --new-only    Only show NEW organizations (filter out active/rejected)")
-        return
+        for name in args.names:
+            suggestions.append((name, ''))
 
     if not suggestions:
-        print("No foundation names provided")
+        parser.print_help()
         return
 
     results = check_duplicates(suggestions)
 
-    # Count all results before filtering
     new_count = sum(1 for _, _, status in results if status == 'new')
     active_count = sum(1 for _, _, status in results if status == 'active')
     rejected_count = sum(1 for _, _, status in results if status == 'rejected')
 
-    # Filter if --new-only flag is set
     display_results = results
-    if new_only:
+    if args.new_only:
         display_results = [(name, url, status) for name, url, status in results if status == 'new']
 
     print("\nDuplicate Check Results:")
     print("="*80)
 
     for name, url, status in display_results:
-        symbol = {
-            'new': '✅',
-            'active': '🔵',
-            'rejected': '❌'
-        }.get(status, '?')
-
+        symbol = {'new': '✅', 'active': '🔵', 'rejected': '❌'}.get(status, '?')
         status_text = {
             'new': 'NEW - Safe to suggest',
             'active': 'ALREADY ACTIVE',
@@ -252,7 +218,7 @@ def main():
         print(f"   Status: {status_text}")
 
     print("\n" + "="*80)
-    if new_only:
+    if args.new_only:
         print(f"Showing: {new_count} new organizations")
         print(f"Filtered out: {active_count} already active, {rejected_count} already rejected")
     else:

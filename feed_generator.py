@@ -216,17 +216,7 @@ class RSSFeedGenerator:
             metadata.append(f"📅 Posted {job['posted_date']}")
 
         if metadata:
-            # Modern card-style header
-            parts.append(f"""
-            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        padding: 20px;
-                        margin: -10px -10px 20px -10px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>
-                <div style='font-size: 15px; opacity: 0.95;'>{' &nbsp;&nbsp;|&nbsp;&nbsp; '.join(metadata)}</div>
-            </div>
-            """)
+            parts.append(f"<div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'>{' | '.join(metadata)}</div>")
 
         # Main description with better readability
         if job.get('description'):
@@ -253,51 +243,45 @@ class RSSFeedGenerator:
 
             parts.append(f"<div style='font-size: 15px;'>{desc}</div>")
 
-        # Keywords/tags as visual pills
         if job.get('keywords'):
-            keywords_html = []
-            for kw in job['keywords'].split(','):
-                kw = kw.strip()
-                keywords_html.append(f"""
-                    <span style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                                 color: white;
-                                 padding: 6px 14px;
-                                 border-radius: 20px;
-                                 margin-right: 8px;
-                                 margin-bottom: 8px;
-                                 font-size: 13px;
-                                 display: inline-block;
-                                 font-weight: 500;
-                                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);'>{kw}</span>
-                """)
-            parts.append(f"""
-                <div style='margin: 28px 0 24px 0; padding-top: 20px; border-top: 2px solid #f0f0f0;'>
-                    <div style='color: #666; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 600;'>Tags</div>
-                    <div>{''.join(keywords_html)}</div>
-                </div>
-            """)
+            keywords_html = [
+                f"<span style='background: #f0e6ff; color: #667eea; padding: 4px 12px; border-radius: 12px; font-size: 13px; display: inline-block; margin-right: 6px; margin-bottom: 4px;'>{kw.strip()}</span>"
+                for kw in job['keywords'].split(',')
+            ]
+            parts.append(f"<div style='margin: 20px 0; padding-top: 16px; border-top: 1px solid #eee;'><strong style='color: #666; font-size: 13px;'>Tags</strong><br style='margin-bottom: 8px;'>{''.join(keywords_html)}</div>")
 
-        # Prominent CTA button (Feedly renders this beautifully)
         if job.get('url'):
-            parts.append(f"""
-                <div style='margin-top: 32px; text-align: center; padding: 24px; background: #f8f9fa; border-radius: 8px;'>
-                    <a href="{job['url']}"
-                       style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                              color: white;
-                              padding: 14px 32px;
-                              text-decoration: none;
-                              border-radius: 6px;
-                              display: inline-block;
-                              font-weight: 600;
-                              font-size: 16px;
-                              box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-                              transition: all 0.3s;'>
-                        🚀 Apply for this Position
-                    </a>
-                </div>
-            """)
+            parts.append(f"<div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'><a href=\"{job['url']}\" style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'>Apply for this Position</a></div>")
 
         return ''.join(parts) if parts else "No details available"
+
+    def build_summary_item(self, scrape_results: Dict) -> Dict:
+        """Build a summary feed item from scraping results"""
+        summary_parts = []
+        summary_parts.append("<h3>Update Summary</h3>")
+        summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
+        summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
+
+        if scrape_results['failed_sites'] > 0:
+            summary_parts.append(f"<p><strong>Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
+            failed_sites = [r['site_name'] for r in scrape_results['site_results'] if not r['success']]
+            summary_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
+
+        sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
+        if sites_with_jobs:
+            summary_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
+            summary_parts.append("<ul>")
+            for result in sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True):
+                summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
+            summary_parts.append("</ul></details>")
+
+        return {
+            'title': f"Update - {scrape_results['total_new_jobs']} New Jobs Found",
+            'url': self.link,
+            'site_name': 'System Update',
+            'description': '\n'.join(summary_parts),
+            'discovered_date': datetime.now(pytz.UTC).isoformat()
+        }
 
     def _parse_date(self, date_str: str) -> datetime:
         """Parse date string to datetime object"""

@@ -6,6 +6,7 @@ Site Setup Tool - Helps configure new job sites
 import sys
 import csv
 import json
+import os
 from scraper import JobScraper
 from database import JobDatabase
 
@@ -181,19 +182,21 @@ class SiteSetup:
 
         keywords = input("   Keywords to filter by (comma-separated, optional): ").strip()
 
-        # Add to CSV
-        try:
-            # Check if file exists and has headers
-            try:
-                with open('sites.csv', 'r') as f:
-                    pass
-            except FileNotFoundError:
-                # Create with headers
-                with open('sites.csv', 'w', newline='') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(['site_name', 'url', 'active', 'keywords'])
+        # Check for duplicates and create file if needed
+        if os.path.exists('sites.csv'):
+            with open('sites.csv', 'r') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row.get('url', '').strip() == url.strip():
+                        print(f"\n⚠️  {url} is already in sites.csv as '{row.get('site_name', 'unknown')}'")
+                        return
+        else:
+            with open('sites.csv', 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['site_name', 'url', 'active', 'keywords'])
 
-            # Append new site
+        # Append new site
+        try:
             with open('sites.csv', 'a', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow([site_name, url, 'yes', keywords])

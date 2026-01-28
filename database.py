@@ -15,7 +15,7 @@ class JobDatabase:
     @contextmanager
     def _connect(self):
         """Context manager that guarantees connection cleanup"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path, timeout=30)
         try:
             yield conn
         finally:
@@ -25,6 +25,7 @@ class JobDatabase:
         """Initialize database schema"""
         with self._connect() as conn:
             cursor = conn.cursor()
+            cursor.execute("PRAGMA journal_mode=WAL")
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS jobs (
