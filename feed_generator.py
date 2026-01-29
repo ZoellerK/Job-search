@@ -191,13 +191,16 @@ class RSSFeedGenerator:
 
         # Truncated description for preview
         if job.get('description'):
-            desc = job['description'].strip()
-            # Remove excessive whitespace
-            desc = ' '.join(desc.split())
-            # Truncate for card preview (Feedly shows ~150 chars)
-            if len(desc) > 200:
-                desc = desc[:197] + '...'
-            parts.append(desc)
+            desc = job['description']
+            # Handle None description
+            if desc is not None:
+                desc = desc.strip()
+                # Remove excessive whitespace
+                desc = ' '.join(desc.split())
+                # Truncate for card preview (Feedly shows ~150 chars)
+                if len(desc) > 200:
+                    desc = desc[:197] + '...'
+                parts.append(desc)
 
         return '\n\n'.join(parts) if parts else "View job details"
 
@@ -222,6 +225,10 @@ class RSSFeedGenerator:
         if job.get('description'):
             desc = job['description']
 
+            # Handle None description
+            if desc is None:
+                desc = ''
+
             desc = html.escape(desc)
 
             # Convert paragraphs
@@ -235,11 +242,17 @@ class RSSFeedGenerator:
                         if len(para) < 60 and not para.endswith('.') and not para.endswith(','):
                             formatted_paras.append(f"<h3 style='color: #667eea; margin-top: 24px; margin-bottom: 12px; font-size: 18px;'>{para}</h3>")
                         else:
-                            formatted_paras.append(f"<p style='line-height: 1.7; margin-bottom: 16px; color: #333;'>{para.replace(chr(10), '<br>')}</p>")
+                            # Handle potential None in para
+                            para_content = para.replace(chr(10), '<br>') if para else ''
+                            formatted_paras.append(f"<p style='line-height: 1.7; margin-bottom: 16px; color: #333;'>{para_content}</p>")
                 desc = ''.join(formatted_paras)
             else:
-                desc = desc.replace('\n', '<br>')
-                desc = f"<p style='line-height: 1.7; color: #333;'>{desc}</p>"
+                # Handle potential None in desc
+                if desc:
+                    desc = desc.replace('\n', '<br>')
+                    desc = f"<p style='line-height: 1.7; color: #333;'>{desc}</p>"
+                else:
+                    desc = "<p style='line-height: 1.7; color: #333;'></p>"
 
             parts.append(f"<div style='font-size: 15px;'>{desc}</div>")
 
@@ -285,15 +298,18 @@ class RSSFeedGenerator:
 
     def _parse_date(self, date_str: str) -> datetime:
         """Parse date string to datetime object"""
-        if not date_str:
+        if not date_str or date_str is None:
             return None
 
         try:
             # Try ISO format first
-            dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-            if dt.tzinfo is None:
-                dt = pytz.UTC.localize(dt)
-            return dt
+            # Handle None explicitly before calling replace
+            if isinstance(date_str, str):
+                dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+                if dt.tzinfo is None:
+                    dt = pytz.UTC.localize(dt)
+                return dt
+            return None
         except (ValueError, AttributeError):
             return None
 
@@ -333,12 +349,12 @@ class RSSFeedGenerator:
         ]
 
         for job in jobs:
-            title = html.escape(job.get('title', 'Unknown Position'))
-            url = html.escape(job.get('url', '#'))
-            site = html.escape(job.get('site_name', 'Unknown Source'))
-            location = html.escape(job.get('location', 'Location not specified'))
-            description = html.escape(job.get('description', 'No description available'))
-            discovered = html.escape(job.get('discovered_date', 'Unknown'))
+            title = html.escape(job.get('title') or 'Unknown Position')
+            url = html.escape(job.get('url') or '#')
+            site = html.escape(job.get('site_name') or 'Unknown Source')
+            location = html.escape(job.get('location') or 'Location not specified')
+            description = html.escape(job.get('description') or 'No description available')
+            discovered = html.escape(job.get('discovered_date') or 'Unknown')
 
             html_parts.extend([
                 "<div class='job'>",
