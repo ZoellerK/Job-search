@@ -77,6 +77,9 @@ class JobScraper:
         """Extract job information from a DOM element"""
         job = {}
 
+        # Generic link texts that should be replaced with URL-extracted titles
+        generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
+
         # Try to find title
         title_tags = ['h1', 'h2', 'h3', 'h4', 'a']
         for tag in title_tags:
@@ -94,6 +97,13 @@ class JobScraper:
             # If we have title but no link, use the page URL
             job['url'] = base_url
 
+        # If title is generic (like "Apply Now"), try to extract from URL
+        if job.get('title') and job.get('url'):
+            if job['title'].lower() in generic_texts:
+                url_title = self._extract_title_from_url(job['url'])
+                if url_title:
+                    job['title'] = url_title
+
         # Try to find location
         location_keywords = ['location', 'city', 'office', 'remote']
         for keyword in location_keywords:
@@ -109,6 +119,112 @@ class JobScraper:
 
         return job
 
+    def _extract_title_from_url(self, url: str) -> Optional[str]:
+        """
+        Extract a meaningful job title from a URL slug.
+        Handles common URL patterns from job boards and ATSes.
+
+        Examples:
+            /program-partnerships-manager-connected/ -> Program Partnerships Manager Connected
+            /associate-director-of-program-implementation -> Associate Director Of Program Implementation
+            /Grants-Project-Manager -> Grants Project Manager
+            /jobs/5073319008 -> None (just an ID)
+        """
+        try:
+            parsed = urlparse(url)
+            path = parsed.path.strip('/')
+
+            # Also check query parameters for job title info
+            query_params = {}
+            if parsed.query:
+                from urllib.parse import parse_qs
+                query_params = parse_qs(parsed.query)
+
+            # Split path into segments
+            segments = [s for s in path.split('/') if s]
+
+            if not segments:
+                return None
+
+            # Common ATS patterns to skip
+            skip_patterns = ['jobs', 'job', 'careers', 'career', 'apply', 'opening', 'openings', 'position',
+                           'positions', 'o', 'postings', 'posting', 'details', 'detail', 'opportunitydetail',
+                           'single-offer-career', 'careers-list', 'job-board', 'employment', 'work']
+
+            # Patterns that indicate a segment is NOT a job title
+            # Pure numbers, UUIDs, short hashes
+            not_title_patterns = [
+                r'^\d+$',  # Pure numbers
+                r'^[a-f0-9]{8,}$',  # Hex strings (8+ chars)
+                r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$',  # UUIDs
+                r'^gh_jid=',  # Greenhouse job ID param
+                r'^jobId=',  # Generic job ID param
+                r'^\w{2,3}\d+',  # Code + numbers like F7, p49, B617
+                r'^(scl|fi)$',  # Dropbox segments
+            ]
+
+            # Work backwards through segments to find title
+            title_segment = None
+            for segment in reversed(segments):
+                # Skip if matches non-title patterns
+                if any(re.match(pattern, segment, re.I) for pattern in not_title_patterns):
+                    continue
+
+                # Skip common ATS path segments
+                if segment.lower() in skip_patterns:
+                    continue
+
+                # Skip very short segments (likely not titles)
+                if len(segment) < 3:
+                    continue
+
+                # Skip if segment looks like a domain or company name
+                # (single word, no separators, all lowercase or starts with capital)
+                if '-' not in segment and '_' not in segment and len(segment.split()) == 1:
+                    # Could be company name or generic term, be cautious
+                    # Only skip if it's very short or in a blocklist
+                    common_company_indicators = ['leadingeducators', 'stradaeducation', 'rethinkpriorities',
+                                                'thehumaneleague', 'civicnation', 'catalyst']
+                    if segment.lower() in common_company_indicators or len(segment) < 10:
+                        continue
+
+                title_segment = segment
+                break
+
+            if not title_segment:
+                return None
+
+            # Clean up the segment
+            # Replace common separators with spaces
+            title = re.sub(r'[-_+]', ' ', title_segment)
+
+            # Remove file extensions
+            title = re.sub(r'\.(pdf|doc|docx)$', '', title, flags=re.I)
+
+            # Remove common suffixes like job IDs at the end
+            title = re.sub(r'\s+\d+$', '', title)
+
+            # Remove query parameters if any slipped through
+            title = re.sub(r'\?.*$', '', title)
+
+            # Remove common prefixes
+            title = re.sub(r'^(job[\s-]*(announcement|posting|opening|description)[\s-]*)', '', title, flags=re.I)
+
+            # Title case each word
+            title = title.title()
+
+            # Clean up spacing
+            title = re.sub(r'\s+', ' ', title).strip()
+
+            # Only return if it looks like a real title (has multiple words or is reasonably long)
+            if len(title) > 10 or len(title.split()) > 1:
+                return title
+
+            return None
+
+        except Exception:
+            return None
+
     def _extract_jobs_from_links(self, soup: BeautifulSoup, base_url: str) -> List[Dict]:
         """Extract jobs from links that look like job postings - Enhanced version"""
         jobs = []
@@ -117,6 +233,9 @@ class JobScraper:
 
         # Exclude common non-job navigation keywords
         exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category']
+
+        # Generic link texts that should be replaced with URL-extracted titles
+        generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
 
         links = soup.find_all('a', href=True)
         for link in links:
@@ -151,8 +270,15 @@ class JobScraper:
                         if loc_elem:
                             location = loc_elem.get_text(strip=True)
 
+                    # If title is generic (like "Apply Now"), try to extract from URL
+                    title = text
+                    if text.lower() in generic_texts:
+                        url_title = self._extract_title_from_url(full_url)
+                        if url_title:
+                            title = url_title
+
                     jobs.append({
-                        'title': text,
+                        'title': title,
                         'url': full_url,
                         'description': description,
                         'location': location
