@@ -137,12 +137,13 @@ class RSSFeedGenerator:
         """Extract smart metadata from job for better Feedly categorization"""
         categories = []
 
-        # Combine title, description, and location for text analysis
+        # Combine title, description, location, and job_type for text analysis
         # Use 'or' to handle None values (job.get() returns None if key exists with None value)
         search_text = ' '.join([
             (job.get('title') or '').lower(),
             (job.get('description') or '').lower(),
-            (job.get('location') or '').lower()
+            (job.get('location') or '').lower(),
+            (job.get('job_type') or '').lower()
         ])
 
         # Work arrangement
@@ -183,6 +184,10 @@ class RSSFeedGenerator:
         metadata_parts = []
         if job.get('location'):
             metadata_parts.append(job['location'])
+        if job.get('job_type'):
+            metadata_parts.append(job['job_type'])
+        if job.get('salary'):
+            metadata_parts.append(job['salary'])
         if job.get('site_name'):
             metadata_parts.append(job['site_name'])
 
@@ -215,6 +220,10 @@ class RSSFeedGenerator:
             metadata.append(f"📍 <strong>{job['location']}</strong>")
         if job.get('site_name'):
             metadata.append(f"🏢 {job['site_name']}")
+        if job.get('job_type'):
+            metadata.append(f"💼 {job['job_type']}")
+        if job.get('salary'):
+            metadata.append(f"💰 {job['salary']}")
         if job.get('posted_date'):
             metadata.append(f"📅 Posted {job['posted_date']}")
 
@@ -355,14 +364,24 @@ class RSSFeedGenerator:
             location = html.escape(job.get('location') or 'Location not specified')
             description = html.escape(job.get('description') or 'No description available')
             discovered = html.escape(job.get('discovered_date') or 'Unknown')
+            job_type = html.escape(job.get('job_type') or '')
+            salary = html.escape(job.get('salary') or '')
+
+            # Build metadata line
+            meta_parts = [f"<strong>Source:</strong> {site}"]
+            if location and location != 'Location not specified':
+                meta_parts.append(f"<strong>Location:</strong> {location}")
+            if job_type:
+                meta_parts.append(f"<strong>Type:</strong> {job_type}")
+            if salary:
+                meta_parts.append(f"<strong>Salary:</strong> {salary}")
+            meta_parts.append(f"<strong>Discovered:</strong> {discovered}")
 
             html_parts.extend([
                 "<div class='job'>",
                 f"<h2><a href='{url}' target='_blank'>{title}</a></h2>",
                 f"<div class='meta'>",
-                f"<strong>Source:</strong> {site} | ",
-                f"<strong>Location:</strong> {location} | ",
-                f"<strong>Discovered:</strong> {discovered}",
+                ' | '.join(meta_parts),
                 "</div>",
                 f"<div class='description'>{description}</div>",
                 f"<a href='{url}' target='_blank'>View Full Posting →</a>",

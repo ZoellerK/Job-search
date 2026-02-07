@@ -406,6 +406,169 @@ class JobScraper:
 
         return jobs
 
+    def scrape_job_details(self, job_url: str) -> Dict:
+        """
+        Scrape detailed information from an individual job posting page.
+        Extracts description, location, salary, job type, and other metadata.
+
+        Args:
+            job_url: URL of the individual job posting
+
+        Returns:
+            Dictionary with job details (description, location, salary, etc.)
+        """
+        soup = self.fetch_page(job_url)
+        if not soup:
+            return {}
+
+        details = {}
+
+        # Extract job description - try multiple common patterns
+        description = None
+
+        # Pattern 1: Look for common description classes/ids
+        desc_patterns = [
+            {'class': re.compile(r'(job-)?description', re.I)},
+            {'id': re.compile(r'(job-)?description', re.I)},
+            {'class': re.compile(r'job-details?', re.I)},
+            {'class': re.compile(r'job-content', re.I)},
+            {'class': re.compile(r'posting-content', re.I)},
+            {'class': re.compile(r'position-description', re.I)},
+        ]
+
+        for pattern in desc_patterns:
+            desc_elem = soup.find(['div', 'section', 'article'], **pattern)
+            if desc_elem:
+                # Get text but preserve some structure
+                description = desc_elem.get_text(separator='\n', strip=True)
+                break
+
+        # Pattern 2: If no description found, look for main content area
+        if not description:
+            main_content = soup.find('main') or soup.find(id='main') or soup.find(class_=re.compile('main', re.I))
+            if main_content:
+                # Try to find the largest text block
+                text_blocks = main_content.find_all(['div', 'section', 'article'])
+                if text_blocks:
+                    # Get the element with the most text content
+                    largest = max(text_blocks, key=lambda x: len(x.get_text(strip=True)))
+                    if len(largest.get_text(strip=True)) > 100:  # Reasonable minimum length
+                        description = largest.get_text(separator='\n', strip=True)
+
+        # Pattern 3: Last resort - get all paragraphs in the page
+        if not description:
+            paragraphs = soup.find_all('p')
+            if len(paragraphs) > 3:  # If there are multiple paragraphs, likely a job description
+                description = '\n\n'.join(p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 20)
+
+        if description:
+            # Limit description length to avoid storing too much data
+            details['description'] = description[:5000]
+
+        # Extract location
+        location_patterns = [
+            {'class': re.compile(r'location', re.I)},
+            {'id': re.compile(r'location', re.I)},
+            {'class': re.compile(r'job-location', re.I)},
+            {'class': re.compile(r'(office|city|region)', re.I)},
+        ]
+
+        for pattern in location_patterns:
+            loc_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
+            if loc_elem:
+                location_text = loc_elem.get_text(strip=True)
+                # Filter out obviously wrong matches
+                if location_text and 5 < len(location_text) < 100:
+                    details['location'] = location_text
+                    break
+
+        # Extract salary/compensation
+        salary_patterns = [
+            {'class': re.compile(r'salary|compensation|pay', re.I)},
+            {'id': re.compile(r'salary|compensation', re.I)},
+        ]
+
+        for pattern in salary_patterns:
+            salary_elem = soup.find(['span', 'div', 'p'], **pattern)
+            if salary_elem:
+                salary_text = salary_elem.get_text(strip=True)
+                if salary_text and 5 < len(salary_text) < 200:
+                    details['salary'] = salary_text
+                    break
+
+        # Extract job type (full-time, part-time, etc.)
+        job_type_patterns = [
+            {'class': re.compile(r'job-?type|employment-?type', re.I)},
+            {'id': re.compile(r'job-?type', re.I)},
+        ]
+
+        for pattern in job_type_patterns:
+            type_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
+            if type_elem:
+                type_text = type_elem.get_text(strip=True)
+                if type_text and len(type_text) < 50:
+                    details['job_type'] = type_text
+                    break
+
+        # Extract posted date
+        date_patterns = [
+            {'class': re.compile(r'posted|date|publish', re.I)},
+            {'id': re.compile(r'posted|date', re.I)},
+        ]
+
+        for pattern in date_patterns:
+            date_elem = soup.find(['span', 'div', 'p', 'time'], **pattern)
+            if date_elem:
+                # Check for time tag with datetime attribute
+                if date_elem.name == 'time' and date_elem.get('datetime'):
+                    details['posted_date'] = date_elem['datetime']
+                    break
+                else:
+                    date_text = date_elem.get_text(strip=True)
+                    if date_text and 5 < len(date_text) < 100:
+                        details['posted_date'] = date_text
+                        break
+
+        return details
+
+    def enrich_jobs_with_details(self, jobs: List[Dict], max_jobs: int = 50) -> List[Dict]:
+        """
+        Enrich a list of jobs by scraping their detail pages.
+
+        Args:
+            jobs: List of job dictionaries with at least 'url' field
+            max_jobs: Maximum number of jobs to enrich (to avoid overloading)
+
+        Returns:
+            List of enriched job dictionaries
+        """
+        enriched_jobs = []
+
+        for i, job in enumerate(jobs[:max_jobs]):
+            if not job.get('url'):
+                enriched_jobs.append(job)
+                continue
+
+            # Only scrape details if we don't already have a description
+            if job.get('description'):
+                enriched_jobs.append(job)
+                continue
+
+            print(f"Enriching job {i+1}/{min(len(jobs), max_jobs)}: {job.get('title', 'Unknown')}")
+
+            # Scrape detail page
+            details = self.scrape_job_details(job['url'])
+
+            # Merge details into job
+            enriched_job = {**job, **details}
+            enriched_jobs.append(enriched_job)
+
+            # Be respectful - add a small delay between requests
+            if i < len(jobs) - 1:
+                time.sleep(0.5)
+
+        return enriched_jobs
+
     def test_selectors(self, url: str) -> Dict:
         """
         Test URL and return information about the page structure

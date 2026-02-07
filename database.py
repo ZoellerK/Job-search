@@ -38,9 +38,28 @@ class JobDatabase:
                     posted_date TEXT,
                     discovered_date TEXT NOT NULL,
                     keywords TEXT,
+                    salary TEXT,
+                    job_type TEXT,
+                    details_scraped BOOLEAN DEFAULT 0,
                     UNIQUE(url)
                 )
             """)
+
+            # Add new columns to existing tables if they don't exist
+            try:
+                cursor.execute("ALTER TABLE jobs ADD COLUMN salary TEXT")
+            except sqlite3.OperationalError:
+                pass  # Column already exists
+
+            try:
+                cursor.execute("ALTER TABLE jobs ADD COLUMN job_type TEXT")
+            except sqlite3.OperationalError:
+                pass  # Column already exists
+
+            try:
+                cursor.execute("ALTER TABLE jobs ADD COLUMN details_scraped BOOLEAN DEFAULT 0")
+            except sqlite3.OperationalError:
+                pass  # Column already exists
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS site_parsers (
@@ -56,7 +75,9 @@ class JobDatabase:
 
     def add_job(self, site_name: str, url: str, title: str,
                 description: str = None, location: str = None,
-                posted_date: str = None, keywords: str = None) -> bool:
+                posted_date: str = None, keywords: str = None,
+                salary: str = None, job_type: str = None,
+                details_scraped: bool = False) -> bool:
         """
         Add a new job posting to the database
         Returns True if added, False if duplicate
@@ -65,10 +86,12 @@ class JobDatabase:
             try:
                 conn.execute("""
                     INSERT INTO jobs (site_name, url, title, description, location,
-                                    posted_date, discovered_date, keywords)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                                    posted_date, discovered_date, keywords, salary,
+                                    job_type, details_scraped)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (site_name, url, title, description, location, posted_date,
-                      datetime.now(timezone.utc).isoformat(), keywords))
+                      datetime.now(timezone.utc).isoformat(), keywords, salary,
+                      job_type, details_scraped))
                 conn.commit()
                 return True
             except sqlite3.IntegrityError:
@@ -85,7 +108,10 @@ class JobDatabase:
             'location': row[5],
             'posted_date': row[6],
             'discovered_date': row[7],
-            'keywords': row[8]
+            'keywords': row[8],
+            'salary': row[9] if len(row) > 9 else None,
+            'job_type': row[10] if len(row) > 10 else None,
+            'details_scraped': row[11] if len(row) > 11 else False
         } for row in rows]
 
     def get_recent_jobs(self, limit: int = 100) -> List[Dict]:
@@ -95,7 +121,7 @@ class JobDatabase:
 
             cursor.execute("""
                 SELECT id, site_name, url, title, description, location,
-                       posted_date, discovered_date, keywords
+                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
                 FROM jobs
                 ORDER BY discovered_date DESC
                 LIMIT ?
@@ -110,11 +136,91 @@ class JobDatabase:
 
             cursor.execute("""
                 SELECT id, site_name, url, title, description, location,
-                       posted_date, discovered_date, keywords
+                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
                 FROM jobs
                 WHERE discovered_date > ?
                 ORDER BY discovered_date DESC
             """, (since_date,))
+
+            return self._rows_to_jobs(cursor.fetchall())
+
+    def update_job_details(self, url: str, description: str = None,
+                          location: str = None, posted_date: str = None,
+                          salary: str = None, job_type: str = None) -> bool:
+        """
+        Update job details for an existing job by URL
+
+        Args:
+            url: Job URL to update
+            description: Job description
+            location: Job location
+            posted_date: Posted date
+            salary: Salary/compensation
+            job_type: Job type (full-time, part-time, etc.)
+
+        Returns:
+            True if updated, False if job not found
+        """
+        with self._connect() as conn:
+            cursor = conn.cursor()
+
+            # Build update query dynamically based on provided fields
+            updates = []
+            values = []
+
+            if description is not None:
+                updates.append("description = ?")
+                values.append(description)
+
+            if location is not None:
+                updates.append("location = ?")
+                values.append(location)
+
+            if posted_date is not None:
+                updates.append("posted_date = ?")
+                values.append(posted_date)
+
+            if salary is not None:
+                updates.append("salary = ?")
+                values.append(salary)
+
+            if job_type is not None:
+                updates.append("job_type = ?")
+                values.append(job_type)
+
+            if updates:
+                updates.append("details_scraped = ?")
+                values.append(True)
+                values.append(url)  # For WHERE clause
+
+                query = f"UPDATE jobs SET {', '.join(updates)} WHERE url = ?"
+                cursor.execute(query, values)
+                conn.commit()
+                return cursor.rowcount > 0
+
+            return False
+
+    def get_jobs_without_details(self, limit: int = 50) -> List[Dict]:
+        """
+        Get jobs that don't have details scraped yet
+
+        Args:
+            limit: Maximum number of jobs to return
+
+        Returns:
+            List of job dictionaries without details
+        """
+        with self._connect() as conn:
+            cursor = conn.cursor()
+
+            cursor.execute("""
+                SELECT id, site_name, url, title, description, location,
+                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
+                FROM jobs
+                WHERE details_scraped = 0 OR details_scraped IS NULL
+                ORDER BY discovered_date DESC
+                LIMIT ?
+            """, (limit,))
 
             return self._rows_to_jobs(cursor.fetchall())
 

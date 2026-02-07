@@ -61,7 +61,7 @@ class JobAggregator:
         Scrape a single site and add new jobs to database
 
         Args:
-            site: Dictionary with site_name, url, keywords
+            site: Dictionary with site_name, url, keywords, scrape_details
 
         Returns:
             Dictionary with scraping results: {
@@ -74,6 +74,7 @@ class JobAggregator:
         site_name = site['site_name']
         url = site['url']
         keywords = site.get('keywords', '')
+        scrape_details = site.get('scrape_details', 'no').lower() in ['yes', 'true', '1']
 
         try:
             parser_config = self.db.get_parser_config(site_name)
@@ -82,6 +83,11 @@ class JobAggregator:
                 jobs = self.scraper.scrape_with_config(url, parser_config)
             else:
                 jobs = self.scraper.auto_detect_jobs(url)
+
+            # If scrape_details is enabled, enrich jobs with detail page information
+            if scrape_details and jobs:
+                print(f"   → Scraping detail pages for {site_name} ({len(jobs[:20])} jobs)...")
+                jobs = self.scraper.enrich_jobs_with_details(jobs, max_jobs=20)
 
             new_jobs_count = 0
             for job in jobs:
@@ -97,7 +103,10 @@ class JobAggregator:
                     description=job.get('description'),
                     location=job.get('location'),
                     posted_date=job.get('posted_date'),
-                    keywords=keywords
+                    keywords=keywords,
+                    salary=job.get('salary'),
+                    job_type=job.get('job_type'),
+                    details_scraped=scrape_details
                 )
 
                 if added:
