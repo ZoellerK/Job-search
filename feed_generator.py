@@ -1,6 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict
-import pytz
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import html
@@ -47,7 +46,7 @@ class RSSFeedGenerator:
         ET.SubElement(channel, 'link').text = self.link
         ET.SubElement(channel, 'description').text = self.description
         ET.SubElement(channel, 'language').text = 'en'
-        ET.SubElement(channel, 'lastBuildDate').text = self._format_rfc822_date(datetime.now(pytz.UTC))
+        ET.SubElement(channel, 'lastBuildDate').text = self._format_rfc822_date(datetime.now(timezone.utc))
 
         # Add atom:link for better feed discovery (Feedly best practice)
         ET.SubElement(channel, '{http://www.w3.org/2005/Atom}link', {
@@ -196,16 +195,13 @@ class RSSFeedGenerator:
 
         # Truncated description for preview
         if job.get('description'):
-            desc = job['description']
-            # Handle None description
-            if desc is not None:
-                desc = desc.strip()
-                # Remove excessive whitespace
-                desc = ' '.join(desc.split())
-                # Truncate for card preview (Feedly shows ~150 chars)
-                if len(desc) > 200:
-                    desc = desc[:197] + '...'
-                parts.append(desc)
+            desc = job['description'].strip()
+            # Remove excessive whitespace
+            desc = ' '.join(desc.split())
+            # Truncate for card preview (Feedly shows ~150 chars)
+            if len(desc) > 200:
+                desc = desc[:197] + '...'
+            parts.append(desc)
 
         return '\n\n'.join(parts) if parts else "View job details"
 
@@ -232,13 +228,7 @@ class RSSFeedGenerator:
 
         # Main description with better readability
         if job.get('description'):
-            desc = job['description']
-
-            # Handle None description
-            if desc is None:
-                desc = ''
-
-            desc = html.escape(desc)
+            desc = html.escape(job['description'])
 
             # Convert paragraphs
             paragraphs = desc.split('\n\n')
@@ -251,17 +241,12 @@ class RSSFeedGenerator:
                         if len(para) < 60 and not para.endswith('.') and not para.endswith(','):
                             formatted_paras.append(f"<h3 style='color: #667eea; margin-top: 24px; margin-bottom: 12px; font-size: 18px;'>{para}</h3>")
                         else:
-                            # Handle potential None in para
-                            para_content = para.replace(chr(10), '<br>') if para else ''
+                            para_content = para.replace(chr(10), '<br>')
                             formatted_paras.append(f"<p style='line-height: 1.7; margin-bottom: 16px; color: #333;'>{para_content}</p>")
                 desc = ''.join(formatted_paras)
             else:
-                # Handle potential None in desc
-                if desc:
-                    desc = desc.replace('\n', '<br>')
-                    desc = f"<p style='line-height: 1.7; color: #333;'>{desc}</p>"
-                else:
-                    desc = "<p style='line-height: 1.7; color: #333;'></p>"
+                desc = desc.replace('\n', '<br>')
+                desc = f"<p style='line-height: 1.7; color: #333;'>{desc}</p>"
 
             parts.append(f"<div style='font-size: 15px;'>{desc}</div>")
 
@@ -273,7 +258,8 @@ class RSSFeedGenerator:
             parts.append(f"<div style='margin: 20px 0; padding-top: 16px; border-top: 1px solid #eee;'><strong style='color: #666; font-size: 13px;'>Tags</strong><br style='margin-bottom: 8px;'>{''.join(keywords_html)}</div>")
 
         if job.get('url'):
-            parts.append(f"<div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'><a href=\"{job['url']}\" style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'>Apply for this Position</a></div>")
+            safe_url = html.escape(job['url'])
+            parts.append(f"<div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'><a href=\"{safe_url}\" style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'>Apply for this Position</a></div>")
 
         return ''.join(parts) if parts else "No details available"
 
@@ -302,23 +288,19 @@ class RSSFeedGenerator:
             'url': self.link,
             'site_name': 'System Update',
             'description': '\n'.join(summary_parts),
-            'discovered_date': datetime.now(pytz.UTC).isoformat()
+            'discovered_date': datetime.now(timezone.utc).isoformat()
         }
 
     def _parse_date(self, date_str: str) -> datetime:
         """Parse date string to datetime object"""
-        if not date_str or date_str is None:
+        if not date_str:
             return None
 
         try:
-            # Try ISO format first
-            # Handle None explicitly before calling replace
-            if isinstance(date_str, str):
-                dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-                if dt.tzinfo is None:
-                    dt = pytz.UTC.localize(dt)
-                return dt
-            return None
+            dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt
         except (ValueError, AttributeError):
             return None
 
@@ -326,7 +308,7 @@ class RSSFeedGenerator:
         """Format datetime as RFC 822 date string for RSS"""
         # Ensure timezone aware
         if dt.tzinfo is None:
-            dt = pytz.UTC.localize(dt)
+            dt = dt.replace(tzinfo=timezone.utc)
         return dt.strftime('%a, %d %b %Y %H:%M:%S %z')
 
     def generate_html_preview(self, jobs: List[Dict], output_file: str = "preview.html") -> str:

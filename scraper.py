@@ -1,9 +1,11 @@
+import threading
+
 import requests
 from bs4 import BeautifulSoup
 from typing import List, Dict, Optional
 import time
 import re
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, parse_qs
 
 
 class JobScraper:
@@ -13,14 +15,21 @@ class JobScraper:
         self.user_agent = user_agent or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         self.timeout = timeout
         self.retry_attempts = retry_attempts
-        self.session = requests.Session()
-        self.session.headers.update({'User-Agent': self.user_agent})
+        self._local = threading.local()
+
+    def _get_session(self) -> requests.Session:
+        """Get a thread-local requests session (requests.Session is not thread-safe)"""
+        if not hasattr(self._local, 'session'):
+            self._local.session = requests.Session()
+            self._local.session.headers.update({'User-Agent': self.user_agent})
+        return self._local.session
 
     def fetch_page(self, url: str) -> Optional[BeautifulSoup]:
         """Fetch and parse a web page with retries"""
+        session = self._get_session()
         for attempt in range(self.retry_attempts):
             try:
-                response = self.session.get(url, timeout=self.timeout)
+                response = session.get(url, timeout=self.timeout)
                 response.raise_for_status()
                 return BeautifulSoup(response.content, 'lxml')
             except requests.RequestException as e:
@@ -133,12 +142,6 @@ class JobScraper:
         try:
             parsed = urlparse(url)
             path = parsed.path.strip('/')
-
-            # Also check query parameters for job title info
-            query_params = {}
-            if parsed.query:
-                from urllib.parse import parse_qs
-                query_params = parse_qs(parsed.query)
 
             # Split path into segments
             segments = [s for s in path.split('/') if s]

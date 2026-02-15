@@ -191,7 +191,7 @@ def main():
 
     if not suggestions:
         parser.print_help()
-        return
+        return 0
 
     results = check_duplicates(suggestions)
 
@@ -224,10 +224,9 @@ def main():
     else:
         print(f"Summary: {new_count} new, {active_count} already active, {rejected_count} already rejected")
     print("="*80 + "\n")
+    return 0
 
 
 if __name__ == "__main__":
     import sys
-    exit_code = main()
-    if exit_code is not None:
-        sys.exit(exit_code)
+    sys.exit(main())

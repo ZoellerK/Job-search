@@ -193,13 +193,13 @@ class SiteSetup:
         else:
             with open('sites.csv', 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['site_name', 'url', 'active', 'keywords'])
+                writer.writerow(['site_name', 'url', 'active', 'keywords', 'scrape_details'])
 
         # Append new site
         try:
             with open('sites.csv', 'a', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow([site_name, url, 'yes', keywords])
+                writer.writerow([site_name, url, 'yes', keywords, 'no'])
 
             print(f"\n✅ Added {site_name} to sites.csv")
             print(f"   Jobs detected: {len(jobs)}")

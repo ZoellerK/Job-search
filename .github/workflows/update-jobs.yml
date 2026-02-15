@@ -54,11 +54,9 @@ jobs:
       run: |
         mkdir -p docs
         cp feed.xml docs/
-        cp preview.html docs/index.html
 
-        # Add timestamp to the HTML
-        echo "<p><small>Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')</small></p>" >> docs/index.html
-        echo "</body></html>" >> docs/index.html
+        # Insert timestamp before the closing </body> tag (preview.html already has closing tags)
+        sed 's|</body>|<p><small>Last updated: '"$(date -u '+%Y-%m-%d %H:%M:%S UTC')"'</small></p></body>|' preview.html > docs/index.html
 
     - name: Setup Pages
       uses: actions/configure-pages@v4

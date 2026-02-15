@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Test multiple problematic sites to identify common issues"""
 
-import csv
 from scraper import JobScraper
 from database import JobDatabase
 

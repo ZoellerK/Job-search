@@ -11,8 +11,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict
 
-import pytz
-
 from database import JobDatabase
 from scraper import JobScraper
 from feed_generator import RSSFeedGenerator
