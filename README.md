@@ -1,363 +1,209 @@
 # Job Posting RSS Feed
 
-A Python tool that scrapes job postings from multiple websites and generates an RSS feed you can subscribe to. Perfect for monitoring job boards and company career pages that don't offer their own RSS feeds.
+A Python tool that scrapes job postings from multiple websites and generates an RSS feed you can subscribe to. Monitors job boards and company career pages that don't offer their own RSS feeds.
 
 ## Features
 
-- **Multi-source aggregation**: Monitor multiple job sites from a single feed
-- **Auto-detection**: Automatically detects job listings on most career pages
-- **Custom parsers**: Configure custom scrapers for sites that need it
-- **RSS feed generation**: Creates a standard RSS feed you can use in any feed reader
-- **HTML preview**: Generates a browsable HTML page of jobs
-- **Duplicate detection**: Tracks jobs you've already seen
-- **Keyword filtering**: Filter jobs by keywords per site
-- **Daily scheduling**: Optionally run on a schedule
-- **GitHub Actions automation**: Run automatically in the cloud (no computer needed!)
+- **Multi-source aggregation** — monitor 70+ career pages from a single feed
+- **Auto-detection** — automatically finds job listings on most career pages
+- **Custom parsers** — configure site-specific scrapers when auto-detect isn't enough
+- **RSS feed generation** — standard RSS 2.0 feed optimised for Feedly
+- **HTML preview** — browsable HTML page of recent jobs
+- **Duplicate detection** — tracks jobs by URL; cross-site dedup via fuzzy title matching
+- **Keyword filtering** — filter jobs per site with comma-separated keywords
+- **Site health tracking** — automatically flags sites that fail 3+ consecutive scrapes (alerts appear in your feed)
+- **Smart rate limiting** — per-domain throttling with automatic back-off on 429s
+- **JS rendering** — optional Playwright fallback for JavaScript-heavy career pages
+- **Data export** — export jobs to CSV or JSON
+- **Structured logging** — logs to console + `job_aggregator.log` for debugging
+- **Automated tests** — 44-test pytest suite with mocked HTTP
+- **GitHub Actions** — runs automatically in the cloud (no computer needed)
 
-## Two Ways to Use This
+## Quick Start
 
-### Option 1: Automated Cloud (Recommended for Phone Users)
+### 1. Install
 
-**Best if you want to manage everything from your phone.**
-
-- Runs automatically in GitHub's cloud (free)
-- Edit sites from GitHub mobile app or web browser
-- RSS feed published at a public URL
-- No computer needed, ever
-
-**[📱 See PHONE_SETUP.md for complete instructions](PHONE_SETUP.md)**
-
-### Option 2: Local Computer
-
-**Best if you have a computer and want more control.**
-
-- Run the Python script on your computer
-- More flexibility and customization
-- Can run offline
-
-**Continue reading below for local installation.**
-
----
-
-## Installation (Local Computer)
-
-1. Clone or download this repository
-
-2. Install Python dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. You're ready to go!
+**Optional** — for JavaScript-heavy sites (React/Vue career pages):
 
-## Quick Start
+```bash
+pip install playwright && playwright install chromium
+```
 
-### 1. Add Job Sites
+### 2. Add job sites
 
-Edit `sites.csv` to add the websites you want to monitor:
+Edit `sites.csv`:
 
 ```csv
-site_name,url,active,keywords
-Tech Company,https://example.com/careers,yes,python developer
-Startup Co,https://startup.example/jobs,yes,remote
-Another Corp,https://corp.example/openings,yes,
+site_name,url,active,keywords,scrape_details
+Democracy Fund,https://democracyfund.org/about/jobs/,yes,,no
+CSIS,https://careers.csis.org/,yes,,no
 ```
 
-- **site_name**: A friendly name for the site
-- **url**: The URL of the careers/jobs page
-- **active**: Set to `yes` to monitor, `no` to disable
-- **keywords**: Optional comma-separated keywords to filter jobs
+| Column | Description |
+|--------|-------------|
+| `site_name` | Display name for the site |
+| `url` | URL of the careers/jobs page |
+| `active` | `yes` to monitor, `no` to disable |
+| `keywords` | Optional comma-separated filter keywords |
+| `scrape_details` | `yes` to also scrape individual job detail pages |
 
-### 2. Run the Aggregator
+### 3. Run
 
 ```bash
-python job_aggregator.py
+python job_aggregator.py          # Full update (scrape + feed + preview)
 ```
 
 This will:
-1. Scrape all active sites
-2. Find new job postings
-3. Generate an RSS feed (`feed.xml`)
-4. Create an HTML preview (`preview.html`)
-5. Show statistics
+1. Scrape all active sites (5 in parallel)
+2. Deduplicate against existing jobs (URL + cross-site fuzzy title matching)
+3. Record site health for each scrape
+4. Generate `feed.xml` (RSS) and `preview.html`
+5. Flag any sites failing 3+ times in a row (alert appears in feed)
 
-### 3. Subscribe to Your Feed
+### 4. Subscribe
 
-Option A: **Local RSS reader**
-- Open `feed.xml` in your RSS reader (Feedly, NetNewsWire, etc.)
+- **Feedly / RSS reader** — subscribe to the published URL or local `feed.xml`
+- **Browser** — open `preview.html`
+- **Local server** — `python -m http.server 8000` then subscribe to `http://localhost:8000/feed.xml`
 
-Option B: **Web browser**
-- Open `preview.html` in your browser to view jobs
-
-Option C: **Serve the feed**
-```bash
-python -m http.server 8000
-```
-Then subscribe to `http://localhost:8000/feed.xml`
-
-## Usage
-
-### Basic Commands
+## Commands
 
 ```bash
-# Run full update (scrape + generate feed)
-python job_aggregator.py update
-
-# Just scrape sites
-python job_aggregator.py scrape
-
-# Just generate RSS feed from database
-python job_aggregator.py feed
-
-# Generate HTML preview
-python job_aggregator.py preview
-
-# Show statistics
-python job_aggregator.py stats
+python job_aggregator.py update    # Full update cycle (default)
+python job_aggregator.py scrape    # Scrape only (no feed generation)
+python job_aggregator.py feed      # Regenerate feed from database
+python job_aggregator.py preview   # Regenerate HTML preview
+python job_aggregator.py stats     # Show database statistics
+python job_aggregator.py health    # Show site health summary + alerts
+python job_aggregator.py export csv              # Export all jobs to jobs_export.csv
+python job_aggregator.py export json             # Export all jobs to jobs_export.json
+python job_aggregator.py export json my_jobs.json  # Export to custom file
 ```
 
-### Setting Up New Sites
-
-The tool includes a setup utility to help configure new job sites:
-
-#### Auto-detect Jobs
+## Site Setup Tools
 
 ```bash
-python setup_site.py auto https://example.com/careers
+python setup_site.py auto https://example.com/careers    # Auto-detect jobs
+python setup_site.py test https://example.com/careers    # Analyse page structure
+python setup_site.py config https://example.com/careers "Company Name"  # Create custom parser
 ```
-
-This will:
-- Attempt to automatically detect job listings
-- Show you what it found
-- Optionally add the site to your `sites.csv`
-
-#### Test a URL
-
-```bash
-python setup_site.py test https://example.com/careers
-```
-
-This shows you:
-- Page structure
-- Common HTML classes
-- Common tags
-- Number of links
-
-Helpful for understanding how to configure custom parsers.
-
-#### Create Custom Parser
-
-If auto-detection doesn't work well:
-
-```bash
-python setup_site.py config https://example.com/careers "Example Company"
-```
-
-This launches an interactive wizard that helps you create a custom parser configuration. You'll be asked to identify:
-- The HTML element that contains each job
-- Where the job title is
-- Where the job URL is
-- Where location/description are (optional)
-
-The tool saves this configuration and uses it automatically.
-
-### Scheduling
-
-To run the aggregator daily:
-
-```bash
-# Run at 9 AM daily (default)
-python scheduler.py
-
-# Run at custom time (24-hour format)
-python scheduler.py 14:30
-```
-
-Or use cron (Linux/Mac):
-```bash
-# Add to crontab (runs at 9 AM daily)
-0 9 * * * cd /path/to/Job-search && python job_aggregator.py update
-```
-
-Or Windows Task Scheduler:
-- Create a task that runs `python job_aggregator.py update` daily
 
 ## Configuration
 
 ### config.json
 
-Main configuration file:
-
 ```json
 {
   "feed": {
-    "title": "Job Postings Aggregator",
-    "description": "Aggregated job postings from multiple sources",
+    "title": "Job Postings RSS Feed",
+    "description": "Aggregated job postings",
     "author": "Job Search Tool",
-    "link": "http://localhost:8000/feed.xml",
-    "language": "en"
+    "link": "https://yourdomain.github.io/Job-search/feed.xml",
+    "include_site_in_title": true,
+    "simple_descriptions": false,
+    "include_summary": true
   },
-  "database": {
-    "path": "jobs.db"
-  },
-  "output": {
-    "feed_file": "feed.xml",
-    "max_items": 100
-  },
+  "database": { "path": "jobs.db" },
+  "output": { "feed_file": "feed.xml", "max_items": 100 },
   "scraping": {
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "timeout": 30,
-    "retry_attempts": 3
+    "user_agent": "Mozilla/5.0 ...",
+    "timeout": 15,
+    "retry_attempts": 2
   }
 }
 ```
 
-### sites.csv
+| Feed option | Default | Description |
+|-------------|---------|-------------|
+| `include_site_in_title` | `true` | Append site name to each job title |
+| `simple_descriptions` | `false` | Use plain text instead of rich HTML |
+| `include_summary` | `true` | Add scrape summary + health alerts as first feed item |
 
-List of sites to monitor:
+## Site Health Tracking
 
-- **site_name**: Display name for the site
-- **url**: Full URL to the jobs/careers page
-- **active**: `yes` or `no` to enable/disable
-- **keywords**: Optional filter (comma-separated)
+Every scrape records success/failure per site in a `site_health` table. When a site fails 3+ times in a row:
 
-Example:
-```csv
-site_name,url,active,keywords
-Python Jobs,https://pythonjobs.github.io/,yes,remote,senior
-Remote OK,https://remoteok.com/,yes,python,developer
-Y Combinator,https://www.ycombinator.com/jobs,yes,
-```
+- A **warning banner** appears in the RSS feed summary item (visible in Feedly)
+- The `health` command shows a full breakdown
+- The log file records the errors
+
+This lets you know immediately when a site changes its URL or blocks scraping, without auto-disabling anything.
 
 ## How It Works
 
-1. **Scraping**: The tool visits each active URL in `sites.csv`
-2. **Detection**: Uses either auto-detection or custom parser to find jobs
-3. **Filtering**: Applies keyword filters if specified
-4. **Storage**: Saves new jobs to SQLite database (`jobs.db`)
-5. **Deduplication**: Skips jobs that were already found
-6. **Feed Generation**: Creates RSS feed from recent jobs
-7. **Preview**: Generates HTML page for easy viewing
+1. **Scraping** — visits each active URL in `sites.csv` (5 threads)
+2. **Detection** — uses custom parser config (if saved) or auto-detection heuristics
+3. **JS fallback** — if the page looks like a JS-rendered shell and Playwright is installed, retries with headless Chromium
+4. **Rate limiting** — per-domain throttling; automatic exponential back-off on HTTP 429
+5. **Filtering** — applies keyword filters if configured
+6. **Deduplication** — skips jobs with duplicate URLs; also checks for matching normalised titles across sites
+7. **Health tracking** — records success/failure + error details per site
+8. **Storage** — saves new jobs to SQLite (`jobs.db`)
+9. **Feed generation** — creates RSS 2.0 feed with rich HTML content, metadata categories, and health alerts
 
-## Troubleshooting
+## Scheduling
 
-### "No jobs detected"
+### With the built-in scheduler
 
-Try these steps:
+```bash
+python scheduler.py          # Runs at 9 AM daily (default)
+python scheduler.py 14:30    # Custom time
+```
 
-1. **Test the URL**:
-   ```bash
-   python setup_site.py test https://example.com/careers
-   ```
-   Make sure the page loads and shows common elements.
+### With cron (Linux/Mac)
 
-2. **Check the page manually**: Visit the URL in a browser. Are there actually job listings?
+```bash
+0 9 * * * cd /path/to/Job-search && python job_aggregator.py update
+```
 
-3. **Create a custom parser**:
-   ```bash
-   python setup_site.py config https://example.com/careers "Site Name"
-   ```
+### With GitHub Actions
 
-4. **Inspect the HTML**: Right-click a job listing and "Inspect Element" to see the HTML structure.
+See the `.github/workflows/` directory — runs automatically in the cloud. Edit `sites.csv` from the GitHub web UI or mobile app.
 
-### "Connection timeout"
+**[See PHONE_SETUP.md for managing everything from your phone](PHONE_SETUP.md)**
 
-- Check your internet connection
-- The site might be blocking automated access
-- Try increasing timeout in `config.json`
+## Running Tests
 
-### "Too many duplicates"
+```bash
+python -m pytest tests/ -v
+```
 
-- The tool tracks jobs by URL
-- If a site changes job URLs frequently, you may see duplicates
-- Consider clearing old jobs from the database periodically
+44 tests covering database operations, scraper logic (with mocked HTTP), feed generation, site health, cross-site dedup, and data export.
 
 ## Project Structure
 
 ```
 Job-search/
-├── job_aggregator.py    # Main orchestrator script
-├── scraper.py          # Web scraping logic
-├── database.py         # SQLite database management
-├── feed_generator.py   # RSS feed generation
-├── setup_site.py       # Site configuration tool
-├── scheduler.py        # Scheduling script
-├── config.json         # Configuration
-├── sites.csv           # List of sites to monitor
-├── requirements.txt    # Python dependencies
-├── jobs.db            # SQLite database (created on first run)
-├── feed.xml           # Generated RSS feed
-└── preview.html       # Generated HTML preview
+├── job_aggregator.py    # Main orchestrator + CLI
+├── scraper.py           # Web scraping (requests + optional Playwright)
+├── database.py          # SQLite: jobs, site_parsers, site_health tables
+├── feed_generator.py    # RSS 2.0 + HTML preview generation
+├── setup_site.py        # Interactive site configuration tool
+├── scheduler.py         # Daily scheduling wrapper
+├── config.json          # Configuration
+├── sites.csv            # Sites to monitor
+├── requirements.txt     # Python dependencies
+├── pytest.ini           # Test configuration
+├── tests/               # Automated test suite
+│   ├── test_database.py
+│   ├── test_scraper.py
+│   └── test_feed_generator.py
+├── jobs.db              # SQLite database (created on first run)
+├── feed.xml             # Generated RSS feed
+├── preview.html         # Generated HTML preview
+└── job_aggregator.log   # Log file
 ```
-
-## Advanced Usage
-
-### Python API
-
-You can import and use the modules in your own scripts:
-
-```python
-from job_aggregator import JobAggregator
-
-# Create aggregator
-agg = JobAggregator()
-
-# Scrape all sites
-new_jobs = agg.scrape_all()
-
-# Get recent jobs from database
-jobs = agg.db.get_recent_jobs(limit=50)
-
-# Generate custom feed
-agg.generate_feed(max_items=200)
-```
-
-### Custom Parsers
-
-Parser configurations are stored in the database. You can also set them programmatically:
-
-```python
-from database import JobDatabase
-
-db = JobDatabase()
-
-parser_config = {
-    'job_container': {'tag': 'div', 'class': 'job-listing'},
-    'title': {'tag': 'h3', 'class': 'job-title'},
-    'url': {'tag': 'a', 'attr': 'href'},
-    'location': {'tag': 'span', 'class': 'location'}
-}
-
-db.save_parser_config('Site Name', 'https://example.com', parser_config)
-```
-
-
-## Tips
-
-1. **Start small**: Add 2-3 sites first, make sure they work
-2. **Test before adding**: Use `setup_site.py auto` to test a URL before adding to sites.csv
-3. **Use keywords**: Filter noisy sites with targeted keywords
-4. **Check regularly**: Run manually a few times before setting up scheduling
-5. **Monitor the database**: Use `python job_aggregator.py stats` to see what's being found
-6. **Back up your database**: Copy `jobs.db` periodically if you want to keep history
 
 ## Limitations
 
-- Sites with heavy JavaScript (React, Vue, etc.) may not work without additional tools like Selenium
-- Sites with CAPTCHA or anti-bot measures won't work
-- Rate limiting may cause some requests to fail
-- Job listings without clear structure may not be detected automatically
+- Sites with CAPTCHA or aggressive anti-bot measures won't work
+- Some ATS platforms (Workday, Taleo) may need custom parser configs
+- Cross-site dedup uses exact normalised title matching — very similar but non-identical titles won't match
 
 ## License
 
 This project is provided as-is for personal use. Be respectful of the websites you scrape and follow their terms of service.
-
-## Contributing
-
-Feel free to modify and extend this tool for your needs! Some ideas:
-
-- Add support for Selenium/Playwright for JavaScript-heavy sites
-- Integrate with job board APIs (Indeed, LinkedIn, etc.)
-- Create a web interface
-- Add more sophisticated filtering (salary ranges, experience level, etc.)
-- Export to different formats (JSON, CSV, etc.)

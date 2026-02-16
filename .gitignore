@@ -45,3 +45,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Test cache
+.pytest_cache/
+
+# Export files
+jobs_export.*

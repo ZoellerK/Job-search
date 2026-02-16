@@ -4,3 +4,11 @@ schedule>=1.2.0
 python-dateutil>=2.8.0
 lxml>=4.9.0
 pytz
+
+# Optional: JS rendering for sites that need it
+# Install with: pip install playwright && playwright install chromium
+# playwright>=1.40.0
+
+# Testing
+pytest>=7.0.0
+pytest-mock>=3.10.0

@@ -1,8 +1,11 @@
+import logging
 from datetime import datetime, timezone
 from typing import List, Dict
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import html
+
+logger = logging.getLogger(__name__)
 
 
 class RSSFeedGenerator:
@@ -263,8 +266,9 @@ class RSSFeedGenerator:
 
         return ''.join(parts) if parts else "No details available"
 
-    def build_summary_item(self, scrape_results: Dict) -> Dict:
-        """Build a summary feed item from scraping results"""
+    def build_summary_item(self, scrape_results: Dict,
+                           health_alerts: List[Dict] = None) -> Dict:
+        """Build a summary feed item from scraping results + health alerts."""
         summary_parts = []
         summary_parts.append("<h3>Update Summary</h3>")
         summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
@@ -275,6 +279,26 @@ class RSSFeedGenerator:
             failed_sites = [r['site_name'] for r in scrape_results['site_results'] if not r['success']]
             summary_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
 
+        # Health alerts — persistently broken sites flagged for your attention
+        if health_alerts:
+            summary_parts.append(
+                "<div style='background: #fff3cd; border: 1px solid #ffc107; "
+                "padding: 12px 16px; border-radius: 4px; margin: 12px 0;'>"
+            )
+            summary_parts.append(
+                "<strong style='color: #856404;'>Site Health Alerts</strong>"
+                "<p style='color: #856404; margin: 4px 0;'>"
+                "The following sites have failed 3+ consecutive scrapes and may need attention:</p><ul>"
+            )
+            for alert in health_alerts:
+                name = html.escape(alert['site_name'])
+                error = html.escape(alert.get('last_error') or 'unknown error')
+                summary_parts.append(
+                    f"<li><strong>{name}</strong> — {alert['consecutive_failures']} failures "
+                    f"(last: {error})</li>"
+                )
+            summary_parts.append("</ul></div>")
+
         sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
         if sites_with_jobs:
             summary_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
@@ -283,8 +307,12 @@ class RSSFeedGenerator:
                 summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
             summary_parts.append("</ul></details>")
 
+        title = f"Update - {scrape_results['total_new_jobs']} New Jobs Found"
+        if health_alerts:
+            title += f" ({len(health_alerts)} site alert{'s' if len(health_alerts) != 1 else ''})"
+
         return {
-            'title': f"Update - {scrape_results['total_new_jobs']} New Jobs Found",
+            'title': title,
             'url': self.link,
             'site_name': 'System Update',
             'description': '\n'.join(summary_parts),

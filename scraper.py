@@ -1,21 +1,61 @@
+import logging
 import threading
+import time
+import re
+from collections import defaultdict
+from urllib.parse import urljoin, urlparse, parse_qs
+from typing import List, Dict, Optional
 
 import requests
 from bs4 import BeautifulSoup
-from typing import List, Dict, Optional
-import time
-import re
-from urllib.parse import urljoin, urlparse, parse_qs
+
+logger = logging.getLogger(__name__)
+
+# Playwright is optional — only used as a JS-rendering fallback
+try:
+    from playwright.sync_api import sync_playwright
+    HAS_PLAYWRIGHT = True
+except ImportError:
+    HAS_PLAYWRIGHT = False
+
+
+class DomainThrottler:
+    """Per-domain rate limiter so we don't hammer any single host."""
+
+    def __init__(self, default_delay: float = 1.0):
+        self.default_delay = default_delay
+        self._lock = threading.Lock()
+        self._last_request: Dict[str, float] = {}
+        # Domains that asked us to slow down (429)
+        self._backoff: Dict[str, float] = defaultdict(lambda: 0.0)
+
+    def wait(self, domain: str):
+        with self._lock:
+            delay = max(self.default_delay, self._backoff[domain])
+            last = self._last_request.get(domain, 0.0)
+            elapsed = time.monotonic() - last
+            if elapsed < delay:
+                time.sleep(delay - elapsed)
+            self._last_request[domain] = time.monotonic()
+
+    def record_429(self, domain: str):
+        """Double the back-off for this domain (capped at 60 s)."""
+        with self._lock:
+            current = self._backoff[domain] or self.default_delay
+            self._backoff[domain] = min(current * 2, 60.0)
+            logger.warning("429 from %s — backing off to %.1fs", domain, self._backoff[domain])
 
 
 class JobScraper:
     """Scrapes job postings from websites"""
 
-    def __init__(self, user_agent: str = None, timeout: int = 30, retry_attempts: int = 3):
+    def __init__(self, user_agent: str = None, timeout: int = 30,
+                 retry_attempts: int = 3, domain_delay: float = 1.0):
         self.user_agent = user_agent or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         self.timeout = timeout
         self.retry_attempts = retry_attempts
         self._local = threading.local()
+        self.throttler = DomainThrottler(default_delay=domain_delay)
 
     def _get_session(self) -> requests.Session:
         """Get a thread-local requests session (requests.Session is not thread-safe)"""
@@ -24,27 +64,103 @@ class JobScraper:
             self._local.session.headers.update({'User-Agent': self.user_agent})
         return self._local.session
 
-    def fetch_page(self, url: str) -> Optional[BeautifulSoup]:
-        """Fetch and parse a web page with retries"""
+    def fetch_page(self, url: str, use_js: bool = False) -> Optional[BeautifulSoup]:
+        """
+        Fetch and parse a web page with retries.
+
+        Returns (soup, http_status) when called internally, but public API
+        still returns just soup for backward compat.
+        """
+        result = self._fetch_page_internal(url, use_js=use_js)
+        return result[0] if result else None
+
+    def _fetch_page_internal(self, url: str, use_js: bool = False):
+        """Returns (soup, http_status) or None on total failure."""
+        domain = urlparse(url).netloc
         session = self._get_session()
+        last_status = None
+
         for attempt in range(self.retry_attempts):
+            self.throttler.wait(domain)
             try:
                 response = session.get(url, timeout=self.timeout)
-                response.raise_for_status()
-                return BeautifulSoup(response.content, 'lxml')
-            except requests.RequestException as e:
-                print(f"Attempt {attempt + 1} failed for {url}: {e}")
-                if attempt < self.retry_attempts - 1:
-                    time.sleep(2 ** attempt)  # Exponential backoff
-                else:
-                    print(f"Failed to fetch {url} after {self.retry_attempts} attempts")
+                last_status = response.status_code
+
+                if response.status_code == 429:
+                    self.throttler.record_429(domain)
+                    logger.warning("Attempt %d: 429 Too Many Requests for %s", attempt + 1, url)
+                    if attempt < self.retry_attempts - 1:
+                        retry_after = int(response.headers.get('Retry-After', 2 ** (attempt + 1)))
+                        time.sleep(min(retry_after, 30))
+                    continue
+
+                if response.status_code == 403:
+                    logger.warning("403 Forbidden for %s — may need JS rendering", url)
+                    if HAS_PLAYWRIGHT and not use_js:
+                        return self._fetch_with_playwright(url)
                     return None
 
+                if response.status_code == 404:
+                    logger.warning("404 Not Found for %s", url)
+                    return (None, 404)
+
+                response.raise_for_status()
+                soup = BeautifulSoup(response.content, 'lxml')
+
+                # Heuristic: if page looks empty, try Playwright
+                if not use_js and self._page_looks_empty(soup) and HAS_PLAYWRIGHT:
+                    logger.info("Page %s looks JS-rendered — trying Playwright", url)
+                    pw_result = self._fetch_with_playwright(url)
+                    if pw_result and pw_result[0]:
+                        return pw_result
+
+                return (soup, response.status_code)
+
+            except requests.RequestException as e:
+                logger.warning("Attempt %d failed for %s: %s", attempt + 1, url, e)
+                if attempt < self.retry_attempts - 1:
+                    time.sleep(2 ** attempt)
+                else:
+                    logger.error("Failed to fetch %s after %d attempts", url, self.retry_attempts)
+                    return (None, last_status)
+
+        return (None, last_status)
+
+    @staticmethod
+    def _page_looks_empty(soup: BeautifulSoup) -> bool:
+        """Detect pages that are likely JS-rendered shells with no real content."""
+        text = soup.get_text(strip=True)
+        # Very short body text likely means content is loaded via JS
+        if len(text) < 200:
+            return True
+        # Common SPA shells
+        if soup.find(id='__next') or soup.find(id='root') or soup.find(id='app'):
+            if not soup.find_all(['article', 'li', 'tr'], limit=3):
+                return True
+        return False
+
+    def _fetch_with_playwright(self, url: str):
+        """Fetch page using Playwright (headless Chromium). Returns (soup, status)."""
+        if not HAS_PLAYWRIGHT:
+            return None
+        logger.info("Fetching %s with Playwright", url)
+        try:
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=True)
+                page = browser.new_page(user_agent=self.user_agent)
+                resp = page.goto(url, wait_until='networkidle', timeout=self.timeout * 1000)
+                status = resp.status if resp else None
+                content = page.content()
+                browser.close()
+            return (BeautifulSoup(content, 'lxml'), status)
+        except Exception as e:
+            logger.error("Playwright failed for %s: %s", url, e)
+            return None
+
+    # ── Public scraping methods (unchanged API) ───────────────────────
+
     def auto_detect_jobs(self, url: str) -> List[Dict]:
-        """
-        Attempt to automatically detect job listings on a page
-        Uses common patterns found on career pages
-        """
+        """Attempt to automatically detect job listings on a page"""
         soup = self.fetch_page(url)
         if not soup:
             return []
@@ -53,7 +169,6 @@ class JobScraper:
         seen_urls = set()
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
 
-        # Enhanced patterns for job listings - more comprehensive
         job_patterns = [
             {'container': 'div', 'class_patterns': ['job', 'position', 'opening', 'listing', 'career', 'opportunity', 'vacancy', 'role', 'post']},
             {'container': 'li', 'class_patterns': ['job', 'position', 'opening', 'listing', 'opportunity', 'role']},
@@ -63,11 +178,9 @@ class JobScraper:
             {'container': 'a', 'class_patterns': ['job-link', 'position-link', 'job-card', 'opportunity']},
         ]
 
-        # Try each pattern
         for pattern in job_patterns:
             containers = soup.find_all(pattern['container'])
             for container in containers:
-                # Check if any class token matches job-related keywords
                 classes = container.get('class', [])
                 class_tokens = {token for cls in classes for token in re.split(r'[-_]', cls.lower())}
                 if any(keyword in class_tokens for keyword in pattern['class_patterns']):
@@ -76,20 +189,15 @@ class JobScraper:
                         jobs.append(job)
                         seen_urls.add(job.get('url'))
 
-        # If no jobs found with class patterns, look for common link patterns
         if not jobs:
             jobs = self._extract_jobs_from_links(soup, base_url)
 
         return jobs
 
     def _extract_job_from_element(self, element, base_url: str) -> Dict:
-        """Extract job information from a DOM element"""
         job = {}
-
-        # Generic link texts that should be replaced with URL-extracted titles
         generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
 
-        # Try to find title
         title_tags = ['h1', 'h2', 'h3', 'h4', 'a']
         for tag in title_tags:
             title_elem = element.find(tag)
@@ -97,23 +205,19 @@ class JobScraper:
                 job['title'] = title_elem.get_text(strip=True)
                 break
 
-        # Try to find URL
         link = element.find('a', href=True)
         if link:
             href = link['href']
             job['url'] = urljoin(base_url, href)
         elif job.get('title'):
-            # If we have title but no link, use the page URL
             job['url'] = base_url
 
-        # If title is generic (like "Apply Now"), try to extract from URL
         if job.get('title') and job.get('url'):
             if job['title'].lower() in generic_texts:
                 url_title = self._extract_title_from_url(job['url'])
                 if url_title:
                     job['title'] = url_title
 
-        # Try to find location
         location_keywords = ['location', 'city', 'office', 'remote']
         for keyword in location_keywords:
             loc_elem = element.find(class_=re.compile(keyword, re.I))
@@ -121,123 +225,72 @@ class JobScraper:
                 job['location'] = loc_elem.get_text(strip=True)
                 break
 
-        # Get description (if available)
         desc_elem = element.find('p') or element.find('div', class_=re.compile('desc', re.I))
         if desc_elem:
-            job['description'] = desc_elem.get_text(strip=True)[:2000]  # Increased limit for more detail
+            job['description'] = desc_elem.get_text(strip=True)[:2000]
 
         return job
 
     def _extract_title_from_url(self, url: str) -> Optional[str]:
-        """
-        Extract a meaningful job title from a URL slug.
-        Handles common URL patterns from job boards and ATSes.
-
-        Examples:
-            /program-partnerships-manager-connected/ -> Program Partnerships Manager Connected
-            /associate-director-of-program-implementation -> Associate Director Of Program Implementation
-            /Grants-Project-Manager -> Grants Project Manager
-            /jobs/5073319008 -> None (just an ID)
-        """
         try:
             parsed = urlparse(url)
             path = parsed.path.strip('/')
-
-            # Split path into segments
             segments = [s for s in path.split('/') if s]
-
             if not segments:
                 return None
 
-            # Common ATS patterns to skip
             skip_patterns = ['jobs', 'job', 'careers', 'career', 'apply', 'opening', 'openings', 'position',
                            'positions', 'o', 'postings', 'posting', 'details', 'detail', 'opportunitydetail',
                            'single-offer-career', 'careers-list', 'job-board', 'employment', 'work']
 
-            # Patterns that indicate a segment is NOT a job title
-            # Pure numbers, UUIDs, short hashes
             not_title_patterns = [
-                r'^\d+$',  # Pure numbers
-                r'^[a-f0-9]{8,}$',  # Hex strings (8+ chars)
-                r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$',  # UUIDs
-                r'^gh_jid=',  # Greenhouse job ID param
-                r'^jobId=',  # Generic job ID param
-                r'^\w{2,3}\d+',  # Code + numbers like F7, p49, B617
-                r'^(scl|fi)$',  # Dropbox segments
+                r'^\d+$',
+                r'^[a-f0-9]{8,}$',
+                r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$',
+                r'^gh_jid=',
+                r'^jobId=',
+                r'^\w{2,3}\d+',
+                r'^(scl|fi)$',
             ]
 
-            # Work backwards through segments to find title
             title_segment = None
             for segment in reversed(segments):
-                # Skip if matches non-title patterns
                 if any(re.match(pattern, segment, re.I) for pattern in not_title_patterns):
                     continue
-
-                # Skip common ATS path segments
                 if segment.lower() in skip_patterns:
                     continue
-
-                # Skip very short segments (likely not titles)
                 if len(segment) < 3:
                     continue
-
-                # Skip if segment looks like a domain or company name
-                # (single word, no separators, all lowercase or starts with capital)
                 if '-' not in segment and '_' not in segment and len(segment.split()) == 1:
-                    # Could be company name or generic term, be cautious
-                    # Only skip if it's very short or in a blocklist
                     common_company_indicators = ['leadingeducators', 'stradaeducation', 'rethinkpriorities',
                                                 'thehumaneleague', 'civicnation', 'catalyst']
                     if segment.lower() in common_company_indicators or len(segment) < 10:
                         continue
-
                 title_segment = segment
                 break
 
             if not title_segment:
                 return None
 
-            # Clean up the segment
-            # Replace common separators with spaces
             title = re.sub(r'[-_+]', ' ', title_segment)
-
-            # Remove file extensions
             title = re.sub(r'\.(pdf|doc|docx)$', '', title, flags=re.I)
-
-            # Remove common suffixes like job IDs at the end
             title = re.sub(r'\s+\d+$', '', title)
-
-            # Remove query parameters if any slipped through
             title = re.sub(r'\?.*$', '', title)
-
-            # Remove common prefixes
             title = re.sub(r'^(job[\s-]*(announcement|posting|opening|description)[\s-]*)', '', title, flags=re.I)
-
-            # Title case each word
             title = title.title()
-
-            # Clean up spacing
             title = re.sub(r'\s+', ' ', title).strip()
 
-            # Only return if it looks like a real title (has multiple words or is reasonably long)
             if len(title) > 10 or len(title.split()) > 1:
                 return title
-
             return None
-
         except Exception:
             return None
 
     def _extract_jobs_from_links(self, soup: BeautifulSoup, base_url: str) -> List[Dict]:
-        """Extract jobs from links that look like job postings - Enhanced version"""
         jobs = []
-        seen_urls = set()  # Track to avoid duplicates
+        seen_urls = set()
         job_keywords = ['job', 'position', 'career', 'opening', 'vacancy', 'role', 'opportunity', 'apply', 'hiring', 'employment']
-
-        # Exclude common non-job navigation keywords
         exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category']
-
-        # Generic link texts that should be replaced with URL-extracted titles
         generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
 
         links = soup.find_all('a', href=True)
@@ -246,34 +299,25 @@ class JobScraper:
             text = link.get_text(strip=True)
             full_url = urljoin(base_url, href)
 
-            # Skip if already seen this URL
             if full_url in seen_urls:
                 continue
-
-            # Skip navigation/footer links
             if any(exclude in href.lower() or exclude in text.lower() for exclude in exclude_keywords):
                 continue
 
-            # Check if link text or href contains job-related keywords
             if any(keyword in href.lower() or keyword in text.lower() for keyword in job_keywords):
-                if text and 5 < len(text) < 200:  # Reasonable title length
-                    # Try to extract more context from parent element
+                if text and 5 < len(text) < 200:
                     parent = link.parent
                     description = None
                     location = None
 
                     if parent:
-                        # Look for description in sibling or child elements
                         desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary', re.I))
                         if desc_elem:
                             description = desc_elem.get_text(strip=True)[:2000]
-
-                        # Look for location
                         loc_elem = parent.find(class_=re.compile('location|city|region', re.I))
                         if loc_elem:
                             location = loc_elem.get_text(strip=True)
 
-                    # If title is generic (like "Apply Now"), try to extract from URL
                     title = text
                     if text.lower() in generic_texts:
                         url_title = self._extract_title_from_url(full_url)
@@ -291,24 +335,6 @@ class JobScraper:
         return jobs
 
     def scrape_with_config(self, url: str, parser_config: Dict) -> List[Dict]:
-        """
-        Scrape jobs using a specific parser configuration
-
-        Parser config format:
-        {
-            'job_container': {'tag': 'div', 'class': 'job-listing'},
-            'title': {'tag': 'h3', 'class': 'job-title'},
-            'url': {'tag': 'a', 'attr': 'href'},
-            'location': {'tag': 'span', 'class': 'location'},
-            'description': {'tag': 'p', 'class': 'description'}
-        }
-
-        OR for URL pattern matching:
-        {
-            'url_pattern': '/en/nonprofit-job/',
-            'exclude_patterns': ['/apply', '/share']
-        }
-        """
         soup = self.fetch_page(url)
         if not soup:
             return []
@@ -316,11 +342,9 @@ class JobScraper:
         jobs = []
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
 
-        # Check if this is a URL pattern-based config
         if 'url_pattern' in parser_config:
             return self._scrape_by_url_pattern(soup, base_url, parser_config)
 
-        # Find all job containers
         container_config = parser_config.get('job_container', {})
         containers = soup.find_all(
             container_config.get('tag', 'div'),
@@ -328,73 +352,52 @@ class JobScraper:
         )
 
         for container in containers:
-            job = {'url': url}  # Default to page URL
-
-            # Extract each field based on config
+            job = {'url': url}
             for field, field_config in parser_config.items():
                 if field == 'job_container':
                     continue
-
                 element = container.find(
                     field_config.get('tag'),
                     class_=field_config.get('class')
                 )
-
                 if element:
                     if field == 'url' and 'attr' in field_config:
                         job[field] = urljoin(base_url, element.get(field_config['attr'], ''))
                     else:
                         job[field] = element.get_text(strip=True)
 
-            if job.get('title'):  # Only add if we found a title
+            if job.get('title'):
                 jobs.append(job)
 
         return jobs
 
     def _scrape_by_url_pattern(self, soup: BeautifulSoup, base_url: str, config: Dict) -> List[Dict]:
-        """
-        Scrape jobs by filtering links that match URL patterns
-        Useful for sites where job URLs follow a specific pattern
-        """
         jobs = []
         seen_urls = set()
-
         url_pattern = config.get('url_pattern', '')
         exclude_patterns = config.get('exclude_patterns', [])
 
         links = soup.find_all('a', href=True)
-
         for link in links:
             href = link['href']
             full_url = urljoin(base_url, href)
-
-            # Skip if already seen
             if full_url in seen_urls:
                 continue
-
-            # Check if URL matches the pattern
             if url_pattern not in href:
                 continue
-
-            # Check exclude patterns
             if any(exclude in href for exclude in exclude_patterns):
                 continue
 
-            # Extract job info
             text = link.get_text(strip=True)
             if text and 5 < len(text) < 200:
-                # Try to get more context from parent
                 parent = link.parent
                 description = None
                 location = None
 
                 if parent:
-                    # Look for description nearby
                     desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary|snippet', re.I))
                     if desc_elem:
                         description = desc_elem.get_text(strip=True)[:2000]
-
-                    # Look for location
                     loc_elem = parent.find(class_=re.compile('location|city|region|where', re.I))
                     if loc_elem:
                         location = loc_elem.get_text(strip=True)
@@ -410,26 +413,14 @@ class JobScraper:
         return jobs
 
     def scrape_job_details(self, job_url: str) -> Dict:
-        """
-        Scrape detailed information from an individual job posting page.
-        Extracts description, location, salary, job type, and other metadata.
-
-        Args:
-            job_url: URL of the individual job posting
-
-        Returns:
-            Dictionary with job details (description, location, salary, etc.)
-        """
         soup = self.fetch_page(job_url)
         if not soup:
             return {}
 
         details = {}
 
-        # Extract job description - try multiple common patterns
+        # Description
         description = None
-
-        # Pattern 1: Look for common description classes/ids
         desc_patterns = [
             {'class': re.compile(r'(job-)?description', re.I)},
             {'id': re.compile(r'(job-)?description', re.I)},
@@ -442,55 +433,46 @@ class JobScraper:
         for pattern in desc_patterns:
             desc_elem = soup.find(['div', 'section', 'article'], **pattern)
             if desc_elem:
-                # Get text but preserve some structure
                 description = desc_elem.get_text(separator='\n', strip=True)
                 break
 
-        # Pattern 2: If no description found, look for main content area
         if not description:
             main_content = soup.find('main') or soup.find(id='main') or soup.find(class_=re.compile('main', re.I))
             if main_content:
-                # Try to find the largest text block
                 text_blocks = main_content.find_all(['div', 'section', 'article'])
                 if text_blocks:
-                    # Get the element with the most text content
                     largest = max(text_blocks, key=lambda x: len(x.get_text(strip=True)))
-                    if len(largest.get_text(strip=True)) > 100:  # Reasonable minimum length
+                    if len(largest.get_text(strip=True)) > 100:
                         description = largest.get_text(separator='\n', strip=True)
 
-        # Pattern 3: Last resort - get all paragraphs in the page
         if not description:
             paragraphs = soup.find_all('p')
-            if len(paragraphs) > 3:  # If there are multiple paragraphs, likely a job description
+            if len(paragraphs) > 3:
                 description = '\n\n'.join(p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 20)
 
         if description:
-            # Limit description length to avoid storing too much data
             details['description'] = description[:5000]
 
-        # Extract location
+        # Location
         location_patterns = [
             {'class': re.compile(r'location', re.I)},
             {'id': re.compile(r'location', re.I)},
             {'class': re.compile(r'job-location', re.I)},
             {'class': re.compile(r'(office|city|region)', re.I)},
         ]
-
         for pattern in location_patterns:
             loc_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
             if loc_elem:
                 location_text = loc_elem.get_text(strip=True)
-                # Filter out obviously wrong matches
                 if location_text and 5 < len(location_text) < 100:
                     details['location'] = location_text
                     break
 
-        # Extract salary/compensation
+        # Salary
         salary_patterns = [
             {'class': re.compile(r'salary|compensation|pay', re.I)},
             {'id': re.compile(r'salary|compensation', re.I)},
         ]
-
         for pattern in salary_patterns:
             salary_elem = soup.find(['span', 'div', 'p'], **pattern)
             if salary_elem:
@@ -499,12 +481,11 @@ class JobScraper:
                     details['salary'] = salary_text
                     break
 
-        # Extract job type (full-time, part-time, etc.)
+        # Job type
         job_type_patterns = [
             {'class': re.compile(r'job-?type|employment-?type', re.I)},
             {'id': re.compile(r'job-?type', re.I)},
         ]
-
         for pattern in job_type_patterns:
             type_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
             if type_elem:
@@ -513,16 +494,14 @@ class JobScraper:
                     details['job_type'] = type_text
                     break
 
-        # Extract posted date
+        # Posted date
         date_patterns = [
             {'class': re.compile(r'posted|date|publish', re.I)},
             {'id': re.compile(r'posted|date', re.I)},
         ]
-
         for pattern in date_patterns:
             date_elem = soup.find(['span', 'div', 'p', 'time'], **pattern)
             if date_elem:
-                # Check for time tag with datetime attribute
                 if date_elem.name == 'time' and date_elem.get('datetime'):
                     details['posted_date'] = date_elem['datetime']
                     break
@@ -535,48 +514,28 @@ class JobScraper:
         return details
 
     def enrich_jobs_with_details(self, jobs: List[Dict], max_jobs: int = 50) -> List[Dict]:
-        """
-        Enrich a list of jobs by scraping their detail pages.
-
-        Args:
-            jobs: List of job dictionaries with at least 'url' field
-            max_jobs: Maximum number of jobs to enrich (to avoid overloading)
-
-        Returns:
-            List of enriched job dictionaries
-        """
         enriched_jobs = []
 
         for i, job in enumerate(jobs[:max_jobs]):
             if not job.get('url'):
                 enriched_jobs.append(job)
                 continue
-
-            # Only scrape details if we don't already have a description
             if job.get('description'):
                 enriched_jobs.append(job)
                 continue
 
-            print(f"Enriching job {i+1}/{min(len(jobs), max_jobs)}: {job.get('title', 'Unknown')}")
+            logger.info("Enriching job %d/%d: %s", i + 1, min(len(jobs), max_jobs), job.get('title', 'Unknown'))
 
-            # Scrape detail page
             details = self.scrape_job_details(job['url'])
-
-            # Merge details into job
             enriched_job = {**job, **details}
             enriched_jobs.append(enriched_job)
 
-            # Be respectful - add a small delay between requests
             if i < len(jobs) - 1:
                 time.sleep(0.5)
 
         return enriched_jobs
 
     def test_selectors(self, url: str) -> Dict:
-        """
-        Test URL and return information about the page structure
-        Helpful for debugging and creating parser configs
-        """
         soup = self.fetch_page(url)
         if not soup:
             return {'error': 'Failed to fetch page'}
@@ -588,7 +547,6 @@ class JobScraper:
             'links_count': len(soup.find_all('a')),
         }
 
-        # Find most common classes
         all_classes = []
         for elem in soup.find_all(class_=True):
             all_classes.extend(elem.get('class', []))
@@ -597,14 +555,12 @@ class JobScraper:
         for cls in all_classes:
             class_counts[cls] = class_counts.get(cls, 0) + 1
 
-        # Get top 10 most common classes
         info['common_classes'] = sorted(
             class_counts.items(),
             key=lambda x: x[1],
             reverse=True
         )[:10]
 
-        # Count common tags
         for tag in ['div', 'article', 'section', 'li', 'tr']:
             info['common_tags'][tag] = len(soup.find_all(tag))
 

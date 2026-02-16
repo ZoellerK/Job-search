@@ -6,6 +6,7 @@ Scrapes job postings from multiple sources and generates RSS feed
 
 import csv
 import json
+import logging
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
@@ -15,12 +16,37 @@ from database import JobDatabase
 from scraper import JobScraper
 from feed_generator import RSSFeedGenerator
 
+logger = logging.getLogger(__name__)
+
+
+def configure_logging(level: str = "INFO"):
+    """Set up structured logging to console and file."""
+    root = logging.getLogger()
+    root.setLevel(getattr(logging, level.upper(), logging.INFO))
+
+    fmt = logging.Formatter(
+        "%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    # Console handler
+    console = logging.StreamHandler(sys.stdout)
+    console.setFormatter(fmt)
+    root.addHandler(console)
+
+    # File handler (rotating-ish: just append for simplicity)
+    try:
+        fh = logging.FileHandler("job_aggregator.log", encoding="utf-8")
+        fh.setFormatter(fmt)
+        root.addHandler(fh)
+    except OSError:
+        pass  # If we can't write a log file, carry on
+
 
 class JobAggregator:
     """Main orchestrator for job aggregation"""
 
     def __init__(self, config_file: str = "config.json", sites_file: str = "sites.csv"):
-        # Load configuration
         with open(config_file, 'r') as f:
             self.config = json.load(f)
 
@@ -41,7 +67,6 @@ class JobAggregator:
         )
 
     def load_sites(self) -> List[Dict]:
-        """Load sites to scrape from CSV file"""
         sites = []
         try:
             with open(self.sites_file, 'r') as f:
@@ -50,25 +75,12 @@ class JobAggregator:
                     if row.get('active', '').lower() in ['yes', 'true', '1']:
                         sites.append(row)
         except FileNotFoundError:
-            print(f"Error: {self.sites_file} not found")
+            logger.error("Sites file not found: %s", self.sites_file)
             return []
         return sites
 
     def scrape_site(self, site: Dict) -> Dict:
-        """
-        Scrape a single site and add new jobs to database
-
-        Args:
-            site: Dictionary with site_name, url, keywords, scrape_details
-
-        Returns:
-            Dictionary with scraping results: {
-                'site_name': str,
-                'success': bool,
-                'new_jobs': int,
-                'error': str or None
-            }
-        """
+        """Scrape a single site, record health, return results."""
         site_name = site['site_name']
         url = site['url']
         keywords = site.get('keywords', '')
@@ -82,17 +94,29 @@ class JobAggregator:
             else:
                 jobs = self.scraper.auto_detect_jobs(url)
 
-            # If scrape_details is enabled, enrich jobs with detail page information
             if scrape_details and jobs:
-                print(f"   → Scraping detail pages for {site_name} ({len(jobs[:20])} jobs)...")
+                logger.info("Scraping detail pages for %s (%d jobs)", site_name, min(len(jobs), 20))
                 jobs = self.scraper.enrich_jobs_with_details(jobs, max_jobs=20)
 
             new_jobs_count = 0
+            dedup_skipped = 0
+
             for job in jobs:
                 if keywords:
                     job_text = f"{job.get('title', '')} {job.get('description', '')}".lower()
                     if not any(kw.strip().lower() in job_text for kw in keywords.split(',')):
                         continue
+
+                # Cross-site dedup check
+                existing = self.db.find_similar_job(job.get('title', ''), site_name)
+                if existing:
+                    dedup_skipped += 1
+                    logger.debug(
+                        "Dedup: '%s' from %s matches '%s' from %s",
+                        job.get('title'), site_name,
+                        existing['title'], existing['site_name']
+                    )
+                    continue
 
                 added = self.db.add_job(
                     site_name=site_name,
@@ -106,40 +130,49 @@ class JobAggregator:
                     job_type=job.get('job_type'),
                     details_scraped=scrape_details
                 )
-
                 if added:
                     new_jobs_count += 1
 
-            return {
+            # Record health
+            self.db.record_scrape_result(
+                site_name=site_name,
+                success=True,
+                jobs_found=len(jobs),
+            )
+
+            result = {
                 'site_name': site_name,
                 'success': True,
                 'new_jobs': new_jobs_count,
+                'total_found': len(jobs),
+                'dedup_skipped': dedup_skipped,
                 'error': None
             }
+            if dedup_skipped:
+                logger.info("%s: %d new, %d dedup-skipped", site_name, new_jobs_count, dedup_skipped)
+
+            return result
 
         except Exception as e:
+            logger.error("Failed to scrape %s: %s", site_name, e, exc_info=True)
+            self.db.record_scrape_result(
+                site_name=site_name,
+                success=False,
+                error_message=str(e),
+            )
             return {
                 'site_name': site_name,
                 'success': False,
                 'new_jobs': 0,
+                'total_found': 0,
+                'dedup_skipped': 0,
                 'error': str(e)
             }
 
     def scrape_all(self) -> Dict:
-        """
-        Scrape all active sites in parallel
-
-        Returns:
-            Dictionary with results: {
-                'total_new_jobs': int,
-                'successful_sites': int,
-                'failed_sites': int,
-                'site_results': List[Dict]
-            }
-        """
         sites = self.load_sites()
         if not sites:
-            print("No active sites found in sites.csv")
+            logger.warning("No active sites found in %s", self.sites_file)
             return {
                 'total_new_jobs': 0,
                 'successful_sites': 0,
@@ -147,33 +180,28 @@ class JobAggregator:
                 'site_results': []
             }
 
-        print(f"\n{'='*60}")
-        print(f"Starting job aggregation for {len(sites)} sites")
-        print(f"{'='*60}")
+        logger.info("Starting job aggregation for %d sites", len(sites))
 
         with ThreadPoolExecutor(max_workers=5) as executor:
             futures = {executor.submit(self.scrape_site, site): site for site in sites}
             site_results = [f.result() for f in as_completed(futures)]
 
-        # Sort for deterministic output
         site_results.sort(key=lambda r: r['site_name'])
 
         for result in site_results:
-            status = "✓" if result['success'] else "✗"
+            status = "OK" if result['success'] else "FAIL"
             jobs_str = f"{result['new_jobs']} new" if result['new_jobs'] else "no new jobs"
-            error_str = f" — {result['error']}" if result['error'] else ""
-            print(f"  {status} {result['site_name']}: {jobs_str}{error_str}")
+            error_str = f" -- {result['error']}" if result['error'] else ""
+            logger.info("  [%s] %s: %s%s", status, result['site_name'], jobs_str, error_str)
 
         total_new_jobs = sum(r['new_jobs'] for r in site_results)
         successful_sites = sum(1 for r in site_results if r['success'])
         failed_sites = sum(1 for r in site_results if not r['success'])
 
-        print(f"\n{'='*60}")
-        print(f"Scraping complete! Total new jobs: {total_new_jobs}")
-        print(f"Successful: {successful_sites}/{len(sites)} sites")
-        if failed_sites > 0:
-            print(f"Failed: {failed_sites} sites")
-        print(f"{'='*60}\n")
+        logger.info(
+            "Scraping complete: %d new jobs, %d/%d sites succeeded",
+            total_new_jobs, successful_sites, len(sites)
+        )
 
         return {
             'total_new_jobs': total_new_jobs,
@@ -183,68 +211,68 @@ class JobAggregator:
         }
 
     def generate_feed(self, max_items: int = None) -> str:
-        """
-        Generate RSS feed from database
-
-        Args:
-            max_items: Maximum number of items to include (default from config)
-
-        Returns:
-            Path to generated feed file
-        """
         if max_items is None:
             max_items = self.config['output']['max_items']
 
-        print(f"\n📡 Generating RSS feed...")
-
         jobs = self.db.get_recent_jobs(limit=max_items)
-        print(f"   Including {len(jobs)} jobs in feed")
+        logger.info("Generating RSS feed with %d jobs", len(jobs))
 
         output_file = self.config['output']['feed_file']
         self.feed_gen.generate_feed(jobs, output_file)
 
-        print(f"   ✓ RSS feed saved to {output_file}")
+        logger.info("RSS feed saved to %s", output_file)
         return output_file
 
     def generate_preview(self) -> str:
-        """Generate HTML preview of recent jobs"""
-        print(f"\n📄 Generating HTML preview...")
-
         jobs = self.db.get_recent_jobs(limit=50)
         output_file = "preview.html"
         self.feed_gen.generate_html_preview(jobs, output_file)
-
-        print(f"   ✓ HTML preview saved to {output_file}")
+        logger.info("HTML preview saved to %s", output_file)
         return output_file
 
     def show_stats(self):
-        """Display database statistics"""
         stats = self.db.get_stats()
+        logger.info(
+            "Stats: %d total jobs, %d today, %d this week, %d sites",
+            stats['total_jobs'], stats['jobs_today'],
+            stats['jobs_this_week'], stats['total_sites']
+        )
 
-        print(f"\n📊 Database Statistics")
-        print(f"{'='*40}")
-        print(f"Total jobs tracked: {stats['total_jobs']}")
-        print(f"Jobs discovered today: {stats['jobs_today']}")
-        print(f"Sites monitored: {stats['total_sites']}")
-        print(f"{'='*40}\n")
+    def check_site_health(self) -> List[Dict]:
+        """
+        Check for persistently failing sites and return alerts.
+        These get surfaced in the RSS feed summary so you see them in Feedly.
+        """
+        failing = self.db.get_failing_sites(consecutive_failures=3)
+        if failing:
+            logger.warning("=== SITE HEALTH ALERTS ===")
+            for site in failing:
+                logger.warning(
+                    "  %s: %d consecutive failures (last error: %s)",
+                    site['site_name'],
+                    site['consecutive_failures'],
+                    site['last_error']
+                )
+        return failing
 
     def run_full_update(self):
         """Run complete update cycle: scrape, cleanup, generate feed, show stats"""
-        print("\n🚀 Starting full update cycle...")
+        logger.info("Starting full update cycle")
 
-        # Clean up old jobs (keep last 90 days)
-        print("\n🧹 Cleaning up old jobs...")
+        # Clean up old data
         deleted = self.db.cleanup_old_jobs(days_to_keep=90)
-        if deleted > 0:
-            print(f"   Deleted {deleted} jobs older than 90 days")
-        else:
-            print(f"   No old jobs to delete")
+        if deleted:
+            logger.info("Deleted %d jobs older than 90 days", deleted)
+        self.db.cleanup_old_health_records(days_to_keep=30)
 
         # Scrape all sites
         scrape_results = self.scrape_all()
 
-        # Generate RSS feed with scraping summary
-        self.generate_feed_with_summary(scrape_results)
+        # Check site health — alerts go into the feed summary
+        health_alerts = self.check_site_health()
+
+        # Generate RSS feed with summary + health alerts
+        self.generate_feed_with_summary(scrape_results, health_alerts)
 
         # Generate HTML preview
         self.generate_preview()
@@ -252,32 +280,64 @@ class JobAggregator:
         # Show stats
         self.show_stats()
 
-        print(f"✅ Update complete! Found {scrape_results['total_new_jobs']} new jobs.\n")
+        logger.info("Update complete: %d new jobs found", scrape_results['total_new_jobs'])
 
-    def generate_feed_with_summary(self, scrape_results: Dict):
-        """Generate RSS feed with optional scraping summary at the top"""
-        print(f"\n📡 Generating RSS feed...")
-
+    def generate_feed_with_summary(self, scrape_results: Dict,
+                                    health_alerts: List[Dict] = None):
+        """Generate RSS feed with optional scraping summary and health alerts."""
         max_items = self.config['output']['max_items']
         jobs = self.db.get_recent_jobs(limit=max_items)
 
         include_summary = self.config['feed'].get('include_summary', True)
 
-        if include_summary and scrape_results['total_new_jobs'] > 0:
-            summary_job = self.feed_gen.build_summary_item(scrape_results)
+        if include_summary and (scrape_results['total_new_jobs'] > 0 or health_alerts):
+            summary_job = self.feed_gen.build_summary_item(
+                scrape_results, health_alerts=health_alerts or []
+            )
             jobs = [summary_job] + jobs
-            print(f"   Including summary + {len(jobs)-1} jobs in feed")
+            logger.info("Including summary + %d jobs in feed", len(jobs) - 1)
         else:
-            print(f"   Including {len(jobs)} jobs in feed")
+            logger.info("Including %d jobs in feed", len(jobs))
 
         output_file = self.config['output']['feed_file']
         self.feed_gen.generate_feed(jobs, output_file)
+        logger.info("RSS feed saved to %s", output_file)
 
-        print(f"   ✓ RSS feed saved to {output_file}")
+    def export(self, output_file: str, fmt: str = "csv",
+               limit: int = None, site_name: str = None):
+        """Export jobs to a file."""
+        self.db.export_jobs(output_file, fmt=fmt, limit=limit, site_name=site_name)
+        logger.info("Exported to %s", output_file)
+
+    def show_health(self):
+        """Print site health summary to console."""
+        summary = self.db.get_site_health_summary()
+        if not summary:
+            logger.info("No site health data yet. Run a scrape first.")
+            return
+
+        logger.info("=== Site Health (last 7 days) ===")
+        for s in summary:
+            status = "OK" if s['failures'] == 0 else "WARN"
+            logger.info(
+                "  [%s] %s: %d/%d succeeded, %d jobs found",
+                status, s['site_name'], s['successes'], s['total_scrapes'],
+                s['total_jobs_found']
+            )
+
+        failing = self.db.get_failing_sites(consecutive_failures=3)
+        if failing:
+            logger.warning("--- Persistently failing (3+ consecutive) ---")
+            for site in failing:
+                logger.warning(
+                    "  %s: %d failures, last error: %s",
+                    site['site_name'], site['consecutive_failures'], site['last_error']
+                )
 
 
 def main():
-    """Main entry point"""
+    configure_logging()
+
     try:
         aggregator = JobAggregator()
 
@@ -294,6 +354,17 @@ def main():
                 aggregator.show_stats()
             elif command == "update":
                 aggregator.run_full_update()
+            elif command == "health":
+                aggregator.show_health()
+            elif command == "export":
+                fmt = "csv"
+                output = "jobs_export.csv"
+                if len(sys.argv) > 2:
+                    fmt = sys.argv[2].lower()
+                    output = f"jobs_export.{fmt}"
+                if len(sys.argv) > 3:
+                    output = sys.argv[3]
+                aggregator.export(output, fmt=fmt)
             else:
                 print(f"Unknown command: {command}")
                 print("\nAvailable commands:")
@@ -302,29 +373,23 @@ def main():
                 print("  preview - Generate HTML preview")
                 print("  stats   - Show database statistics")
                 print("  update  - Run full update (scrape + feed + preview)")
+                print("  health  - Show site health summary")
+                print("  export [csv|json] [filename] - Export jobs")
                 sys.exit(1)
         else:
-            # Default: run full update
             aggregator.run_full_update()
 
-        print("\n✅ Job aggregator completed successfully!")
+        logger.info("Job aggregator completed successfully")
         sys.exit(0)
 
     except FileNotFoundError as e:
-        print(f"\n❌ Error: Required file not found: {e}")
-        print("Please ensure config.json and sites.csv exist in the working directory.")
+        logger.error("Required file not found: %s", e)
         sys.exit(1)
     except KeyError as e:
-        print(f"\n❌ Error: Missing required configuration key: {e}")
-        print("Please check your config.json file.")
+        logger.error("Missing required configuration key: %s", e)
         sys.exit(1)
     except Exception as e:
-        print(f"\n❌ Error: Job aggregator failed with unexpected error:")
-        print(f"   {type(e).__name__}: {e}")
-        import traceback
-        traceback.print_exc()
-        print("\nThe job aggregator encountered an error but this may not prevent feed generation.")
-        print("Check the error above for details.")
+        logger.error("Unexpected error: %s: %s", type(e).__name__, e, exc_info=True)
         sys.exit(1)
 
 
