@@ -32,8 +32,8 @@ candidates.csv       — Staging area for org candidates pending review
 **Use `manage_sites.py` for all site changes.** Never edit `sites.csv` or `rejected_sites.txt` by hand. See [ORG_WORKFLOW.md](ORG_WORKFLOW.md) for the full protocol.
 
 1. **Discover**: `python manage_sites.py add "Name" "URL" --category "Cat" --test` (dedup + URL test, stores in candidates.csv)
-2. **Review**: `python manage_sites.py review` generates a checkbox markdown file
-3. **Process**: User checks `[x]` to approve, then `python manage_sites.py process review_YYYY-MM-DD.md`
+2. **Review**: Present **10 at a time** in a table with org descriptions; user picks IDs to approve
+3. **Process**: `manage_sites.py approve <ids>` / `manage_sites.py reject <ids>`, commit+push after each batch
 4. **Patterns**: `python manage_sites.py patterns` shows what gets approved to guide future discovery
 
 ## Common Tasks

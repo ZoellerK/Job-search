@@ -41,39 +41,36 @@ When the user asks for new organizations:
 
 ---
 
-## Phase 2: Review (Checkboxes)
+## Phase 2: Review (Batches of 10 with Descriptions)
 
-Generate a review file for the user:
+Present candidates **10 at a time** in a table. Each batch must include a **brief description** of what the organization does/focuses on so the user can make informed decisions without leaving the conversation.
+
+**Format:** Present each batch as a markdown table:
+
+```
+| ID | Organization | What they do |
+|----|-------------|-------------|
+| 1  | **Org Name** | One-line description of mission/focus area |
+| 2  | **Another Org** | One-line description of mission/focus area |
+...
+```
+
+Then ask: "Which IDs to approve?"
+
+- **Approved IDs** → `manage_sites.py approve <ids>`
+- **All other IDs in the batch** → `manage_sites.py reject <ids>`
+- **Commit and push** after each batch
+- **Then present the next batch of 10**
+
+Repeat until all candidates are reviewed.
+
+**Alternative (file-based review):** For offline/async review, generate a checkbox file:
 
 ```bash
 python manage_sites.py review
 # or limit batch size:
-python manage_sites.py review --batch 20
+python manage_sites.py review --batch 10
 ```
-
-This creates a markdown file like `review_2026-02-16.md`:
-
-```markdown
-# Candidate Review (2026-02-16)
-
-15 candidates to review. Check `[x]` to approve, leave `[ ]` to reject.
-
-## Democracy & Governance (5)
-
-- [ ] **1. Org Name** — https://example.org/careers
-  Greenhouse | 12 jobs
-
-- [ ] **2. Another Org** — https://another.org/jobs
-  Lever | 5 jobs
-
-## Foundations (10)
-
-- [ ] **3. Big Foundation** — https://big.org/careers
-  Workday | 8 jobs
-...
-```
-
-**Present this file to the user.** They check `[x]` the ones they want.
 
 ---
 
