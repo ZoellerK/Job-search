@@ -19,7 +19,8 @@ A Python tool that scrapes job postings from multiple websites and generates an 
 - **JS rendering** — optional Playwright fallback for JavaScript-heavy career pages
 - **Data export** — export jobs to CSV or JSON
 - **Structured logging** — configurable log level; logs to console + `job_aggregator.log`
-- **Automated tests** — 118-test pytest suite with mocked HTTP
+- **Config validation** — safe defaults for missing config keys; CSV validation catches empty URLs and duplicates
+- **Automated tests** — 128-test pytest suite with unit, integration, and mocked HTTP tests
 - **GitHub Actions** — runs automatically in the cloud (no computer needed)
 
 ## Quick Start
@@ -123,7 +124,8 @@ The `auto` command automatically detects ATS platforms (Greenhouse, Lever, etc.)
     "retry_attempts": 2,
     "max_workers": 5
   },
-  "logging": { "level": "INFO" }
+  "logging": { "level": "INFO" },
+  "cleanup": { "days_to_keep": 90, "stale_after_days": 30 }
 }
 ```
 
@@ -136,6 +138,10 @@ The `auto` command automatically detects ATS platforms (Greenhouse, Lever, etc.)
 | `scraping.max_workers` | `5` | Number of parallel scraping threads |
 | `scraping.timeout` | `15` | HTTP request timeout in seconds |
 | `logging.level` | `INFO` | Log level (`DEBUG`, `INFO`, `WARNING`, `ERROR`) |
+| `cleanup.days_to_keep` | `90` | Delete jobs older than this many days |
+| `cleanup.stale_after_days` | `30` | Mark jobs as stale after this many days unseen |
+
+Missing config keys are filled with safe defaults automatically, so a minimal `config.json` (e.g. just `{"database": {"path": "jobs.db"}}`) will work.
 
 ## ATS Parsers
 
@@ -206,7 +212,7 @@ See the `.github/workflows/` directory — runs automatically in the cloud. Edit
 python -m pytest tests/ -v
 ```
 
-118 tests covering database operations, scraper logic (with mocked HTTP), feed generation, ATS parsers, salary extraction, relevance scoring, site health, staleness tracking, cross-site dedup, and data export.
+128 tests covering database operations, scraper logic (with mocked HTTP), feed generation, ATS parsers, salary extraction, relevance scoring, site health, staleness tracking, cross-site dedup, data export, end-to-end integration, CSV validation, and config defaults.
 
 ## Project Structure
 
@@ -225,12 +231,13 @@ Job-search/
 ├── CLAUDE.md            # Project context for AI assistants
 ├── requirements.txt     # Python dependencies
 ├── pytest.ini           # Test configuration
-├── tests/               # Automated test suite (118 tests)
+├── tests/               # Automated test suite (128 tests)
 │   ├── test_database.py
 │   ├── test_scraper.py
 │   ├── test_feed_generator.py
 │   ├── test_ats_parsers.py
-│   └── test_salary_extractor.py
+│   ├── test_salary_extractor.py
+│   └── test_integration.py
 ├── jobs.db              # SQLite database (created on first run)
 ├── feed.xml             # Generated RSS feed
 ├── preview.html         # Generated HTML preview
