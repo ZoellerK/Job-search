@@ -51,3 +51,6 @@ Thumbs.db
 
 # Export files
 jobs_export.*
+
+# Generated reports
+validation_report.txt
