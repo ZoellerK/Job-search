@@ -13,9 +13,11 @@ ats_parsers.py       — Dedicated parsers for Greenhouse, Lever, Workable, Team
 salary_extractor.py  — Regex-based salary extraction from description text
 database.py          — SQLite with jobs, site_parsers, site_health tables
 feed_generator.py    — RSS 2.0 + HTML preview (Feedly-optimized)
+manage_sites.py      — Site discovery/staging/review pipeline (replaces manual CSV editing)
 setup_site.py        — Interactive site configuration wizard
 config.json          — All runtime settings (feed, scraping, logging)
 sites.csv            — Sites to monitor (site_name, url, active, keywords, scrape_details)
+candidates.csv       — Staging area for org candidates pending review
 ```
 
 ## Key Conventions
@@ -25,14 +27,14 @@ sites.csv            — Sites to monitor (site_name, url, active, keywords, scr
 - **Minimal changes.** Don't refactor surrounding code when fixing a bug. Don't add docstrings/comments to untouched code.
 - **SQLite schema changes** use `ALTER TABLE` with `try/except OperationalError` for backward compat (see `database.py:init_database`).
 
-## Adding Sites (The Golden Rule)
+## Adding Sites
 
-**Present → Confirm → Act.** See [ORG_WORKFLOW.md](ORG_WORKFLOW.md) for the full protocol.
+**Use `manage_sites.py` for all site changes.** Never edit `sites.csv` or `rejected_sites.txt` by hand. See [ORG_WORKFLOW.md](ORG_WORKFLOW.md) for the full protocol.
 
-1. Check `rejected_sites.txt` and `sites.csv` for duplicates first: `python check_duplicates.py --validate`
-2. Present suggestions as a numbered list — make NO file changes
-3. Wait for explicit user confirmation
-4. Only then append to `sites.csv`
+1. **Discover**: `python manage_sites.py add "Name" "URL" --category "Cat" --test` (dedup + URL test, stores in candidates.csv)
+2. **Review**: `python manage_sites.py review` generates a checkbox markdown file
+3. **Process**: User checks `[x]` to approve, then `python manage_sites.py process review_YYYY-MM-DD.md`
+4. **Patterns**: `python manage_sites.py patterns` shows what gets approved to guide future discovery
 
 ## Common Tasks
 

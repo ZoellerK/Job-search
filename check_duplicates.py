@@ -6,6 +6,7 @@ Helper script to check for duplicates between new suggestions and rejected/exist
 import csv
 import re
 from typing import Set, List, Tuple
+from urllib.parse import urlparse
 
 
 def load_existing_sites(sites_file: str = 'sites.csv') -> Set[str]:
@@ -21,6 +22,44 @@ def load_existing_sites(sites_file: str = 'sites.csv') -> Set[str]:
     except FileNotFoundError:
         pass
     return sites
+
+
+def load_existing_urls(sites_file: str = 'sites.csv') -> Set[str]:
+    """Load all URLs from sites.csv (both full URLs and domains)"""
+    urls = set()
+    try:
+        with open(sites_file, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                url = row.get('url', '').strip()
+                if url:
+                    urls.add(url.lower().rstrip('/'))
+                    urls.add(urlparse(url).netloc.lower())
+    except FileNotFoundError:
+        pass
+    return urls
+
+
+def load_rejected_urls(rejected_file: str = 'rejected_sites.txt') -> Set[str]:
+    """Load all URLs from rejected_sites.txt (both full URLs and domains)"""
+    urls = set()
+    try:
+        with open(rejected_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith('#') or line.startswith('##') or not line:
+                    continue
+                if ' - ' in line:
+                    parts = line.split(' - ', 1)
+                    if len(parts) == 2:
+                        url = parts[1].strip()
+                        url = re.sub(r'\s*\(.*?\)\s*$', '', url)
+                        if url:
+                            urls.add(url.lower().rstrip('/'))
+                            urls.add(urlparse(url).netloc.lower())
+    except FileNotFoundError:
+        pass
+    return urls
 
 
 def load_rejected_sites(rejected_file: str = 'rejected_sites.txt') -> Set[str]:
@@ -72,14 +111,29 @@ def check_duplicates(new_suggestions: List[Tuple[str, str]]) -> List[Tuple[str, 
     existing_normalized = {normalize_name(name) for name in existing}
     rejected_normalized = {normalize_name(name) for name in rejected}
 
+    # Also check URLs
+    existing_urls = load_existing_urls()
+    rejected_urls = load_rejected_urls()
+
     results = []
     for name, url in new_suggestions:
         normalized = normalize_name(name)
 
+        # Name-based checks
         if name.lower() in existing or normalized in existing_normalized:
             status = 'active'
         elif name.lower() in rejected or normalized in rejected_normalized:
             status = 'rejected'
+        # URL-based checks (if URL provided)
+        elif url:
+            url_lower = url.lower().rstrip('/')
+            domain = urlparse(url).netloc.lower() if url.startswith('http') else ''
+            if url_lower in existing_urls or (domain and domain in existing_urls):
+                status = 'active'
+            elif url_lower in rejected_urls or (domain and domain in rejected_urls):
+                status = 'rejected'
+            else:
+                status = 'new'
         else:
             status = 'new'
 

@@ -1,183 +1,137 @@
-# Organization Suggestion & Addition Workflow
+# Organization Discovery & Approval Workflow
 
-## The Golden Rule
+## Overview
 
-**Present → Confirm → Act.** Never modify `sites.csv` or `rejected_sites.txt` without explicit user confirmation with echo-back.
+```
+Discovery → candidates.csv → Review (checkboxes) → sites.csv / rejected_sites.txt
+```
+
+All file writes go through `manage_sites.py`. Never edit `sites.csv` or `rejected_sites.txt` by hand.
 
 ---
 
-## Phase 1: Present
+## Phase 1: Discovery
 
-When the user asks for organization suggestions:
+When the user asks for new organizations:
 
-1. **Read existing data** to avoid duplicates:
+1. **Run patterns first** to understand what's been approved:
    ```bash
-   python check_duplicates.py --file candidates.txt --new-only
+   python manage_sites.py patterns
    ```
-   This checks against both `rejected_sites.txt` (400+ rejected) and `sites.csv` (active sites).
 
-2. **Only suggest orgs you can verify exist.** Do not fabricate organization names. If unsure whether an org is real, ask the user to name them directly.
+2. **Find candidates** and add them to the staging area:
+   ```bash
+   python manage_sites.py add "Org Name" "https://example.org/careers" --category "Democracy" --test
+   ```
+   The `--test` flag fetches the URL, detects ATS, and counts jobs.
+   Duplicates are automatically blocked (checks names AND URLs against sites.csv, rejected_sites.txt, and candidates.csv).
 
-3. **Show a numbered list.** That's it. No file changes yet.
+3. **For bulk discovery**, create a text file and batch-add:
+   ```bash
+   # candidates_new.txt — one per line: Name - URL
+   python manage_sites.py add-batch candidates_new.txt --category "Foundations"
+   ```
 
-**Example:**
-```
-Here are 10 verified foundations not already in your lists:
+4. **Check staging status**:
+   ```bash
+   python manage_sites.py status
+   ```
 
-1. Freedom House - freedomhouse.org/careers
-2. National Endowment for Democracy - ned.org/jobs
-3. Open Society Foundations - opensociety.org/careers
-4. Democracy Fund - democracyfund.org/jobs
-5. Protect Democracy - protectdemocracy.org/careers
-...
-
-Which numbers would you like to add?
-```
-
-**STOP HERE. Do not write to any files.**
-
----
-
-## Phase 2: Confirm (Echo-Back Required)
-
-When the user responds (e.g., "add 1, 3, 5"):
-
-**Echo back exactly what you're about to do:**
-```
-To confirm, I'll add these 3 organizations to sites.csv:
-
-1. Freedom House - freedomhouse.org/careers
-3. Open Society Foundations - opensociety.org/careers
-5. Protect Democracy - protectdemocracy.org/careers
-
-Proceed?
-```
-
-Wait for the user to say yes before touching any files.
+**No manual CSV editing happens in this phase.**
 
 ---
 
-## Phase 3: Act
+## Phase 2: Review (Checkboxes)
 
-Only after confirmation:
-1. Append confirmed orgs to `sites.csv`
-2. Run `python check_duplicates.py --validate` to verify no conflicts
-3. Report what was added
+Generate a review file for the user:
 
----
-
-## Presentation Formats
-
-### Quick List (5–10 orgs)
-```
-1. **Organization Name** - careers.example.org
-   One-line description (5–10 words)
-
-2. **Another Org** - jobs.example.org
-   One-line description
+```bash
+python manage_sites.py review
+# or limit batch size:
+python manage_sites.py review --batch 20
 ```
 
-### Compact Table (10–20 orgs)
-```
-| # | Organization              | Focus Area         | URL                        |
-|---|---------------------------|--------------------|----------------------------|
-| 1 | Freedom House             | Democracy advocacy | freedomhouse.org/careers   |
-| 2 | Open Society Foundations  | Justice, democracy | opensociety.org/careers    |
-```
+This creates a markdown file like `review_2026-02-16.md`:
 
-### Categorized Groups (20+ orgs)
-```
-**Democracy & Governance (5)**
-1. Freedom House - freedomhouse.org/careers
-2. National Endowment for Democracy - ned.org/jobs
-...
+```markdown
+# Candidate Review (2026-02-16)
 
-**Climate & Environment (4)**
-6. Natural Resources Defense Council - nrdc.org/careers
+15 candidates to review. Check `[x]` to approve, leave `[ ]` to reject.
+
+## Democracy & Governance (5)
+
+- [ ] **1. Org Name** — https://example.org/careers
+  Greenhouse | 12 jobs
+
+- [ ] **2. Another Org** — https://another.org/jobs
+  Lever | 5 jobs
+
+## Foundations (10)
+
+- [ ] **3. Big Foundation** — https://big.org/careers
+  Workday | 8 jobs
 ...
 ```
 
-### Key Principles
-- Use numbered lists so the user can reference by number
-- Bold org names for scanning
-- Direct career-page URLs, not homepages
-- Group by category when presenting 15+ orgs
-- Include count in headers
+**Present this file to the user.** They check `[x]` the ones they want.
 
 ---
 
-## User Request Formats
+## Phase 3: Process
 
-When you want to tell the AI to add organizations, use any of these:
+After the user marks their choices:
 
-### Simple URLs
-```
-https://example1.org/careers
-https://example2.org/jobs
-```
-
-### Structured
-```
-1. Example Foundation
-   URL: https://example.org/careers
-   Keywords: policy, democracy
-```
-
-### Table
-```
-| Organization      | URL                              | Keywords          |
-|-------------------|----------------------------------|-------------------|
-| Example Foundation| https://example.org/careers      | policy, democracy |
-```
-
-### CSV-Ready
-```csv
-site_name,url,active,keywords
-Example Foundation,https://example.org/careers,yes,policy
-```
-
----
-
-## Validation Commands
-
-### Check individual orgs
 ```bash
-python check_duplicates.py "Org Name 1" "Org Name 2"
+python manage_sites.py process review_2026-02-16.md
 ```
 
-### Batch check from file
+This:
+- Moves `[x]` checked items → appends to `sites.csv`
+- Moves `[ ]` unchecked items → appends to `rejected_sites.txt`
+- Updates candidate status in `candidates.csv`
+
+**Alternative: quick approve/reject by ID without a review file:**
 ```bash
-python check_duplicates.py --file candidates.txt --new-only
+python manage_sites.py approve 1 3 5 7
+python manage_sites.py reject 2 4 6
 ```
-
-### Validate sites.csv integrity
-```bash
-python check_duplicates.py --validate
-# or shortcut:
-./validate-sites.sh
-```
-
-### Output legend
-- ✅ **NEW** — Safe to suggest
-- ❌ **ALREADY REJECTED** — User said no
-- 🔵 **ALREADY ACTIVE** — Already monitoring
 
 ---
 
-## Normalization Rules
+## Quick Reference
 
-When comparing names, the validator:
-- Converts to lowercase
-- Removes "the" prefix
-- Strips suffixes: Foundation, Fund, Institute, Inc, LLC, Trust, Philanthropies, Ventures, Collective, Network, Group, Initiative, Project
-
-So "Ford Foundation" = "ford" = "The Ford Fund". Always over-validate.
+| Command | What it does |
+|---------|-------------|
+| `manage_sites.py add <name> <url>` | Stage a candidate |
+| `manage_sites.py add-batch <file>` | Stage many candidates |
+| `manage_sites.py test <url>` | Test URL without staging |
+| `manage_sites.py status` | Show pending/approved/rejected counts |
+| `manage_sites.py review` | Generate checkbox review file |
+| `manage_sites.py process <file>` | Apply review decisions |
+| `manage_sites.py approve <ids>` | Quick approve by ID |
+| `manage_sites.py reject <ids>` | Quick reject by ID |
+| `manage_sites.py patterns` | Analyze what gets approved |
+| `manage_sites.py clear` | Remove processed candidates from staging |
 
 ---
 
-## What This Workflow Prevents
+## Dedup Rules
 
-- Suggesting orgs already active or rejected
-- Writing to files without user sign-off
-- Fabricating organization names that don't exist
-- Misaligned numbering between what's presented and what's acted on
+Candidates are checked against three sources:
+1. **sites.csv** — name match (normalized) AND URL/domain match
+2. **rejected_sites.txt** — name match (normalized) AND URL/domain match
+3. **candidates.csv** — name match AND URL match (prevents re-adding)
+
+Name normalization: lowercase, strip "the" prefix, strip common suffixes (Foundation, Fund, Institute, etc.).
+
+---
+
+## Approval Patterns
+
+Run `python manage_sites.py patterns` to see:
+- ATS platform distribution across approved sites
+- URL pattern breakdown (org-hosted vs. ATS-hosted)
+- Common name terms
+- Approval rate vs rejection rate
+
+Use these patterns to prioritize discovery toward categories and org types the user tends to approve.
