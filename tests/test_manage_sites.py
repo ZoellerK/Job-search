@@ -184,6 +184,18 @@ class TestReview:
         checkbox_count = content.count("- [ ]")
         assert checkbox_count == 3
 
+    def test_review_default_batch_size(self, site_env):
+        """Without --batch flag, should use DEFAULT_BATCH_SIZE."""
+        for i in range(15):
+            manage_sites.cmd_add_candidate([f"Org {i}", f"https://org{i}.org/careers"])
+
+        output_file = str(site_env['tmp_path'] / "review.md")
+        manage_sites.cmd_review(["--output", output_file])
+
+        content = open(output_file).read()
+        checkbox_count = content.count("- [ ]")
+        assert checkbox_count == manage_sites.DEFAULT_BATCH_SIZE
+
 
 class TestProcess:
     def test_process_approvals(self, site_env):
@@ -217,6 +229,9 @@ class TestProcess:
         assert statuses['Org A'] == 'approved'
         assert statuses['Org B'] == 'rejected'
 
+        # Review file should be cleaned up
+        assert not review_file.exists()
+
     def test_process_sites_csv_format(self, site_env):
         """Verify appended rows use correct CSV format."""
         manage_sites.cmd_add_candidate(["Org With Comma, Inc", "https://comma.org/careers"])
@@ -235,6 +250,9 @@ class TestProcess:
 
         names = [r['site_name'] for r in rows]
         assert "Org With Comma, Inc" in names
+
+        # Review file should be cleaned up
+        assert not review_file.exists()
 
 
 class TestQuickApproveReject:

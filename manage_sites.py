@@ -23,6 +23,7 @@ from check_duplicates import load_existing_sites, load_rejected_sites, normalize
 CANDIDATES_FILE = 'candidates.csv'
 SITES_FILE = 'sites.csv'
 REJECTED_FILE = 'rejected_sites.txt'
+DEFAULT_BATCH_SIZE = 10
 CANDIDATES_FIELDS = [
     'id', 'name', 'url', 'category', 'ats_type', 'job_count',
     'date_added', 'status',  # pending | approved | rejected
@@ -395,8 +396,8 @@ def cmd_review(args):
         print("No pending candidates to review.")
         return 0
 
-    # Parse batch size
-    batch_size = len(pending)
+    # Parse batch size (default from constant)
+    batch_size = DEFAULT_BATCH_SIZE
     output_file = None
     i = 0
     while i < len(args):
@@ -527,6 +528,10 @@ def cmd_process(args):
     print(f"  Rejected (→ {REJECTED_FILE}): {len(added_to_rejected)}")
     for name in added_to_rejected:
         print(f"    - {name}")
+
+    # Clean up review file — decisions are recorded in candidates.csv
+    os.remove(review_file)
+    print(f"\nCleaned up {review_file}")
 
     return 0
 
@@ -789,10 +794,10 @@ def main():
         print("      Test a URL (dedup + fetch + ATS detect + job count)")
         print()
         print("Review & approval:")
-        print("  review [--batch N] [--output FILE]")
+        print(f"  review [--batch N] [--output FILE]   (default batch: {DEFAULT_BATCH_SIZE})")
         print("      Generate a checkbox review file for pending candidates")
         print("  process <review_file.md>")
-        print("      Process a review file (checked → sites.csv, unchecked → rejected)")
+        print("      Process a review file (checked → sites.csv, unchecked → rejected, file deleted)")
         print("  approve <id> [id ...]")
         print("      Quick-approve candidates by ID number")
         print("  reject <id> [id ...]")
