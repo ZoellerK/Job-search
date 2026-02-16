@@ -25,7 +25,7 @@ SITES_FILE = 'sites.csv'
 REJECTED_FILE = 'rejected_sites.txt'
 DEFAULT_BATCH_SIZE = 10
 CANDIDATES_FIELDS = [
-    'id', 'name', 'url', 'category', 'ats_type', 'job_count',
+    'id', 'name', 'url', 'category', 'description', 'ats_type', 'job_count',
     'date_added', 'status',  # pending | approved | rejected
 ]
 
@@ -49,7 +49,12 @@ def _read_candidates() -> List[Dict]:
         return []
     with open(CANDIDATES_FILE, 'r', newline='') as f:
         reader = csv.DictReader(f)
-        return list(reader)
+        rows = list(reader)
+    # Backfill missing 'description' field for old rows
+    for row in rows:
+        if 'description' not in row:
+            row['description'] = ''
+    return rows
 
 
 def _write_candidates(rows: List[Dict]):
@@ -207,18 +212,22 @@ def test_url(url: str) -> Dict:
 def cmd_add_candidate(args):
     """Add one or more candidates to the staging CSV."""
     if len(args) < 2:
-        print("Usage: python manage_sites.py add <name> <url> [--category CAT] [--test]")
+        print("Usage: python manage_sites.py add <name> <url> [--category CAT] [--description DESC] [--test]")
         return 1
 
     name = args[0]
     url = args[1]
     category = ''
+    description = ''
     do_test = False
 
     i = 2
     while i < len(args):
         if args[i] == '--category' and i + 1 < len(args):
             category = args[i + 1]
+            i += 2
+        elif args[i] == '--description' and i + 1 < len(args):
+            description = args[i + 1]
             i += 2
         elif args[i] == '--test':
             do_test = True
@@ -260,6 +269,7 @@ def cmd_add_candidate(args):
         'name': name,
         'url': url,
         'category': category,
+        'description': description,
         'ats_type': ats_type,
         'job_count': str(job_count),
         'date_added': datetime.now().strftime('%Y-%m-%d'),
@@ -277,8 +287,8 @@ def cmd_add_candidate(args):
 def cmd_add_batch(args):
     """
     Add multiple candidates from a file.
-    File format: one per line, 'Name - URL' or 'Name,URL'
-    Optional: --category CAT applies to all entries
+    File format: one per line, 'Name - URL - Description' or 'Name,URL,Description'
+    Description is optional. --category CAT applies to all entries.
     """
     if len(args) < 1:
         print("Usage: python manage_sites.py add-batch <file> [--category CAT]")
@@ -305,15 +315,19 @@ def cmd_add_batch(args):
             if not line or line.startswith('#'):
                 continue
             if ' - ' in line:
-                name, url = line.split(' - ', 1)
-                entries.append((name.strip(), url.strip()))
+                parts = line.split(' - ')
+                if len(parts) >= 3:
+                    entries.append((parts[0].strip(), parts[1].strip(), parts[2].strip()))
+                elif len(parts) == 2:
+                    entries.append((parts[0].strip(), parts[1].strip(), ''))
             elif ',' in line:
-                parts = line.split(',', 1)
-                entries.append((parts[0].strip(), parts[1].strip()))
+                parts = line.split(',')
+                desc = parts[2].strip() if len(parts) >= 3 else ''
+                entries.append((parts[0].strip(), parts[1].strip(), desc))
 
     added = 0
     skipped = 0
-    for name, url in entries:
+    for name, url, desc in entries:
         dup = check_duplicate(name, url)
         if dup:
             print(f"  SKIP: {name} — {dup}")
@@ -333,6 +347,7 @@ def cmd_add_batch(args):
             'name': name,
             'url': url,
             'category': category,
+            'description': desc,
             'ats_type': ats_type,
             'job_count': '0',
             'date_added': datetime.now().strftime('%Y-%m-%d'),
@@ -786,10 +801,10 @@ def main():
         print("Site Management Pipeline")
         print()
         print("Discovery & staging:")
-        print("  add <name> <url> [--category CAT] [--test]")
+        print("  add <name> <url> [--category CAT] [--description DESC] [--test]")
         print("      Add a candidate to the staging area")
         print("  add-batch <file> [--category CAT]")
-        print("      Bulk-add candidates from a file (Name - URL per line)")
+        print("      Bulk-add candidates from a file (Name - URL - Description per line)")
         print("  test <url> [name]")
         print("      Test a URL (dedup + fetch + ATS detect + job count)")
         print()
