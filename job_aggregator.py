@@ -48,9 +48,44 @@ def configure_logging(level: str = "INFO"):
 class JobAggregator:
     """Main orchestrator for job aggregation"""
 
+    # Defaults applied when config.json keys are missing
+    _DEFAULT_CONFIG = {
+        'feed': {
+            'title': 'Job Postings RSS Feed',
+            'description': 'Aggregated job postings',
+            'link': 'http://localhost:8000/feed.xml',
+            'author': 'Job Search Tool',
+            'include_site_in_title': True,
+            'simple_descriptions': False,
+            'include_summary': True,
+        },
+        'database': {'path': 'jobs.db'},
+        'output': {'feed_file': 'feed.xml', 'max_items': 100},
+        'scraping': {
+            'user_agent': 'Mozilla/5.0',
+            'timeout': 15,
+            'retry_attempts': 2,
+            'max_workers': 5,
+        },
+        'logging': {'level': 'INFO'},
+        'cleanup': {'days_to_keep': 90, 'stale_after_days': 30},
+    }
+
     def __init__(self, config_file: str = "config.json", sites_file: str = "sites.csv"):
-        with open(config_file, 'r') as f:
-            self.config = json.load(f)
+        try:
+            with open(config_file, 'r') as f:
+                self.config = json.load(f)
+        except json.JSONDecodeError as e:
+            logger.error("Invalid JSON in %s: %s", config_file, e)
+            raise SystemExit(1)
+
+        # Merge defaults for any missing sections/keys
+        for section, defaults in self._DEFAULT_CONFIG.items():
+            if section not in self.config:
+                self.config[section] = defaults
+            elif isinstance(defaults, dict):
+                for key, val in defaults.items():
+                    self.config[section].setdefault(key, val)
 
         self.sites_file = sites_file
         self.db = JobDatabase(self.config['database']['path'])
@@ -71,12 +106,32 @@ class JobAggregator:
 
     def load_sites(self) -> List[Dict]:
         sites = []
+        required_columns = {'site_name', 'url', 'active'}
         try:
             with open(self.sites_file, 'r') as f:
                 reader = csv.DictReader(f)
-                for row in reader:
-                    if row.get('active', '').lower() in ['yes', 'true', '1']:
-                        sites.append(row)
+                if not reader.fieldnames or not required_columns.issubset(set(reader.fieldnames)):
+                    missing = required_columns - set(reader.fieldnames or [])
+                    logger.error("sites.csv missing required columns: %s", ', '.join(missing))
+                    return []
+
+                seen_urls = set()
+                for line_num, row in enumerate(reader, start=2):
+                    if row.get('active', '').lower() not in ['yes', 'true', '1']:
+                        continue
+                    url = (row.get('url') or '').strip()
+                    name = (row.get('site_name') or '').strip()
+                    if not url:
+                        logger.warning("Line %d: skipping row with empty URL", line_num)
+                        continue
+                    if not name:
+                        logger.warning("Line %d: skipping row with empty site_name", line_num)
+                        continue
+                    if url in seen_urls:
+                        logger.warning("Line %d: skipping duplicate URL %s", line_num, url)
+                        continue
+                    seen_urls.add(url)
+                    sites.append(row)
         except FileNotFoundError:
             logger.error("Sites file not found: %s", self.sites_file)
             return []
@@ -213,10 +268,25 @@ class JobAggregator:
 
         logger.info("Starting job aggregation for %d sites", len(sites))
 
-        max_workers = self.config['scraping'].get('max_workers', 5)
+        max_workers = self.config.get('scraping', {}).get('max_workers', 5)
+        site_results = []
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(self.scrape_site, site): site for site in sites}
-            site_results = [f.result() for f in as_completed(futures)]
+            for future in as_completed(futures):
+                site = futures[future]
+                try:
+                    site_results.append(future.result())
+                except Exception as e:
+                    site_name = site.get('site_name', 'unknown')
+                    logger.error("Unhandled error scraping %s: %s", site_name, e)
+                    site_results.append({
+                        'site_name': site_name,
+                        'success': False,
+                        'new_jobs': 0,
+                        'total_found': 0,
+                        'dedup_skipped': 0,
+                        'error': str(e),
+                    })
 
         site_results.sort(key=lambda r: r['site_name'])
 
@@ -291,14 +361,17 @@ class JobAggregator:
         """Run complete update cycle: scrape, cleanup, generate feed, show stats"""
         logger.info("Starting full update cycle")
 
-        # Clean up old data and flag stale listings
-        deleted = self.db.cleanup_old_jobs(days_to_keep=90)
+        # Clean up old data and flag stale listings (configurable thresholds)
+        days_to_keep = self.config.get('cleanup', {}).get('days_to_keep', 90)
+        stale_after_days = self.config.get('cleanup', {}).get('stale_after_days', 30)
+
+        deleted = self.db.cleanup_old_jobs(days_to_keep=days_to_keep)
         if deleted:
-            logger.info("Deleted %d jobs older than 90 days", deleted)
+            logger.info("Deleted %d jobs older than %d days", deleted, days_to_keep)
         self.db.cleanup_old_health_records(days_to_keep=30)
-        stale = self.db.mark_stale_jobs(stale_after_days=30)
+        stale = self.db.mark_stale_jobs(stale_after_days=stale_after_days)
         if stale:
-            logger.info("Flagged %d stale jobs (not seen in 30+ days)", stale)
+            logger.info("Flagged %d stale jobs (not seen in %d+ days)", stale, stale_after_days)
 
         # Scrape all sites
         scrape_results = self.scrape_all()
@@ -414,9 +487,10 @@ def main():
                     output = sys.argv[3]
                 aggregator.export(output, fmt=fmt)
             elif command == "stale":
+                stale_days = aggregator.config.get('cleanup', {}).get('stale_after_days', 30)
                 stale_jobs = aggregator.db.get_stale_jobs()
                 if stale_jobs:
-                    logger.info("=== Stale Jobs (not seen in 30+ days) ===")
+                    logger.info("=== Stale Jobs (not seen in %d+ days) ===", stale_days)
                     for j in stale_jobs:
                         logger.info("  [%s] %s — last seen %s", j['site_name'], j['title'], j.get('last_seen_date', 'unknown'))
                 else:

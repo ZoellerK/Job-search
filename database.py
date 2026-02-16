@@ -92,6 +92,24 @@ class JobDatabase:
                 ON site_health (site_name, scrape_date DESC)
             """)
 
+            # Indexes for common job queries
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_jobs_site_name
+                ON jobs (site_name)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_jobs_discovered_date
+                ON jobs (discovered_date DESC)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_jobs_stale
+                ON jobs (stale)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_jobs_site_discovered
+                ON jobs (site_name, discovered_date DESC)
+            """)
+
             conn.commit()
 
     def add_job(self, site_name: str, url: str, title: str,
