@@ -267,12 +267,15 @@ class RSSFeedGenerator:
         return ''.join(parts) if parts else "No details available"
 
     def build_summary_item(self, scrape_results: Dict,
-                           health_alerts: List[Dict] = None) -> Dict:
+                           health_alerts: List[Dict] = None,
+                           stale_count: int = 0) -> Dict:
         """Build a summary feed item from scraping results + health alerts."""
         summary_parts = []
         summary_parts.append("<h3>Update Summary</h3>")
         summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
         summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
+        if stale_count:
+            summary_parts.append(f"<p><strong>Stale Listings Hidden:</strong> {stale_count} (not seen in 30+ days)</p>")
 
         if scrape_results['failed_sites'] > 0:
             summary_parts.append(f"<p><strong>Failed Sites:</strong> {scrape_results['failed_sites']}</p>")

@@ -160,6 +160,54 @@ class TestStats:
         assert stats['total_sites'] == 2
 
 
+class TestStaleness:
+    def test_add_job_sets_last_seen_date(self, db):
+        db.add_job("S", "https://x.com/1", "T")
+        job = db.get_recent_jobs()[0]
+        assert job['last_seen_date'] is not None
+        assert job['stale'] == 0
+
+    def test_mark_jobs_seen_updates_date(self, db):
+        db.add_job("S", "https://x.com/1", "T")
+        original = db.get_recent_jobs()[0]['last_seen_date']
+        import time; time.sleep(0.01)
+        db.mark_jobs_seen(["https://x.com/1"])
+        updated = db.get_recent_jobs()[0]['last_seen_date']
+        assert updated >= original
+
+    def test_mark_stale_jobs(self, db):
+        db.add_job("S", "https://x.com/1", "Old Job")
+        # Manually backdate the last_seen_date
+        with db._connect() as conn:
+            conn.execute(
+                "UPDATE jobs SET last_seen_date = datetime('now', '-60 days') WHERE url = ?",
+                ("https://x.com/1",)
+            )
+            conn.commit()
+        count = db.mark_stale_jobs(stale_after_days=30)
+        assert count == 1
+        stale = db.get_stale_jobs()
+        assert len(stale) == 1
+        assert stale[0]['title'] == "Old Job"
+
+    def test_fresh_jobs_not_marked_stale(self, db):
+        db.add_job("S", "https://x.com/1", "Fresh Job")
+        count = db.mark_stale_jobs(stale_after_days=30)
+        assert count == 0
+
+    def test_mark_seen_clears_stale(self, db):
+        db.add_job("S", "https://x.com/1", "Job")
+        with db._connect() as conn:
+            conn.execute(
+                "UPDATE jobs SET last_seen_date = datetime('now', '-60 days'), stale = 1 WHERE url = ?",
+                ("https://x.com/1",)
+            )
+            conn.commit()
+        db.mark_jobs_seen(["https://x.com/1"])
+        job = db.get_recent_jobs()[0]
+        assert job['stale'] == 0
+
+
 class TestParserConfig:
     def test_save_and_load(self, db):
         config = {'job_container': {'tag': 'div', 'class': 'job'}}

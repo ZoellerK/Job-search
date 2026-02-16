@@ -15,6 +15,8 @@ from typing import List, Dict
 from database import JobDatabase
 from scraper import JobScraper
 from feed_generator import RSSFeedGenerator
+from salary_extractor import extract_salary
+from ats_parsers import detect_ats, parse_ats_page
 
 logger = logging.getLogger(__name__)
 
@@ -92,11 +94,34 @@ class JobAggregator:
             if parser_config:
                 jobs = self.scraper.scrape_with_config(url, parser_config)
             else:
-                jobs = self.scraper.auto_detect_jobs(url)
+                # Try ATS-specific parser first, fall back to generic
+                ats = detect_ats(url)
+                if ats:
+                    soup = self.scraper.fetch_page(url)
+                    if soup:
+                        from urllib.parse import urlparse as _urlparse
+                        base = f"{_urlparse(url).scheme}://{_urlparse(url).netloc}"
+                        jobs = parse_ats_page(ats, soup, base)
+                        if jobs:
+                            logger.info("%s: ATS parser (%s) found %d jobs", site_name, ats, len(jobs))
+                    else:
+                        jobs = []
+                    # Fall back to generic if ATS parser found nothing
+                    if not jobs:
+                        jobs = self.scraper.auto_detect_jobs(url)
+                else:
+                    jobs = self.scraper.auto_detect_jobs(url)
 
             if scrape_details and jobs:
                 logger.info("Scraping detail pages for %s (%d jobs)", site_name, min(len(jobs), 20))
                 jobs = self.scraper.enrich_jobs_with_details(jobs, max_jobs=20)
+
+            # Extract salary from description text when no explicit salary field
+            for job in jobs:
+                if not job.get('salary') and job.get('description'):
+                    extracted = extract_salary(job['description'])
+                    if extracted:
+                        job['salary'] = extracted
 
             new_jobs_count = 0
             dedup_skipped = 0
@@ -132,6 +157,11 @@ class JobAggregator:
                 )
                 if added:
                     new_jobs_count += 1
+
+            # Mark all scraped URLs as "seen" for staleness tracking
+            seen_urls = [j.get('url') for j in jobs if j.get('url')]
+            if seen_urls:
+                self.db.mark_jobs_seen(seen_urls)
 
             # Record health
             self.db.record_scrape_result(
@@ -259,11 +289,14 @@ class JobAggregator:
         """Run complete update cycle: scrape, cleanup, generate feed, show stats"""
         logger.info("Starting full update cycle")
 
-        # Clean up old data
+        # Clean up old data and flag stale listings
         deleted = self.db.cleanup_old_jobs(days_to_keep=90)
         if deleted:
             logger.info("Deleted %d jobs older than 90 days", deleted)
         self.db.cleanup_old_health_records(days_to_keep=30)
+        stale = self.db.mark_stale_jobs(stale_after_days=30)
+        if stale:
+            logger.info("Flagged %d stale jobs (not seen in 30+ days)", stale)
 
         # Scrape all sites
         scrape_results = self.scrape_all()
@@ -288,14 +321,19 @@ class JobAggregator:
         max_items = self.config['output']['max_items']
         jobs = self.db.get_recent_jobs(limit=max_items)
 
+        # Exclude stale jobs from the feed
+        jobs = [j for j in jobs if not j.get('stale')]
+
+        stale_count = len(self.db.get_stale_jobs())
         include_summary = self.config['feed'].get('include_summary', True)
 
         if include_summary and (scrape_results['total_new_jobs'] > 0 or health_alerts):
             summary_job = self.feed_gen.build_summary_item(
-                scrape_results, health_alerts=health_alerts or []
+                scrape_results, health_alerts=health_alerts or [],
+                stale_count=stale_count,
             )
             jobs = [summary_job] + jobs
-            logger.info("Including summary + %d jobs in feed", len(jobs) - 1)
+            logger.info("Including summary + %d jobs in feed (%d stale excluded)", len(jobs) - 1, stale_count)
         else:
             logger.info("Including %d jobs in feed", len(jobs))
 
@@ -365,6 +403,14 @@ def main():
                 if len(sys.argv) > 3:
                     output = sys.argv[3]
                 aggregator.export(output, fmt=fmt)
+            elif command == "stale":
+                stale_jobs = aggregator.db.get_stale_jobs()
+                if stale_jobs:
+                    logger.info("=== Stale Jobs (not seen in 30+ days) ===")
+                    for j in stale_jobs:
+                        logger.info("  [%s] %s — last seen %s", j['site_name'], j['title'], j.get('last_seen_date', 'unknown'))
+                else:
+                    logger.info("No stale jobs found.")
             else:
                 print(f"Unknown command: {command}")
                 print("\nAvailable commands:")
@@ -374,6 +420,7 @@ def main():
                 print("  stats   - Show database statistics")
                 print("  update  - Run full update (scrape + feed + preview)")
                 print("  health  - Show site health summary")
+                print("  stale   - Show stale job listings")
                 print("  export [csv|json] [filename] - Export jobs")
                 sys.exit(1)
         else:

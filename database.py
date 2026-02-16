@@ -47,6 +47,8 @@ class JobDatabase:
                     salary TEXT,
                     job_type TEXT,
                     details_scraped BOOLEAN DEFAULT 0,
+                    last_seen_date TEXT,
+                    stale BOOLEAN DEFAULT 0,
                     UNIQUE(url)
                 )
             """)
@@ -55,6 +57,8 @@ class JobDatabase:
                 "salary TEXT",
                 "job_type TEXT",
                 "details_scraped BOOLEAN DEFAULT 0",
+                "last_seen_date TEXT",
+                "stale BOOLEAN DEFAULT 0",
             ]:
                 try:
                     cursor.execute(f"ALTER TABLE jobs ADD COLUMN {col_def}")
@@ -96,16 +100,17 @@ class JobDatabase:
                 salary: str = None, job_type: str = None,
                 details_scraped: bool = False) -> bool:
         """Add a new job posting. Returns True if added, False if duplicate."""
+        now = datetime.now(timezone.utc).isoformat()
         with self._connect() as conn:
             try:
                 conn.execute("""
                     INSERT INTO jobs (site_name, url, title, description, location,
                                     posted_date, discovered_date, keywords, salary,
-                                    job_type, details_scraped)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    job_type, details_scraped, last_seen_date)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (site_name, url, title, description, location, posted_date,
-                      datetime.now(timezone.utc).isoformat(), keywords, salary,
-                      job_type, details_scraped))
+                      now, keywords, salary,
+                      job_type, details_scraped, now))
                 conn.commit()
                 return True
             except sqlite3.IntegrityError:
@@ -123,7 +128,8 @@ class JobDatabase:
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT id, site_name, url, title, description, location,
-                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
+                       posted_date, discovered_date, keywords, salary, job_type,
+                       details_scraped, last_seen_date, stale
                 FROM jobs
                 ORDER BY discovered_date DESC
                 LIMIT ?
@@ -135,7 +141,8 @@ class JobDatabase:
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT id, site_name, url, title, description, location,
-                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
+                       posted_date, discovered_date, keywords, salary, job_type,
+                       details_scraped, last_seen_date, stale
                 FROM jobs
                 WHERE discovered_date > ?
                 ORDER BY discovered_date DESC
@@ -181,7 +188,8 @@ class JobDatabase:
             cursor = conn.cursor()
             cursor.execute("""
                 SELECT id, site_name, url, title, description, location,
-                       posted_date, discovered_date, keywords, salary, job_type, details_scraped
+                       posted_date, discovered_date, keywords, salary, job_type,
+                       details_scraped, last_seen_date, stale
                 FROM jobs
                 WHERE details_scraped = 0 OR details_scraped IS NULL
                 ORDER BY discovered_date DESC
@@ -295,6 +303,54 @@ class JobDatabase:
             conn.commit()
             logger.info("Cleaned up %d jobs older than %d days", deleted_count, days_to_keep)
             return deleted_count
+
+    # ── Staleness Tracking ─────────────────────────────────────────────
+
+    def mark_jobs_seen(self, urls: List[str]):
+        """Update last_seen_date for all jobs whose URLs appear in this scrape."""
+        if not urls:
+            return
+        now = datetime.now(timezone.utc).isoformat()
+        with self._connect() as conn:
+            cursor = conn.cursor()
+            for url in urls:
+                cursor.execute(
+                    "UPDATE jobs SET last_seen_date = ?, stale = 0 WHERE url = ?",
+                    (now, url),
+                )
+            conn.commit()
+
+    def mark_stale_jobs(self, stale_after_days: int = 30) -> int:
+        """Flag jobs not seen in the last *stale_after_days* days as stale."""
+        with self._connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE jobs
+                SET stale = 1
+                WHERE stale = 0
+                  AND last_seen_date IS NOT NULL
+                  AND date(last_seen_date) < date('now', '-' || ? || ' days')
+            """, (stale_after_days,))
+            count = cursor.rowcount
+            conn.commit()
+            if count:
+                logger.info("Marked %d jobs as stale (not seen in %d days)", count, stale_after_days)
+            return count
+
+    def get_stale_jobs(self, limit: int = 100) -> List[Dict]:
+        """Return jobs flagged as stale."""
+        with self._connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, site_name, url, title, description, location,
+                       posted_date, discovered_date, keywords, salary, job_type,
+                       details_scraped, last_seen_date, stale
+                FROM jobs
+                WHERE stale = 1
+                ORDER BY last_seen_date ASC
+                LIMIT ?
+            """, (limit,))
+            return self._rows_to_jobs(cursor.fetchall())
 
     # ── Site Health Tracking ──────────────────────────────────────────
 
