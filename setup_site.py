@@ -7,8 +7,10 @@ import sys
 import csv
 import json
 import os
+from urllib.parse import urlparse
 from scraper import JobScraper
 from database import JobDatabase
+from ats_parsers import detect_ats, parse_ats_page
 
 
 class SiteSetup:
@@ -46,7 +48,22 @@ class SiteSetup:
         print(f"\n🤖 Auto-detecting job listings on: {url}")
         print("=" * 60)
 
-        jobs = self.scraper.auto_detect_jobs(url)
+        # Try ATS-specific parser first for better results
+        ats = detect_ats(url)
+        jobs = []
+        if ats:
+            print(f"\n🔌 Detected ATS platform: {ats}")
+            soup = self.scraper.fetch_page(url)
+            if soup:
+                base = f"{urlparse(url).scheme}://{urlparse(url).netloc}"
+                jobs = parse_ats_page(ats, soup, base)
+                if jobs:
+                    print(f"   ATS parser found {len(jobs)} jobs")
+                else:
+                    print("   ATS parser returned nothing, falling back to generic detection")
+
+        if not jobs:
+            jobs = self.scraper.auto_detect_jobs(url)
 
         if not jobs:
             print("\n❌ No job listings detected automatically.")

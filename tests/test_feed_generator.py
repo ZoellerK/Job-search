@@ -141,3 +141,45 @@ class TestMetadataExtraction:
         job = {'title': None, 'description': None, 'location': None, 'job_type': None}
         cats = feed_gen._extract_job_metadata(job)
         assert isinstance(cats, list)
+
+
+class TestRelevanceScoring:
+    def test_high_relevance_multiple_keywords(self, feed_gen):
+        job = {'title': 'Director of Program Strategy', 'description': 'policy research grants'}
+        result = feed_gen._score_relevance(job)
+        assert result == 'Relevance: High'
+
+    def test_medium_relevance_one_high_keyword(self, feed_gen):
+        job = {'title': 'Research Intern', 'description': 'administrative support'}
+        result = feed_gen._score_relevance(job)
+        assert result == 'Relevance: Medium'
+
+    def test_medium_relevance_two_medium_keywords(self, feed_gen):
+        job = {'title': 'Communications Coordinator', 'description': ''}
+        result = feed_gen._score_relevance(job)
+        assert result == 'Relevance: Medium'
+
+    def test_no_relevance_unrelated(self, feed_gen):
+        job = {'title': 'Janitor', 'description': 'cleaning and maintenance'}
+        result = feed_gen._score_relevance(job)
+        assert result == ''
+
+    def test_no_relevance_empty(self, feed_gen):
+        job = {'title': '', 'description': ''}
+        result = feed_gen._score_relevance(job)
+        assert result == ''
+
+    def test_relevance_in_metadata(self, feed_gen):
+        job = {'title': 'Director of Program Strategy and Policy',
+               'description': 'grants management', 'location': 'DC', 'job_type': 'Full-time'}
+        cats = feed_gen._extract_job_metadata(job)
+        assert 'Relevance: High' in cats
+
+    def test_custom_keywords(self):
+        gen = RSSFeedGenerator(relevance_keywords={
+            'high': ['underwater', 'basket'],
+            'medium': ['weaving'],
+        })
+        job = {'title': 'Underwater Basket Weaving Instructor', 'description': ''}
+        result = gen._score_relevance(job)
+        assert result == 'Relevance: High'

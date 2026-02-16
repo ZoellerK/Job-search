@@ -11,15 +11,29 @@ logger = logging.getLogger(__name__)
 class RSSFeedGenerator:
     """Generates RSS feed from job postings"""
 
+    # Default relevance keywords — can be overridden via config
+    DEFAULT_RELEVANCE_KEYWORDS = {
+        'high': [
+            'program', 'policy', 'grants', 'advocacy', 'strategy',
+            'research', 'philanthropy', 'director', 'manager', 'officer',
+        ],
+        'medium': [
+            'communications', 'partnerships', 'development', 'coordinator',
+            'analyst', 'associate', 'operations', 'engagement', 'community',
+        ],
+    }
+
     def __init__(self, title: str = "Job Postings", description: str = "Aggregated job postings",
                  link: str = "http://localhost:8000/feed.xml", author: str = "Job Search Tool",
-                 include_site_in_title: bool = True, simple_descriptions: bool = False):
+                 include_site_in_title: bool = True, simple_descriptions: bool = False,
+                 relevance_keywords: Dict = None):
         self.title = title
         self.description = description
         self.link = link
         self.author = author
         self.include_site_in_title = include_site_in_title
         self.simple_descriptions = simple_descriptions
+        self.relevance_keywords = relevance_keywords or self.DEFAULT_RELEVANCE_KEYWORDS
 
     def generate_feed(self, jobs: List[Dict], output_file: str = "feed.xml") -> str:
         """
@@ -176,7 +190,33 @@ class RSSFeedGenerator:
         if any(term in search_text for term in ['director', 'vp', 'vice president', 'head of', 'chief']):
             categories.append('Leadership')
 
+        # Relevance scoring
+        relevance = self._score_relevance(job)
+        if relevance:
+            categories.append(relevance)
+
         return categories
+
+    def _score_relevance(self, job: Dict) -> str:
+        """Score job relevance based on keyword matches. Returns category string or empty."""
+        search_text = ' '.join([
+            (job.get('title') or '').lower(),
+            (job.get('description') or '')[:500].lower(),
+        ])
+        if not search_text.strip():
+            return ''
+
+        # Count matches per tier
+        high_matches = sum(1 for kw in self.relevance_keywords.get('high', [])
+                          if kw.lower() in search_text)
+        medium_matches = sum(1 for kw in self.relevance_keywords.get('medium', [])
+                            if kw.lower() in search_text)
+
+        if high_matches >= 2:
+            return 'Relevance: High'
+        if high_matches >= 1 or medium_matches >= 2:
+            return 'Relevance: Medium'
+        return ''
 
     def _build_plain_summary(self, job: Dict) -> str:
         """Build plain text summary for Feedly preview cards (50-150 chars ideal)"""

@@ -65,7 +65,8 @@ class JobAggregator:
             link=self.config['feed']['link'],
             author=self.config['feed']['author'],
             include_site_in_title=self.config['feed'].get('include_site_in_title', True),
-            simple_descriptions=self.config['feed'].get('simple_descriptions', False)
+            simple_descriptions=self.config['feed'].get('simple_descriptions', False),
+            relevance_keywords=self.config['feed'].get('relevance_keywords'),
         )
 
     def load_sites(self) -> List[Dict]:
@@ -212,7 +213,8 @@ class JobAggregator:
 
         logger.info("Starting job aggregation for %d sites", len(sites))
 
-        with ThreadPoolExecutor(max_workers=5) as executor:
+        max_workers = self.config['scraping'].get('max_workers', 5)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(self.scrape_site, site): site for site in sites}
             site_results = [f.result() for f in as_completed(futures)]
 
@@ -374,7 +376,15 @@ class JobAggregator:
 
 
 def main():
-    configure_logging()
+    # Load config early to get log level before anything else
+    log_level = "INFO"
+    try:
+        with open("config.json", 'r') as f:
+            _cfg = json.load(f)
+        log_level = _cfg.get('logging', {}).get('level', 'INFO')
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        pass
+    configure_logging(log_level)
 
     try:
         aggregator = JobAggregator()

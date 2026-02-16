@@ -30,6 +30,16 @@ def detect_ats(url: str) -> Optional[str]:
         return 'workable'
     if 'teamtailor.com' in host:
         return 'teamtailor'
+    if 'icims.com' in host:
+        return 'icims'
+    if 'tbe.taleo.net' in host or 'taleo.net' in host:
+        return 'taleo'
+    if 'myworkdayjobs.com' in host:
+        return 'workday'
+    if 'workforcenow.adp.com' in host:
+        return 'adp'
+    if 'applicantpro.com' in host:
+        return 'applicantpro'
     return None
 
 
@@ -253,6 +263,259 @@ def parse_teamtailor(soup: BeautifulSoup, base_url: str) -> List[Dict]:
     return jobs
 
 
+# ── iCIMS ─────────────────────────────────────────────────────────────
+
+def parse_icims(soup: BeautifulSoup, base_url: str) -> List[Dict]:
+    """
+    Parse an iCIMS job board page.
+
+    iCIMS boards render job listings as table rows or divs with links
+    containing /jobs/<id>/job in the href.  The Brookings instance uses
+    a landing page with links to individual postings.
+    """
+    jobs = []
+    seen = set()
+
+    # iCIMS typically renders job links with /jobs/<id>/ paths
+    for link in soup.find_all('a', href=re.compile(r'/jobs/\d+', re.I)):
+        text = link.get_text(strip=True)
+        url = urljoin(base_url, link['href'])
+        if url in seen or not text or len(text) < 5:
+            continue
+        # Skip navigation/filter links
+        if text.lower() in ('apply', 'apply now', 'search', 'back'):
+            continue
+        seen.add(url)
+
+        job = {'title': text, 'url': url}
+        parent = link.parent
+        if parent:
+            loc = parent.find(['span', 'div'], class_=re.compile(r'location|city', re.I))
+            if loc:
+                job['location'] = loc.get_text(strip=True)
+            jtype = parent.find(['span', 'div'], class_=re.compile(r'type|category', re.I))
+            if jtype:
+                job['job_type'] = jtype.get_text(strip=True)
+        jobs.append(job)
+
+    # Fallback: look for iCIMS-style listing containers
+    if not jobs:
+        for container in soup.find_all(['div', 'li', 'tr'], class_=re.compile(r'iCIMS|job', re.I)):
+            link = container.find('a', href=True)
+            if not link:
+                continue
+            text = link.get_text(strip=True)
+            url = urljoin(base_url, link['href'])
+            if url in seen or not text or len(text) < 5:
+                continue
+            seen.add(url)
+            jobs.append({'title': text, 'url': url})
+
+    logger.info("iCIMS parser found %d jobs on %s", len(jobs), base_url)
+    return jobs
+
+
+# ── Taleo ─────────────────────────────────────────────────────────────
+
+def parse_taleo(soup: BeautifulSoup, base_url: str) -> List[Dict]:
+    """
+    Parse a Taleo job board page.
+
+    Taleo (Oracle) career sections render job listings in tables or divs.
+    The Freedom House instance uses the v2 career site.  Taleo pages are
+    often JS-heavy, so this parser works best with Playwright-rendered HTML.
+    """
+    jobs = []
+    seen = set()
+
+    # Taleo v2 uses spans/links with class patterns like "job-link" or
+    # requisition rows with data attributes
+    for link in soup.find_all('a', href=True):
+        href = link['href']
+        text = link.get_text(strip=True)
+        # Taleo job links typically contain requisition IDs or /jobdetail/
+        if not text or len(text) < 5:
+            continue
+        if any(kw in href.lower() for kw in ['requisition', 'jobdetail', 'job/']):
+            url = urljoin(base_url, href)
+            if url in seen:
+                continue
+            seen.add(url)
+            job = {'title': text, 'url': url}
+            parent = link.parent
+            if parent:
+                loc = parent.find(['span', 'td'], class_=re.compile(r'location|city', re.I))
+                if loc:
+                    job['location'] = loc.get_text(strip=True)
+            jobs.append(job)
+
+    # Fallback: look for table rows with job data
+    if not jobs:
+        for row in soup.find_all('tr', class_=re.compile(r'job|requisition|data', re.I)):
+            link = row.find('a', href=True)
+            if not link:
+                continue
+            text = link.get_text(strip=True)
+            url = urljoin(base_url, link['href'])
+            if url in seen or not text or len(text) < 5:
+                continue
+            seen.add(url)
+            job = {'title': text, 'url': url}
+            cells = row.find_all('td')
+            if len(cells) >= 2:
+                job['location'] = cells[1].get_text(strip=True)
+            jobs.append(job)
+
+    logger.info("Taleo parser found %d jobs on %s", len(jobs), base_url)
+    return jobs
+
+
+# ── Workday ───────────────────────────────────────────────────────────
+
+def parse_workday(soup: BeautifulSoup, base_url: str) -> List[Dict]:
+    """
+    Parse a Workday job board page.
+
+    Workday career sites (myworkdayjobs.com) are heavily JS-rendered.
+    This parser handles the server-rendered HTML that Playwright produces,
+    which typically contains job cards with data-automation-id attributes.
+    """
+    jobs = []
+    seen = set()
+
+    # Workday uses data-automation-id="jobTitle" on links
+    for link in soup.find_all('a', attrs={'data-automation-id': re.compile(r'jobTitle', re.I)}):
+        text = link.get_text(strip=True)
+        url = urljoin(base_url, link.get('href', ''))
+        if url in seen or not text:
+            continue
+        seen.add(url)
+        job = {'title': text, 'url': url}
+
+        # Location usually in a sibling element
+        parent = link.find_parent(['li', 'div', 'section'])
+        if parent:
+            loc = parent.find(attrs={'data-automation-id': re.compile(r'location', re.I)})
+            if loc:
+                job['location'] = loc.get_text(strip=True)
+            posted = parent.find(attrs={'data-automation-id': re.compile(r'postedOn', re.I)})
+            if posted:
+                job['posted_date'] = posted.get_text(strip=True)
+        jobs.append(job)
+
+    # Fallback: generic link scan for /job/ paths
+    if not jobs:
+        for link in soup.find_all('a', href=re.compile(r'/job/', re.I)):
+            text = link.get_text(strip=True)
+            url = urljoin(base_url, link['href'])
+            if url in seen or not text or len(text) < 5:
+                continue
+            if text.lower() in ('apply', 'apply now', 'sign in'):
+                continue
+            seen.add(url)
+            jobs.append({'title': text, 'url': url})
+
+    logger.info("Workday parser found %d jobs on %s", len(jobs), base_url)
+    return jobs
+
+
+# ── ADP ───────────────────────────────────────────────────────────────
+
+def parse_adp(soup: BeautifulSoup, base_url: str) -> List[Dict]:
+    """
+    Parse an ADP Workforce Now job board page.
+
+    ADP recruitment pages are JS-rendered.  When rendered via Playwright
+    the job cards appear as divs/links with job posting data.
+    """
+    jobs = []
+    seen = set()
+
+    # ADP uses links to job detail pages with /mdf/recruitment/ in the path
+    for link in soup.find_all('a', href=True):
+        href = link['href']
+        text = link.get_text(strip=True)
+        if not text or len(text) < 5:
+            continue
+        # ADP links often contain requisition or job detail identifiers
+        if 'recruitment' in href.lower() or 'requisition' in href.lower():
+            url = urljoin(base_url, href)
+            if url in seen:
+                continue
+            seen.add(url)
+            jobs.append({'title': text, 'url': url})
+
+    # Fallback: look for structured job cards
+    if not jobs:
+        for card in soup.find_all(['div', 'li'], class_=re.compile(r'job|posting|position|requisition', re.I)):
+            link = card.find('a', href=True)
+            if not link:
+                continue
+            text = link.get_text(strip=True)
+            url = urljoin(base_url, link['href'])
+            if url in seen or not text or len(text) < 5:
+                continue
+            seen.add(url)
+            job = {'title': text, 'url': url}
+            loc = card.find(['span', 'div'], class_=re.compile(r'location', re.I))
+            if loc:
+                job['location'] = loc.get_text(strip=True)
+            jobs.append(job)
+
+    logger.info("ADP parser found %d jobs on %s", len(jobs), base_url)
+    return jobs
+
+
+# ── ApplicantPro ──────────────────────────────────────────────────────
+
+def parse_applicantpro(soup: BeautifulSoup, base_url: str) -> List[Dict]:
+    """
+    Parse an ApplicantPro job board page.
+
+    ApplicantPro boards render job listings as links to /jobs/<id>/<slug>
+    in a list format with location and category metadata.
+    """
+    jobs = []
+    seen = set()
+
+    # ApplicantPro uses /jobs/<number>/ link pattern
+    for link in soup.find_all('a', href=re.compile(r'/jobs/\d+', re.I)):
+        text = link.get_text(strip=True)
+        url = urljoin(base_url, link['href'])
+        if url in seen or not text or len(text) < 5:
+            continue
+        if text.lower() in ('apply', 'apply now', 'view job', 'details'):
+            continue
+        seen.add(url)
+
+        job = {'title': text, 'url': url}
+        parent = link.parent
+        if parent:
+            loc = parent.find(['span', 'div', 'small'], class_=re.compile(r'location|city|region', re.I))
+            if loc:
+                job['location'] = loc.get_text(strip=True)
+            dept = parent.find(['span', 'div', 'small'], class_=re.compile(r'department|category', re.I))
+            if dept:
+                job['department'] = dept.get_text(strip=True)
+        jobs.append(job)
+
+    # Fallback: look for job listing containers
+    if not jobs:
+        for container in soup.find_all(['div', 'li', 'tr'], class_=re.compile(r'job|listing|opening|position', re.I)):
+            link = container.find('a', href=True)
+            if not link:
+                continue
+            text = link.get_text(strip=True)
+            url = urljoin(base_url, link['href'])
+            if url in seen or not text or len(text) < 5:
+                continue
+            seen.add(url)
+            jobs.append({'title': text, 'url': url})
+
+    logger.info("ApplicantPro parser found %d jobs on %s", len(jobs), base_url)
+    return jobs
+
+
 # ── Dispatcher ────────────────────────────────────────────────────────
 
 _PARSERS = {
@@ -260,6 +523,11 @@ _PARSERS = {
     'lever': parse_lever,
     'workable': parse_workable,
     'teamtailor': parse_teamtailor,
+    'icims': parse_icims,
+    'taleo': parse_taleo,
+    'workday': parse_workday,
+    'adp': parse_adp,
+    'applicantpro': parse_applicantpro,
 }
 
 

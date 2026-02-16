@@ -2,7 +2,10 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from ats_parsers import detect_ats, parse_greenhouse, parse_lever, parse_workable
+from ats_parsers import (
+    detect_ats, parse_greenhouse, parse_lever, parse_workable,
+    parse_icims, parse_taleo, parse_workday, parse_adp, parse_applicantpro,
+)
 
 
 class TestDetectAts:
@@ -20,6 +23,21 @@ class TestDetectAts:
 
     def test_teamtailor(self):
         assert detect_ats("https://founderspledge.teamtailor.com/en-GB/jobs") == "teamtailor"
+
+    def test_icims(self):
+        assert detect_ats("https://interns-brookings.icims.com/jobs/intro") == "icims"
+
+    def test_taleo(self):
+        assert detect_ats("https://phe.tbe.taleo.net/phe01/ats/careers/v2/jobSearch") == "taleo"
+
+    def test_workday(self):
+        assert detect_ats("https://gatesfoundation.wd1.myworkdayjobs.com/en-US/Gates") == "workday"
+
+    def test_adp(self):
+        assert detect_ats("https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html") == "adp"
+
+    def test_applicantpro(self):
+        assert detect_ats("https://carnegieendowment.applicantpro.com/jobs/") == "applicantpro"
 
     def test_unknown_returns_none(self):
         assert detect_ats("https://example.com/careers") is None
@@ -196,3 +214,190 @@ class TestParseWorkable:
         soup = BeautifulSoup(html, 'lxml')
         jobs = parse_workable(soup, "https://apply.workable.com")
         assert len(jobs) == 2
+
+
+ICIMS_HTML = """
+<html><body>
+<div class="iCIMS_JobsTable">
+  <a href="/jobs/1234/job">Policy Research Associate</a>
+  <span class="location">Washington, DC</span>
+</div>
+<div class="iCIMS_JobsTable">
+  <a href="/jobs/5678/job">Communications Director</a>
+  <span class="location">Remote</span>
+</div>
+</body></html>
+"""
+
+
+class TestParseIcims:
+    def test_finds_jobs(self):
+        soup = BeautifulSoup(ICIMS_HTML, 'lxml')
+        jobs = parse_icims(soup, "https://interns-brookings.icims.com")
+        assert len(jobs) == 2
+
+    def test_extracts_title(self):
+        soup = BeautifulSoup(ICIMS_HTML, 'lxml')
+        jobs = parse_icims(soup, "https://interns-brookings.icims.com")
+        titles = {j['title'] for j in jobs}
+        assert "Policy Research Associate" in titles
+
+    def test_empty_page(self):
+        soup = BeautifulSoup("<html><body></body></html>", 'lxml')
+        jobs = parse_icims(soup, "https://icims.com")
+        assert jobs == []
+
+    def test_skips_apply_links(self):
+        html = """
+        <html><body>
+        <a href="/jobs/123/job">Real Job Title</a>
+        <a href="/jobs/123/apply">Apply</a>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        jobs = parse_icims(soup, "https://icims.com")
+        assert len(jobs) == 1
+        assert jobs[0]['title'] == "Real Job Title"
+
+
+TALEO_HTML = """
+<html><body>
+<table>
+  <tr class="job-row">
+    <td><a href="/requisition/12345">Senior Policy Analyst</a></td>
+    <td>New York, NY</td>
+  </tr>
+  <tr class="job-row">
+    <td><a href="/requisition/67890">Program Coordinator</a></td>
+    <td>Washington, DC</td>
+  </tr>
+</table>
+</body></html>
+"""
+
+
+class TestParseTaleo:
+    def test_finds_jobs(self):
+        soup = BeautifulSoup(TALEO_HTML, 'lxml')
+        jobs = parse_taleo(soup, "https://phe.tbe.taleo.net")
+        assert len(jobs) == 2
+
+    def test_extracts_title(self):
+        soup = BeautifulSoup(TALEO_HTML, 'lxml')
+        jobs = parse_taleo(soup, "https://phe.tbe.taleo.net")
+        titles = {j['title'] for j in jobs}
+        assert "Senior Policy Analyst" in titles
+
+    def test_empty_page(self):
+        soup = BeautifulSoup("<html><body></body></html>", 'lxml')
+        jobs = parse_taleo(soup, "https://taleo.net")
+        assert jobs == []
+
+
+WORKDAY_HTML = """
+<html><body>
+<ul>
+  <li>
+    <a data-automation-id="jobTitle" href="/job/12345">Grants Manager</a>
+    <span data-automation-id="location">Seattle, WA</span>
+    <span data-automation-id="postedOn">Posted 3 days ago</span>
+  </li>
+  <li>
+    <a data-automation-id="jobTitle" href="/job/67890">Data Scientist</a>
+    <span data-automation-id="location">Remote</span>
+  </li>
+</ul>
+</body></html>
+"""
+
+
+class TestParseWorkday:
+    def test_finds_jobs(self):
+        soup = BeautifulSoup(WORKDAY_HTML, 'lxml')
+        jobs = parse_workday(soup, "https://gatesfoundation.wd1.myworkdayjobs.com")
+        assert len(jobs) == 2
+
+    def test_extracts_title(self):
+        soup = BeautifulSoup(WORKDAY_HTML, 'lxml')
+        jobs = parse_workday(soup, "https://gatesfoundation.wd1.myworkdayjobs.com")
+        titles = {j['title'] for j in jobs}
+        assert "Grants Manager" in titles
+
+    def test_extracts_location(self):
+        soup = BeautifulSoup(WORKDAY_HTML, 'lxml')
+        jobs = parse_workday(soup, "https://gatesfoundation.wd1.myworkdayjobs.com")
+        gm = next(j for j in jobs if "Grants" in j['title'])
+        assert gm['location'] == "Seattle, WA"
+
+    def test_extracts_posted_date(self):
+        soup = BeautifulSoup(WORKDAY_HTML, 'lxml')
+        jobs = parse_workday(soup, "https://gatesfoundation.wd1.myworkdayjobs.com")
+        gm = next(j for j in jobs if "Grants" in j['title'])
+        assert "3 days ago" in gm['posted_date']
+
+    def test_empty_page(self):
+        soup = BeautifulSoup("<html><body></body></html>", 'lxml')
+        jobs = parse_workday(soup, "https://myworkdayjobs.com")
+        assert jobs == []
+
+    def test_fallback_to_job_links(self):
+        html = """
+        <html><body>
+        <a href="/job/111">Research Fellow</a>
+        <a href="/job/222">Program Associate</a>
+        <a href="/signin">Sign In</a>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        jobs = parse_workday(soup, "https://myworkdayjobs.com")
+        assert len(jobs) == 2
+
+
+APPLICANTPRO_HTML = """
+<html><body>
+<div class="job-listing">
+  <a href="/jobs/1001/research-director">Research Director</a>
+  <span class="location">Pittsburgh, PA</span>
+  <span class="department">Policy</span>
+</div>
+<div class="job-listing">
+  <a href="/jobs/1002/grants-writer">Grants Writer</a>
+  <span class="location">Remote</span>
+</div>
+</body></html>
+"""
+
+
+class TestParseApplicantpro:
+    def test_finds_jobs(self):
+        soup = BeautifulSoup(APPLICANTPRO_HTML, 'lxml')
+        jobs = parse_applicantpro(soup, "https://carnegieendowment.applicantpro.com")
+        assert len(jobs) == 2
+
+    def test_extracts_title(self):
+        soup = BeautifulSoup(APPLICANTPRO_HTML, 'lxml')
+        jobs = parse_applicantpro(soup, "https://carnegieendowment.applicantpro.com")
+        titles = {j['title'] for j in jobs}
+        assert "Research Director" in titles
+
+    def test_extracts_location(self):
+        soup = BeautifulSoup(APPLICANTPRO_HTML, 'lxml')
+        jobs = parse_applicantpro(soup, "https://carnegieendowment.applicantpro.com")
+        rd = next(j for j in jobs if "Research" in j['title'])
+        assert rd['location'] == "Pittsburgh, PA"
+
+    def test_empty_page(self):
+        soup = BeautifulSoup("<html><body></body></html>", 'lxml')
+        jobs = parse_applicantpro(soup, "https://applicantpro.com")
+        assert jobs == []
+
+    def test_skips_generic_links(self):
+        html = """
+        <html><body>
+        <a href="/jobs/123/real-job">Real Job Title Here</a>
+        <a href="/jobs/123/apply">Apply</a>
+        </body></html>
+        """
+        soup = BeautifulSoup(html, 'lxml')
+        jobs = parse_applicantpro(soup, "https://applicantpro.com")
+        assert len(jobs) == 1
