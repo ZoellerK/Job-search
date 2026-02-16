@@ -4,19 +4,22 @@ A Python tool that scrapes job postings from multiple websites and generates an 
 
 ## Features
 
-- **Multi-source aggregation** — monitor 70+ career pages from a single feed
-- **Auto-detection** — automatically finds job listings on most career pages
-- **Custom parsers** — configure site-specific scrapers when auto-detect isn't enough
-- **RSS feed generation** — standard RSS 2.0 feed optimised for Feedly
+- **Multi-source aggregation** — monitor 72+ career pages from a single feed
+- **ATS-specific parsers** — dedicated parsers for Greenhouse, Lever, Workable, Teamtailor, iCIMS, Taleo, Workday, ADP, and ApplicantPro (12 sites covered)
+- **Auto-detection** — automatically finds job listings on career pages without a dedicated parser
+- **Salary extraction** — regex-based extraction of compensation from job description text (`$60k-$80k`, `$120,000/year`, etc.)
+- **Relevance scoring** — jobs scored against configurable keywords and tagged High/Medium for Feedly filtering
+- **Stale job detection** — tracks when listings were last seen; hides jobs not seen in 30+ days from the feed
+- **RSS feed generation** — standard RSS 2.0 feed optimised for Feedly with rich HTML content
 - **HTML preview** — browsable HTML page of recent jobs
 - **Duplicate detection** — tracks jobs by URL; cross-site dedup via fuzzy title matching
 - **Keyword filtering** — filter jobs per site with comma-separated keywords
-- **Site health tracking** — automatically flags sites that fail 3+ consecutive scrapes (alerts appear in your feed)
+- **Site health tracking** — flags sites that fail 3+ consecutive scrapes (alerts appear in your feed)
 - **Smart rate limiting** — per-domain throttling with automatic back-off on 429s
 - **JS rendering** — optional Playwright fallback for JavaScript-heavy career pages
 - **Data export** — export jobs to CSV or JSON
-- **Structured logging** — logs to console + `job_aggregator.log` for debugging
-- **Automated tests** — 44-test pytest suite with mocked HTTP
+- **Structured logging** — configurable log level; logs to console + `job_aggregator.log`
+- **Automated tests** — 118-test pytest suite with mocked HTTP
 - **GitHub Actions** — runs automatically in the cloud (no computer needed)
 
 ## Quick Start
@@ -58,11 +61,13 @@ python job_aggregator.py          # Full update (scrape + feed + preview)
 ```
 
 This will:
-1. Scrape all active sites (5 in parallel)
-2. Deduplicate against existing jobs (URL + cross-site fuzzy title matching)
-3. Record site health for each scrape
-4. Generate `feed.xml` (RSS) and `preview.html`
-5. Flag any sites failing 3+ times in a row (alert appears in feed)
+1. Scrape all active sites (5 in parallel, configurable)
+2. Use ATS-specific parsers for known platforms, auto-detect for the rest
+3. Extract salary from descriptions when no explicit salary field exists
+4. Deduplicate against existing jobs (URL + cross-site fuzzy title matching)
+5. Record site health for each scrape
+6. Flag stale jobs not seen in 30+ days
+7. Generate `feed.xml` (RSS) and `preview.html` with relevance scoring
 
 ### 4. Subscribe
 
@@ -79,6 +84,7 @@ python job_aggregator.py feed      # Regenerate feed from database
 python job_aggregator.py preview   # Regenerate HTML preview
 python job_aggregator.py stats     # Show database statistics
 python job_aggregator.py health    # Show site health summary + alerts
+python job_aggregator.py stale     # Show stale job listings (not seen in 30+ days)
 python job_aggregator.py export csv              # Export all jobs to jobs_export.csv
 python job_aggregator.py export json             # Export all jobs to jobs_export.json
 python job_aggregator.py export json my_jobs.json  # Export to custom file
@@ -87,10 +93,12 @@ python job_aggregator.py export json my_jobs.json  # Export to custom file
 ## Site Setup Tools
 
 ```bash
-python setup_site.py auto https://example.com/careers    # Auto-detect jobs
+python setup_site.py auto https://example.com/careers    # Auto-detect jobs (uses ATS parser if detected)
 python setup_site.py test https://example.com/careers    # Analyse page structure
 python setup_site.py config https://example.com/careers "Company Name"  # Create custom parser
 ```
+
+The `auto` command automatically detects ATS platforms (Greenhouse, Lever, etc.) and uses the dedicated parser for better results before falling back to generic detection.
 
 ## Configuration
 
@@ -112,16 +120,40 @@ python setup_site.py config https://example.com/careers "Company Name"  # Create
   "scraping": {
     "user_agent": "Mozilla/5.0 ...",
     "timeout": 15,
-    "retry_attempts": 2
-  }
+    "retry_attempts": 2,
+    "max_workers": 5
+  },
+  "logging": { "level": "INFO" }
 }
 ```
 
-| Feed option | Default | Description |
-|-------------|---------|-------------|
-| `include_site_in_title` | `true` | Append site name to each job title |
-| `simple_descriptions` | `false` | Use plain text instead of rich HTML |
-| `include_summary` | `true` | Add scrape summary + health alerts as first feed item |
+| Option | Default | Description |
+|--------|---------|-------------|
+| `feed.include_site_in_title` | `true` | Append site name to each job title |
+| `feed.simple_descriptions` | `false` | Use plain text instead of rich HTML |
+| `feed.include_summary` | `true` | Add scrape summary + health alerts as first feed item |
+| `feed.relevance_keywords` | *(built-in)* | Custom `{"high": [...], "medium": [...]}` keyword lists for scoring |
+| `scraping.max_workers` | `5` | Number of parallel scraping threads |
+| `scraping.timeout` | `15` | HTTP request timeout in seconds |
+| `logging.level` | `INFO` | Log level (`DEBUG`, `INFO`, `WARNING`, `ERROR`) |
+
+## ATS Parsers
+
+Sites hosted on common Applicant Tracking Systems get dedicated parsers that extract richer metadata than generic auto-detection:
+
+| ATS | Example Sites | Data Extracted |
+|-----|--------------|----------------|
+| Greenhouse | Omidyar Network, FSG | title, URL, location, department |
+| Lever | RepresentUs, DRK Foundation | title, URL, location, job type, department |
+| Workable | Echoing Green | title, URL, location, job type |
+| Teamtailor | Founders Pledge | title, URL, location, job type |
+| iCIMS | Brookings Institution | title, URL, location, job type |
+| Taleo | Freedom House | title, URL, location |
+| Workday | Gates Foundation | title, URL, location, posted date |
+| ADP | Rockefeller Foundation | title, URL, location |
+| ApplicantPro | Carnegie Endowment | title, URL, location, department |
+
+ATS type is detected automatically from the URL. Falls back to generic scraping if the ATS parser finds nothing.
 
 ## Site Health Tracking
 
@@ -135,15 +167,17 @@ This lets you know immediately when a site changes its URL or blocks scraping, w
 
 ## How It Works
 
-1. **Scraping** — visits each active URL in `sites.csv` (5 threads)
-2. **Detection** — uses custom parser config (if saved) or auto-detection heuristics
-3. **JS fallback** — if the page looks like a JS-rendered shell and Playwright is installed, retries with headless Chromium
-4. **Rate limiting** — per-domain throttling; automatic exponential back-off on HTTP 429
-5. **Filtering** — applies keyword filters if configured
-6. **Deduplication** — skips jobs with duplicate URLs; also checks for matching normalised titles across sites
-7. **Health tracking** — records success/failure + error details per site
-8. **Storage** — saves new jobs to SQLite (`jobs.db`)
-9. **Feed generation** — creates RSS 2.0 feed with rich HTML content, metadata categories, and health alerts
+1. **Scraping** — visits each active URL in `sites.csv` (configurable parallel threads)
+2. **ATS detection** — checks if URL matches a known ATS platform; uses dedicated parser if so
+3. **Auto-detection** — falls back to heuristic-based job listing detection for non-ATS sites
+4. **JS fallback** — if the page looks like a JS-rendered shell and Playwright is installed, retries with headless Chromium
+5. **Salary extraction** — scans description text for compensation patterns when no salary field exists
+6. **Filtering** — applies keyword filters if configured
+7. **Deduplication** — skips jobs with duplicate URLs; also checks for matching normalised titles across sites
+8. **Staleness tracking** — marks all scraped URLs as "seen"; flags jobs missing for 30+ days
+9. **Health tracking** — records success/failure + error details per site
+10. **Storage** — saves new jobs to SQLite (`jobs.db`)
+11. **Feed generation** — creates RSS 2.0 feed with rich HTML content, relevance scoring, metadata categories, and health alerts
 
 ## Scheduling
 
@@ -172,7 +206,7 @@ See the `.github/workflows/` directory — runs automatically in the cloud. Edit
 python -m pytest tests/ -v
 ```
 
-44 tests covering database operations, scraper logic (with mocked HTTP), feed generation, site health, cross-site dedup, and data export.
+118 tests covering database operations, scraper logic (with mocked HTTP), feed generation, ATS parsers, salary extraction, relevance scoring, site health, staleness tracking, cross-site dedup, and data export.
 
 ## Project Structure
 
@@ -180,18 +214,23 @@ python -m pytest tests/ -v
 Job-search/
 ├── job_aggregator.py    # Main orchestrator + CLI
 ├── scraper.py           # Web scraping (requests + optional Playwright)
+├── ats_parsers.py       # ATS-specific parsers (Greenhouse, Lever, Workday, etc.)
+├── salary_extractor.py  # Salary extraction from description text
 ├── database.py          # SQLite: jobs, site_parsers, site_health tables
 ├── feed_generator.py    # RSS 2.0 + HTML preview generation
 ├── setup_site.py        # Interactive site configuration tool
 ├── scheduler.py         # Daily scheduling wrapper
 ├── config.json          # Configuration
-├── sites.csv            # Sites to monitor
+├── sites.csv            # Sites to monitor (72+ active)
+├── CLAUDE.md            # Project context for AI assistants
 ├── requirements.txt     # Python dependencies
 ├── pytest.ini           # Test configuration
-├── tests/               # Automated test suite
+├── tests/               # Automated test suite (118 tests)
 │   ├── test_database.py
 │   ├── test_scraper.py
-│   └── test_feed_generator.py
+│   ├── test_feed_generator.py
+│   ├── test_ats_parsers.py
+│   └── test_salary_extractor.py
 ├── jobs.db              # SQLite database (created on first run)
 ├── feed.xml             # Generated RSS feed
 ├── preview.html         # Generated HTML preview
@@ -201,7 +240,7 @@ Job-search/
 ## Limitations
 
 - Sites with CAPTCHA or aggressive anti-bot measures won't work
-- Some ATS platforms (Workday, Taleo) may need custom parser configs
+- Workday, Taleo, and ADP pages are heavily JS-rendered — parsers work best with Playwright installed
 - Cross-site dedup uses exact normalised title matching — very similar but non-identical titles won't match
 
 ## License
