@@ -91,7 +91,13 @@ class RSSFeedGenerator:
             # Link
             job_url = job.get('url', self.link)
             ET.SubElement(item, 'link').text = job_url
-            ET.SubElement(item, 'guid', isPermaLink='true').text = job_url
+
+            # GUID — use discovered_date to make summary items unique across runs
+            if job.get('site_name') == 'System Update' and job.get('discovered_date'):
+                guid = ET.SubElement(item, 'guid', isPermaLink='false')
+                guid.text = f"summary-{job['discovered_date']}"
+            else:
+                ET.SubElement(item, 'guid', isPermaLink='true').text = job_url
 
             # Source - separate element for better RSS reader support
             if job.get('site_name'):
@@ -432,12 +438,12 @@ class RSSFeedGenerator:
 
             html_parts.extend([
                 "<div class='job'>",
-                f"<h2><a href='{url}' target='_blank'>{title}</a></h2>",
+                f'<h2><a href="{url}" target="_blank">{title}</a></h2>',
                 f"<div class='meta'>",
                 ' | '.join(meta_parts),
                 "</div>",
                 f"<div class='description'>{description}</div>",
-                f"<a href='{url}' target='_blank'>View Full Posting →</a>",
+                f'<a href="{url}" target="_blank">View Full Posting &rarr;</a>',
                 "</div>"
             ])
 

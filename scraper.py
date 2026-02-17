@@ -98,7 +98,7 @@ class JobScraper:
                     logger.warning("403 Forbidden for %s — may need JS rendering", url)
                     if HAS_PLAYWRIGHT and not use_js:
                         return self._fetch_with_playwright(url)
-                    return None
+                    return (None, 403)
 
                 if response.status_code == 404:
                     logger.warning("404 Not Found for %s", url)
@@ -140,9 +140,9 @@ class JobScraper:
         return False
 
     def _fetch_with_playwright(self, url: str):
-        """Fetch page using Playwright (headless Chromium). Returns (soup, status)."""
+        """Fetch page using Playwright (headless Chromium). Returns (soup, status) or (None, None)."""
         if not HAS_PLAYWRIGHT:
-            return None
+            return (None, None)
         logger.info("Fetching %s with Playwright", url)
         try:
             with sync_playwright() as p:
@@ -155,7 +155,7 @@ class JobScraper:
             return (BeautifulSoup(content, 'lxml'), status)
         except Exception as e:
             logger.error("Playwright failed for %s: %s", url, e)
-            return None
+            return (None, None)
 
     # ── Public scraping methods (unchanged API) ───────────────────────
 

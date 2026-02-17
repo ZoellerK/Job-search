@@ -11,6 +11,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import List, Dict
+from urllib.parse import urlparse as _urlparse
 
 from database import JobDatabase
 from scraper import JobScraper
@@ -155,7 +156,6 @@ class JobAggregator:
                 if ats:
                     soup = self.scraper.fetch_page(url)
                     if soup:
-                        from urllib.parse import urlparse as _urlparse
                         base = f"{_urlparse(url).scheme}://{_urlparse(url).netloc}"
                         jobs = parse_ats_page(ats, soup, base)
                         if jobs:
