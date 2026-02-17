@@ -1,5 +1,8 @@
 site_name,url,active,keywords,scrape_details
 PAC.org,https://pac.org/jobs,yes,,no
+OnPurpose Careers,https://www.onpurposecareers.org/jobboard,yes,,no
+BC Corporate Citizenship,https://ccc.bc.edu/content/bc-ccc/news/csr-jobs.html,yes,,no
+Idealist,https://www.idealist.org/en/nonprofit-jobs,yes,,no
 National Endowment for Democracy,https://www.ned.org/about/work-with-us/,yes,,no
 Freedom House,https://phe.tbe.taleo.net/phe01/ats/careers/v2/jobSearch?act=redirectCwsV2&cws=39&org=FREEHOUS,yes,,no
 Brookings Institution,https://interns-brookings.icims.com/jobs/intro,yes,,no
@@ -28,16 +31,20 @@ The Nature Conservancy,https://careers.tnc.org/us/en/search-results,yes,,no
 Bridgespan Group,https://www.bridgespan.org/about-us/careers,yes,,no
 Partnership for Public Service,https://ourpublicservice.org/careers/,yes,,no
 B Lab,https://www.bcorporation.net/en-us/about-b-lab/work-with-b-lab,yes,,no
+Hilton Foundation,https://secure10.saashr.com/ta/6198075.careers?CareersSearch=&lang=en-US,yes,,no
 Bloomberg Philanthropies,https://www.bloomberg.org/careers/,yes,,no
 Rockefeller Foundation,https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=24726181-f57f-46a1-824d-3c8a89c3328a&ccId=19000101_000001&type=MP&lang=en_US,yes,,no
 Arnold Ventures,https://www.arnoldventures.org/careers,yes,,no
 Blue Meridian Partners,https://www.bluemeridian.org/careers,yes,,no
 J.M. Kaplan Fund,https://jmkfund.org/jobs/,yes,,no
 John Templeton Foundation,https://www.templeton.org/careers,yes,,no
+Hill-Snowdon Foundation,https://www.idealist.org/en/nonprofit/929eabed503947cbb52689e8e6170638-hill-snowdon-foundation-washington,yes,,no
 Clif Bar Family Foundation,https://clifbarfamilyfoundation.org/careers/,yes,,no
 UN Foundation,https://unfoundation.org/careers/,yes,,no
 Oak Foundation,https://oakfnd.org/about/careers/,yes,,no
+Wyss Foundation,https://www.idealist.org/en/nonprofit/574b29e2add24cdbb9c0fe7ab1a0ad29-the-wyss-foundation-washington,yes,,no
 New Venture Fund,https://www.newventurefund.org/careers/,yes,,no
+Hudson River Foundation,https://www.idealist.org/en/nonprofit/e2e5d9847a454f2f9f2c17bc383b8bea-hudson-river-foundation-new-york,yes,,no
 Longview Philanthropy,https://www.longview.org/careers,yes,,no
 Founders Pledge,https://founderspledge.teamtailor.com/en-GB/jobs,yes,,no
 GiveWell,https://www.givewell.org/about/jobs,yes,,no
@@ -50,6 +57,7 @@ Camber Collective,https://www.cambercollective.com/careers,yes,,no
 Berggruen Institute,https://www.berggruen.org/careers,yes,,no
 Vulcan Inc,https://vulcan.com/careers,yes,,no
 Razom for Ukraine,https://www.razomforukraine.org/careers/,yes,,no
+United Help Ukraine,https://unitedhelpukraine.org/,yes,,no
 Nova Ukraine,https://novaukraine.org/careers/,yes,,no
 Protect Democracy,https://protectdemocracy.org/jobs,yes,,no
 States United Democracy Center,https://statesunited.org/about/careers/,yes,,no
