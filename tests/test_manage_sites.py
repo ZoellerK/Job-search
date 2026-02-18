@@ -196,6 +196,63 @@ class TestReview:
         checkbox_count = content.count("- [ ]")
         assert checkbox_count == manage_sites.DEFAULT_BATCH_SIZE
 
+    def test_review_start_flag(self, site_env):
+        """--start ID filters to candidates at or after that ID."""
+        for i in range(10):
+            manage_sites.cmd_add_candidate([f"Org {i}", f"https://org{i}.org/careers"])
+
+        output_file = str(site_env['tmp_path'] / "review.md")
+        # IDs are 1-10; --start 6 should show IDs 6-10 (5 candidates)
+        manage_sites.cmd_review(["--start", "6", "--batch", "20", "--output", output_file])
+
+        content = open(output_file).read()
+        checkbox_count = content.count("- [ ]")
+        assert checkbox_count == 5
+        assert "Org 0" not in content
+        assert "Org 5" in content  # ID 6 = Org 5 (0-indexed names, 1-indexed IDs)
+
+    def test_review_start_and_batch_combined(self, site_env):
+        """--start and --batch work together."""
+        for i in range(10):
+            manage_sites.cmd_add_candidate([f"Org {i}", f"https://org{i}.org/careers"])
+
+        output_file = str(site_env['tmp_path'] / "review.md")
+        manage_sites.cmd_review(["--start", "3", "--batch", "2", "--output", output_file])
+
+        content = open(output_file).read()
+        checkbox_count = content.count("- [ ]")
+        assert checkbox_count == 2
+
+
+class TestDedupCache:
+    def test_cache_detects_existing(self, site_env):
+        cache = manage_sites._DedupCache()
+        assert cache.check("Test Foundation", "https://whatever.org") is not None
+        assert "active" in cache.check("Test Foundation", "https://whatever.org")
+
+    def test_cache_detects_rejected(self, site_env):
+        cache = manage_sites._DedupCache()
+        assert cache.check("Rejected Org", "https://whatever.org") is not None
+        assert "rejected" in cache.check("Rejected Org", "https://whatever.org")
+
+    def test_cache_allows_new(self, site_env):
+        cache = manage_sites._DedupCache()
+        assert cache.check("Brand New Org", "https://brandnew.org/careers") is None
+
+    def test_cache_register_prevents_duplicates(self, site_env):
+        cache = manage_sites._DedupCache()
+        assert cache.check("New Org", "https://new.org/careers") is None
+        cache.register("New Org", "https://new.org/careers")
+        assert cache.check("New Org", "https://other.org") is not None
+        assert cache.check("Other Name", "https://new.org/careers") is not None
+
+    def test_no_false_positive_on_same_domain_different_path(self, site_env):
+        """Different paths on the same domain should NOT be flagged as duplicates."""
+        cache = manage_sites._DedupCache()
+        # test.org/careers is in sites.csv, but test.org/jobs is a different URL
+        result = cache.check("Different Org", "https://test.org/jobs")
+        assert result is None
+
 
 class TestProcess:
     def test_process_approvals(self, site_env):
@@ -336,8 +393,8 @@ class TestURLDedup:
         existing_urls = cd.load_existing_urls(str(sites_csv))
         rejected_urls = cd.load_rejected_urls(str(rejected_txt))
 
-        # Verify URL loading works
+        # Verify full URL loading works (no bare domains)
         assert 'https://test.org/careers' in existing_urls
-        assert 'test.org' in existing_urls
+        assert 'test.org' not in existing_urls  # bare domains no longer stored
         assert 'https://rejected.org/careers' in rejected_urls
-        assert 'rejected.org' in rejected_urls
+        assert 'rejected.org' not in rejected_urls  # bare domains no longer stored

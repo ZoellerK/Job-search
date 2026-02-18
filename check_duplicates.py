@@ -25,7 +25,7 @@ def load_existing_sites(sites_file: str = 'sites.csv') -> Set[str]:
 
 
 def load_existing_urls(sites_file: str = 'sites.csv') -> Set[str]:
-    """Load all URLs from sites.csv (both full URLs and domains)"""
+    """Load all full URLs from sites.csv."""
     urls = set()
     try:
         with open(sites_file, 'r') as f:
@@ -34,14 +34,13 @@ def load_existing_urls(sites_file: str = 'sites.csv') -> Set[str]:
                 url = row.get('url', '').strip()
                 if url:
                     urls.add(url.lower().rstrip('/'))
-                    urls.add(urlparse(url).netloc.lower())
     except FileNotFoundError:
         pass
     return urls
 
 
 def load_rejected_urls(rejected_file: str = 'rejected_sites.txt') -> Set[str]:
-    """Load all URLs from rejected_sites.txt (both full URLs and domains)"""
+    """Load all full URLs from rejected_sites.txt."""
     urls = set()
     try:
         with open(rejected_file, 'r') as f:
@@ -56,7 +55,6 @@ def load_rejected_urls(rejected_file: str = 'rejected_sites.txt') -> Set[str]:
                         url = re.sub(r'\s*\(.*?\)\s*$', '', url)
                         if url:
                             urls.add(url.lower().rstrip('/'))
-                            urls.add(urlparse(url).netloc.lower())
     except FileNotFoundError:
         pass
     return urls
@@ -127,10 +125,9 @@ def check_duplicates(new_suggestions: List[Tuple[str, str]]) -> List[Tuple[str, 
         # URL-based checks (if URL provided)
         elif url:
             url_lower = url.lower().rstrip('/')
-            domain = urlparse(url).netloc.lower() if url.startswith('http') else ''
-            if url_lower in existing_urls or (domain and domain in existing_urls):
+            if url_lower in existing_urls:
                 status = 'active'
-            elif url_lower in rejected_urls or (domain and domain in rejected_urls):
+            elif url_lower in rejected_urls:
                 status = 'rejected'
             else:
                 status = 'new'

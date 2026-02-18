@@ -65,8 +65,13 @@ def _write_candidates(rows: List[Dict]):
         writer.writerows(rows)
 
 
+def _parse_url_key(url: str) -> str:
+    """Normalize a URL for dedup: lowercase, strip trailing slash."""
+    return url.lower().rstrip('/')
+
+
 def _load_existing_urls(sites_file: str = None) -> Set[str]:
-    """Load all URLs from sites.csv, normalized to domains."""
+    """Load all full URLs from sites.csv (no bare domains)."""
     if sites_file is None:
         sites_file = SITES_FILE
     urls = set()
@@ -76,17 +81,14 @@ def _load_existing_urls(sites_file: str = None) -> Set[str]:
             for row in reader:
                 url = row.get('url', '').strip()
                 if url:
-                    urls.add(url.lower().rstrip('/'))
-                    # Also store the domain for fuzzy matching
-                    parsed = urlparse(url)
-                    urls.add(parsed.netloc.lower())
+                    urls.add(_parse_url_key(url))
     except FileNotFoundError:
         pass
     return urls
 
 
 def _load_rejected_urls(rejected_file: str = None) -> Set[str]:
-    """Load all URLs from rejected_sites.txt."""
+    """Load all full URLs from rejected_sites.txt (no bare domains)."""
     if rejected_file is None:
         rejected_file = REJECTED_FILE
     urls = set()
@@ -103,65 +105,82 @@ def _load_rejected_urls(rejected_file: str = None) -> Set[str]:
                         # Strip trailing notes like "(ADDED THEN REMOVED)"
                         url = re.sub(r'\s*\(.*?\)\s*$', '', url)
                         if url:
-                            urls.add(url.lower().rstrip('/'))
-                            parsed = urlparse(url)
-                            urls.add(parsed.netloc.lower())
+                            urls.add(_parse_url_key(url))
     except FileNotFoundError:
         pass
     return urls
 
 
-def _load_candidate_urls() -> Set[str]:
-    """Load URLs already in candidates.csv (any status)."""
-    urls = set()
-    for row in _read_candidates():
-        url = row.get('url', '').strip()
-        if url:
-            urls.add(url.lower().rstrip('/'))
-    return urls
+class _DedupCache:
+    """
+    Preloads all name/URL data from sites.csv, rejected_sites.txt, and
+    candidates.csv once, then answers duplicate checks in O(1).
+    """
+
+    def __init__(self):
+        # Names
+        existing_names = load_existing_sites(SITES_FILE)
+        rejected_names = load_rejected_sites(REJECTED_FILE)
+        self.existing_names_lower = existing_names  # already lowered
+        self.rejected_names_lower = rejected_names
+        self.existing_names_normalized = {normalize_name(n) for n in existing_names}
+        self.rejected_names_normalized = {normalize_name(n) for n in rejected_names}
+
+        # URLs (full URLs only — no bare domains)
+        self.existing_urls = _load_existing_urls()
+        self.rejected_urls = _load_rejected_urls()
+
+        # Candidates
+        candidates = _read_candidates()
+        self.candidate_urls = set()
+        self.candidate_names_normalized: Dict[str, str] = {}  # normalized -> original
+        for row in candidates:
+            curl = row.get('url', '').strip()
+            if curl:
+                self.candidate_urls.add(_parse_url_key(curl))
+            cname = row.get('name', '')
+            if cname:
+                self.candidate_names_normalized[normalize_name(cname)] = cname
+
+    def check(self, name: str, url: str) -> Optional[str]:
+        """Return None if new, or a description of where found."""
+        normalized = normalize_name(name)
+
+        # Name checks
+        if name.lower() in self.existing_names_lower or normalized in self.existing_names_normalized:
+            return f"already active in {SITES_FILE} (name match)"
+        if name.lower() in self.rejected_names_lower or normalized in self.rejected_names_normalized:
+            return f"already rejected in {REJECTED_FILE} (name match)"
+
+        # URL checks (exact full-URL match only)
+        url_lower = _parse_url_key(url)
+        if url_lower in self.existing_urls:
+            return f"already active in {SITES_FILE} (URL match)"
+        if url_lower in self.rejected_urls:
+            return f"already rejected in {REJECTED_FILE} (URL match)"
+
+        # Candidate checks
+        if url_lower in self.candidate_urls:
+            return f"already in {CANDIDATES_FILE} (URL match)"
+        orig = self.candidate_names_normalized.get(normalized)
+        if orig is not None:
+            return f"already in {CANDIDATES_FILE} (name match: {orig})"
+
+        return None
+
+    def register(self, name: str, url: str):
+        """Track a just-added candidate so subsequent checks see it."""
+        self.candidate_urls.add(_parse_url_key(url))
+        self.candidate_names_normalized[normalize_name(name)] = name
 
 
 def check_duplicate(name: str, url: str) -> Optional[str]:
     """
     Check if a name/URL is already tracked anywhere.
     Returns None if new, or a string describing where it was found.
+    Creates a fresh cache each call — for batch operations use _DedupCache directly.
     """
-    # Name checks — pass our module-level file constants
-    existing_names = load_existing_sites(SITES_FILE)
-    rejected_names = load_rejected_sites(REJECTED_FILE)
-    normalized = normalize_name(name)
-    existing_normalized = {normalize_name(n) for n in existing_names}
-    rejected_normalized = {normalize_name(n) for n in rejected_names}
-
-    if name.lower() in existing_names or normalized in existing_normalized:
-        return f"already active in {SITES_FILE} (name match)"
-    if name.lower() in rejected_names or normalized in rejected_normalized:
-        return f"already rejected in {REJECTED_FILE} (name match)"
-
-    # URL checks
-    url_lower = url.lower().rstrip('/')
-    domain = urlparse(url).netloc.lower()
-
-    existing_urls = _load_existing_urls()
-    if url_lower in existing_urls or domain in existing_urls:
-        return f"already active in {SITES_FILE} (URL match)"
-
-    rejected_urls = _load_rejected_urls()
-    if url_lower in rejected_urls or domain in rejected_urls:
-        return f"already rejected in {REJECTED_FILE} (URL match)"
-
-    # Candidates check
-    candidate_urls = _load_candidate_urls()
-    if url_lower in candidate_urls:
-        return f"already in {CANDIDATES_FILE} (URL match)"
-
-    # Check candidate names too
-    for row in _read_candidates():
-        cand_name = row.get('name', '')
-        if normalize_name(cand_name) == normalized:
-            return f"already in {CANDIDATES_FILE} (name match: {cand_name})"
-
-    return None
+    return _DedupCache().check(name, url)
 
 
 def test_url(url: str) -> Dict:
@@ -325,10 +344,15 @@ def cmd_add_batch(args):
                 desc = parts[2].strip() if len(parts) >= 3 else ''
                 entries.append((parts[0].strip(), parts[1].strip(), desc))
 
+    # Load once, check many
+    cache = _DedupCache()
+    candidates = _read_candidates()
+    next_id = max((int(c['id']) for c in candidates if c.get('id', '').isdigit()), default=0) + 1
+
     added = 0
     skipped = 0
     for name, url, desc in entries:
-        dup = check_duplicate(name, url)
+        dup = cache.check(name, url)
         if dup:
             print(f"  SKIP: {name} — {dup}")
             skipped += 1
@@ -341,9 +365,8 @@ def cmd_add_batch(args):
         except ImportError:
             pass
 
-        candidate_id = _next_candidate_id()
         row = {
-            'id': str(candidate_id),
+            'id': str(next_id),
             'name': name,
             'url': url,
             'category': category,
@@ -353,10 +376,13 @@ def cmd_add_batch(args):
             'date_added': datetime.now().strftime('%Y-%m-%d'),
             'status': 'pending',
         }
-        candidates = _read_candidates()
         candidates.append(row)
-        _write_candidates(candidates)
+        cache.register(name, url)
+        next_id += 1
         added += 1
+
+    # Single write at the end
+    _write_candidates(candidates)
 
     print(f"\nAdded {added} candidates, skipped {skipped} duplicates.")
     return 0
@@ -380,11 +406,10 @@ def cmd_test(args):
     else:
         # Check URL only
         dup = None
-        url_lower = url.lower().rstrip('/')
-        domain = urlparse(url).netloc.lower()
-        if url_lower in _load_existing_urls() or domain in _load_existing_urls():
+        url_lower = _parse_url_key(url)
+        if url_lower in _load_existing_urls():
             dup = f"URL already in {SITES_FILE}"
-        elif url_lower in _load_rejected_urls() or domain in _load_rejected_urls():
+        elif url_lower in _load_rejected_urls():
             dup = f"URL already in {REJECTED_FILE}"
 
     if dup:
@@ -411,9 +436,10 @@ def cmd_review(args):
         print("No pending candidates to review.")
         return 0
 
-    # Parse batch size (default from constant)
+    # Parse flags
     batch_size = DEFAULT_BATCH_SIZE
     output_file = None
+    start_id = None
     i = 0
     while i < len(args):
         if args[i] == '--batch' and i + 1 < len(args):
@@ -422,8 +448,15 @@ def cmd_review(args):
         elif args[i] == '--output' and i + 1 < len(args):
             output_file = args[i + 1]
             i += 2
+        elif args[i] == '--start' and i + 1 < len(args):
+            start_id = int(args[i + 1])
+            i += 2
         else:
             i += 1
+
+    # Filter to candidates at or after --start ID
+    if start_id is not None:
+        pending = [c for c in pending if int(c.get('id', 0)) >= start_id]
 
     pending = pending[:batch_size]
 
@@ -809,7 +842,7 @@ def main():
         print("      Test a URL (dedup + fetch + ATS detect + job count)")
         print()
         print("Review & approval:")
-        print(f"  review [--batch N] [--output FILE]   (default batch: {DEFAULT_BATCH_SIZE})")
+        print(f"  review [--batch N] [--start ID] [--output FILE]   (default batch: {DEFAULT_BATCH_SIZE})")
         print("      Generate a checkbox review file for pending candidates")
         print("  process <review_file.md>")
         print("      Process a review file (checked → sites.csv, unchecked → rejected, file deleted)")
