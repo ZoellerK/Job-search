@@ -150,6 +150,104 @@ class TestDomainThrottler:
         assert throttler._backoff["slow.com"] == 4.0
 
 
+class TestIsLikelyJobTitle:
+    def test_rejects_nav_links(self):
+        s = JobScraper()
+        assert not s._is_likely_job_title('About us')
+        assert not s._is_likely_job_title('Our Approach')
+        assert not s._is_likely_job_title('take action')
+        assert not s._is_likely_job_title('Donate Now')
+        assert not s._is_likely_job_title('Subscribe')
+        assert not s._is_likely_job_title('Learn More')
+        assert not s._is_likely_job_title('Find Out More')
+
+    def test_rejects_boilerplate(self):
+        s = JobScraper()
+        assert not s._is_likely_job_title('Hiring Software')
+        assert not s._is_likely_job_title('No jobs found - Filters applied')
+        assert not s._is_likely_job_title('Applicant tracking system by Teamtailor')
+        assert not s._is_likely_job_title('Jobs powered by Lever')
+        assert not s._is_likely_job_title('Post a Job Listing')
+
+    def test_rejects_email_addresses(self):
+        s = JobScraper()
+        assert not s._is_likely_job_title('applyhelp@tnc.org')
+
+    def test_rejects_overly_long_titles(self):
+        s = JobScraper()
+        long_title = 'A' * 151
+        assert not s._is_likely_job_title(long_title)
+
+    def test_accepts_real_job_titles(self):
+        s = JobScraper()
+        assert s._is_likely_job_title('Senior Engineer')
+        assert s._is_likely_job_title('Program Director of Operations')
+        assert s._is_likely_job_title('Deputy Director, Regional Integration')
+        assert s._is_likely_job_title('Product / Engineer / Data Roles')
+        assert s._is_likely_job_title('Digital Media Intern')
+
+    def test_rejects_empty(self):
+        s = JobScraper()
+        assert not s._is_likely_job_title('')
+        assert not s._is_likely_job_title(None)
+        assert not s._is_likely_job_title('   ')
+
+
+class TestSanitizeDescription:
+    def test_strips_cookie_consent(self):
+        s = JobScraper()
+        text = (
+            "The technical storage or access is strictly necessary for the "
+            "legitimate purpose of enabling the use of a specific service.\n\n"
+            "We are looking for a Program Manager to lead our team."
+        )
+        result = s._sanitize_description(text)
+        assert 'technical storage' not in result
+        assert 'Program Manager' in result
+
+    def test_preserves_clean_description(self):
+        s = JobScraper()
+        text = "We are looking for a talented engineer to join our team."
+        result = s._sanitize_description(text)
+        assert result == text
+
+    def test_returns_none_for_all_boilerplate(self):
+        s = JobScraper()
+        text = "This website uses cookies to ensure you get the best experience."
+        result = s._sanitize_description(text)
+        assert result is None
+
+    def test_returns_none_for_empty(self):
+        s = JobScraper()
+        assert s._sanitize_description('') == ''
+        assert s._sanitize_description(None) is None
+
+
+class TestAutoDetectFiltersJunk:
+    @patch.object(JobScraper, 'fetch_page')
+    def test_filters_nav_links_from_class_detection(self, mock_fetch, scraper):
+        from bs4 import BeautifulSoup
+        html = """
+        <html><body>
+        <div class="opportunity">
+          <h3><a href="/about">About us</a></h3>
+        </div>
+        <div class="opportunity">
+          <h3><a href="/jobs/program-manager">Program Manager</a></h3>
+        </div>
+        <div class="opportunity">
+          <h3><a href="/donate">Donate Now</a></h3>
+        </div>
+        </body></html>
+        """
+        mock_fetch.return_value = BeautifulSoup(html, 'lxml')
+        jobs = scraper.auto_detect_jobs("https://example.com/careers")
+        titles = [j['title'] for j in jobs]
+        assert 'Program Manager' in titles
+        assert 'About us' not in titles
+        assert 'Donate Now' not in titles
+
+
 class TestScrapeWithConfig:
     @patch.object(JobScraper, 'fetch_page')
     def test_custom_config_extraction(self, mock_fetch, scraper):

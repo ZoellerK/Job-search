@@ -112,6 +112,43 @@ class TestBuildSummaryItem:
         assert '1 site alert' in item['title']
 
 
+    def test_summary_rich_content_is_raw_html(self, feed_gen):
+        """Summary _rich_content should contain raw HTML, not escaped HTML."""
+        results = {
+            'total_new_jobs': 10,
+            'successful_sites': 5,
+            'failed_sites': 0,
+            'site_results': [
+                {'site_name': 'A', 'success': True, 'new_jobs': 10, 'error': None},
+            ]
+        }
+        item = feed_gen.build_summary_item(results)
+        # _rich_content should have actual HTML tags
+        assert '<h3>' in item['_rich_content']
+        assert '<strong>' in item['_rich_content']
+        # description should be plain text (no HTML)
+        assert '<h3>' not in item['description']
+        assert 'New Jobs Found: 10' in item['description']
+
+    def test_summary_no_double_escaping_in_feed(self, feed_gen, tmp_path):
+        """Summary content:encoded should not have double-escaped HTML."""
+        results = {
+            'total_new_jobs': 5,
+            'successful_sites': 3,
+            'failed_sites': 0,
+            'site_results': [
+                {'site_name': 'TestOrg', 'success': True, 'new_jobs': 5, 'error': None},
+            ]
+        }
+        item = feed_gen.build_summary_item(results)
+        out = str(tmp_path / "feed.xml")
+        feed_gen.generate_feed([item], out)
+        with open(out) as f:
+            content = f.read()
+        # Should NOT contain double-escaped entities like &amp;lt;
+        assert '&amp;lt;' not in content
+
+
 class TestHtmlPreview:
     def test_creates_html_file(self, feed_gen, tmp_path):
         out = str(tmp_path / "preview.html")

@@ -116,7 +116,8 @@ class RSSFeedGenerator:
 
             # Content:encoded - rich HTML for Feedly article view (preferred by Feedly)
             if not self.simple_descriptions:
-                rich_content = self._build_feedly_content(job)
+                # Use pre-built HTML if available (e.g. summary items), else build it
+                rich_content = job.get('_rich_content') or self._build_feedly_content(job)
                 content_elem = ET.SubElement(item, '{http://purl.org/rss/1.0/modules/content/}encoded')
                 content_elem.text = rich_content
 
@@ -316,25 +317,26 @@ class RSSFeedGenerator:
                            health_alerts: List[Dict] = None,
                            stale_count: int = 0) -> Dict:
         """Build a summary feed item from scraping results + health alerts."""
-        summary_parts = []
-        summary_parts.append("<h3>Update Summary</h3>")
-        summary_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
-        summary_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
+        # Rich HTML for content:encoded
+        html_parts = []
+        html_parts.append("<h3>Update Summary</h3>")
+        html_parts.append(f"<p><strong>New Jobs Found:</strong> {scrape_results['total_new_jobs']}</p>")
+        html_parts.append(f"<p><strong>Sites Checked:</strong> {scrape_results['successful_sites']}/{scrape_results['successful_sites'] + scrape_results['failed_sites']}</p>")
         if stale_count:
-            summary_parts.append(f"<p><strong>Stale Listings Hidden:</strong> {stale_count} (not seen in 30+ days)</p>")
+            html_parts.append(f"<p><strong>Stale Listings Hidden:</strong> {stale_count} (not seen in 30+ days)</p>")
 
         if scrape_results['failed_sites'] > 0:
-            summary_parts.append(f"<p><strong>Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
+            html_parts.append(f"<p><strong>Failed Sites:</strong> {scrape_results['failed_sites']}</p>")
             failed_sites = [r['site_name'] for r in scrape_results['site_results'] if not r['success']]
-            summary_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
+            html_parts.append(f"<p style='font-size: 0.9em; color: #666;'>{', '.join(failed_sites)}</p>")
 
         # Health alerts — persistently broken sites flagged for your attention
         if health_alerts:
-            summary_parts.append(
+            html_parts.append(
                 "<div style='background: #fff3cd; border: 1px solid #ffc107; "
                 "padding: 12px 16px; border-radius: 4px; margin: 12px 0;'>"
             )
-            summary_parts.append(
+            html_parts.append(
                 "<strong style='color: #856404;'>Site Health Alerts</strong>"
                 "<p style='color: #856404; margin: 4px 0;'>"
                 "The following sites have failed 3+ consecutive scrapes and may need attention:</p><ul>"
@@ -342,29 +344,45 @@ class RSSFeedGenerator:
             for alert in health_alerts:
                 name = html.escape(alert['site_name'])
                 error = html.escape(alert.get('last_error') or 'unknown error')
-                summary_parts.append(
+                html_parts.append(
                     f"<li><strong>{name}</strong> — {alert['consecutive_failures']} failures "
                     f"(last: {error})</li>"
                 )
-            summary_parts.append("</ul></div>")
+            html_parts.append("</ul></div>")
 
         sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
         if sites_with_jobs:
-            summary_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
-            summary_parts.append("<ul>")
+            html_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
+            html_parts.append("<ul>")
             for result in sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True):
-                summary_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
-            summary_parts.append("</ul></details>")
+                html_parts.append(f"<li><strong>{result['site_name']}</strong>: {result['new_jobs']} new</li>")
+            html_parts.append("</ul></details>")
 
         title = f"Update - {scrape_results['total_new_jobs']} New Jobs Found"
         if health_alerts:
             title += f" ({len(health_alerts)} site alert{'s' if len(health_alerts) != 1 else ''})"
 
+        # Plain text description for <description> element (Feedly preview cards)
+        plain_parts = [f"New Jobs Found: {scrape_results['total_new_jobs']}"]
+        plain_parts.append(
+            f"Sites Checked: {scrape_results['successful_sites']}/"
+            f"{scrape_results['successful_sites'] + scrape_results['failed_sites']}"
+        )
+        if health_alerts:
+            alert_names = [a['site_name'] for a in health_alerts]
+            plain_parts.append(f"Site Health Alerts: {', '.join(alert_names)}")
+        if sites_with_jobs:
+            top = sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True)[:5]
+            plain_parts.append(
+                'Top sites: ' + ', '.join(f"{r['site_name']}: {r['new_jobs']}" for r in top)
+            )
+
         return {
             'title': title,
             'url': self.link,
             'site_name': 'System Update',
-            'description': '\n'.join(summary_parts),
+            'description': '\n'.join(plain_parts),
+            '_rich_content': '\n'.join(html_parts),
             'discovered_date': datetime.now(timezone.utc).isoformat()
         }
 

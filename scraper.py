@@ -49,6 +49,48 @@ class DomainThrottler:
 class JobScraper:
     """Scrapes job postings from websites"""
 
+    # Titles that are clearly navigation / boilerplate, not job postings
+    _NON_JOB_TITLES = frozenset({
+        # Navigation / site sections
+        'about', 'about us', 'our approach', 'our mission', 'our impact',
+        'our people', 'impact', 'take action', 'home', 'careers', 'jobs',
+        'open positions', 'current openings', 'our people and careers',
+        'work with us', 'our team', 'our work', 'what we do', 'who we are',
+        'get involved', 'support us', 'news', 'events', 'resources',
+        'privacy policy', 'terms of service',
+        # Donation / engagement actions
+        'donate', 'donate now', 'subscribe', 'sign up', 'contact',
+        'contact us', 'learn more', 'find out more', 'download pdf',
+        'read more', 'complete form', 'submit',
+        # Meta / system boilerplate
+        'hiring software', 'start', 'partners',
+    })
+
+    _NON_JOB_PREFIXES = (
+        'no jobs found',
+        'applicant tracking system',
+        'jobs powered by',
+        'employer resources',
+        'career advice',
+        'nonprofit salary',
+        'submit position',
+        'post a job',
+        'post a volunteer',
+    )
+
+    # Cookie / consent boilerplate markers
+    _BOILERPLATE_MARKERS = (
+        'technical storage or access',
+        'this website uses cookies',
+        'we use cookies',
+        'cookie consent',
+        'cookie policy',
+        'manage consent',
+        'accept all cookies',
+        'by clicking "accept"',
+        'by continuing to browse',
+    )
+
     def __init__(self, user_agent: str = None, timeout: int = 30,
                  retry_attempts: int = 3, domain_delay: float = 1.0):
         self.user_agent = user_agent or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -157,6 +199,53 @@ class JobScraper:
             logger.error("Playwright failed for %s: %s", url, e)
             return (None, None)
 
+    # ── Quality filters ─────────────────────────────────────────────
+
+    @staticmethod
+    def _is_likely_job_title(title: str) -> bool:
+        """Return False for text that is clearly not a job title."""
+        if not title or not title.strip():
+            return False
+
+        clean = title.strip()
+        lower = clean.lower()
+
+        # Reject known non-job patterns (exact match)
+        if lower in JobScraper._NON_JOB_TITLES:
+            return False
+
+        # Reject known prefixes
+        if lower.startswith(JobScraper._NON_JOB_PREFIXES):
+            return False
+
+        # Reject email addresses
+        if '@' in clean and '.' in clean.split('@')[-1]:
+            return False
+
+        # Reject absurdly long titles (likely scraped body text)
+        if len(clean) > 150:
+            return False
+
+        return True
+
+    @staticmethod
+    def _sanitize_description(text: str) -> Optional[str]:
+        """Strip cookie/consent boilerplate from description text."""
+        if not text:
+            return text
+
+        # Split into paragraphs and drop any that contain boilerplate
+        paragraphs = re.split(r'\n{2,}', text)
+        clean = []
+        for para in paragraphs:
+            lower = para.lower()
+            if any(marker in lower for marker in JobScraper._BOILERPLATE_MARKERS):
+                continue
+            clean.append(para)
+
+        result = '\n\n'.join(clean).strip()
+        return result if len(result) > 20 else None
+
     # ── Public scraping methods (unchanged API) ───────────────────────
 
     def auto_detect_jobs(self, url: str) -> List[Dict]:
@@ -192,11 +281,20 @@ class JobScraper:
         if not jobs:
             jobs = self._extract_jobs_from_links(soup, base_url)
 
+        # Filter out non-job entries (nav links, donation pages, etc.)
+        jobs = [j for j in jobs if self._is_likely_job_title(j.get('title', ''))]
+
         return jobs
 
     def _extract_job_from_element(self, element, base_url: str) -> Dict:
         job = {}
-        generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
+        generic_texts = [
+            'apply now', 'apply', 'view job', 'view position', 'learn more',
+            'read more', 'details', 'more info', 'find out more', 'download pdf',
+            'see full description and apply', 'complete form',
+            'view current openings', 'explore our job openings',
+            'submit position here',
+        ]
 
         title_tags = ['h1', 'h2', 'h3', 'h4', 'a']
         for tag in title_tags:
@@ -290,8 +388,14 @@ class JobScraper:
         jobs = []
         seen_urls = set()
         job_keywords = ['job', 'position', 'career', 'opening', 'vacancy', 'role', 'opportunity', 'apply', 'hiring', 'employment']
-        exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category']
-        generic_texts = ['apply now', 'apply', 'view job', 'learn more', 'read more', 'details', 'more info']
+        exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category', 'donate', 'subscribe', 'newsletter']
+        generic_texts = [
+            'apply now', 'apply', 'view job', 'view position', 'learn more',
+            'read more', 'details', 'more info', 'find out more', 'download pdf',
+            'see full description and apply', 'complete form',
+            'view current openings', 'explore our job openings',
+            'submit position here',
+        ]
 
         links = soup.find_all('a', href=True)
         for link in links:
@@ -323,6 +427,8 @@ class JobScraper:
                         url_title = self._extract_title_from_url(full_url)
                         if url_title:
                             title = url_title
+                        else:
+                            continue  # skip if generic text and no URL title
 
                     jobs.append({
                         'title': title,
@@ -450,6 +556,8 @@ class JobScraper:
             if len(paragraphs) > 3:
                 description = '\n\n'.join(p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 20)
 
+        if description:
+            description = self._sanitize_description(description)
         if description:
             details['description'] = description[:5000]
 
