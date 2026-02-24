@@ -112,6 +112,57 @@ class TestSiteHealth:
         failing = db.get_failing_sites(consecutive_failures=3)
         assert len(failing) == 0
 
+    def test_failing_sites_multiple(self, db):
+        """Multiple failing and healthy sites in one query."""
+        for _ in range(3):
+            db.record_scrape_result("Bad1", False, error_message="timeout")
+            db.record_scrape_result("Bad2", False, error_message="403")
+        db.record_scrape_result("Good", True, jobs_found=5)
+        db.record_scrape_result("Good", True, jobs_found=3)
+        db.record_scrape_result("Good", True, jobs_found=7)
+        failing = db.get_failing_sites(consecutive_failures=3)
+        names = {s['site_name'] for s in failing}
+        assert names == {"Bad1", "Bad2"}
+
+    def test_failing_returns_last_error(self, db):
+        db.record_scrape_result("Site", False, error_message="first error")
+        db.record_scrape_result("Site", False, error_message="second error")
+        db.record_scrape_result("Site", False, error_message="latest error")
+        failing = db.get_failing_sites(consecutive_failures=3)
+        assert failing[0]['last_error'] == "latest error"
+
+
+class TestZeroJobStreaks:
+    def test_detects_streak(self, db):
+        for _ in range(4):
+            db.record_scrape_result("EmptySite", True, jobs_found=0)
+        streaks = db.get_zero_job_streaks(min_streak=3)
+        assert len(streaks) == 1
+        assert streaks[0]['site_name'] == "EmptySite"
+        assert streaks[0]['zero_job_streak'] == 4
+
+    def test_no_streak_if_jobs_found(self, db):
+        db.record_scrape_result("Site", True, jobs_found=0)
+        db.record_scrape_result("Site", True, jobs_found=0)
+        db.record_scrape_result("Site", True, jobs_found=5)
+        streaks = db.get_zero_job_streaks(min_streak=3)
+        assert len(streaks) == 0
+
+    def test_streak_broken_by_failure(self, db):
+        db.record_scrape_result("Site", True, jobs_found=0)
+        db.record_scrape_result("Site", True, jobs_found=0)
+        db.record_scrape_result("Site", False, error_message="err")
+        db.record_scrape_result("Site", True, jobs_found=0)
+        # Only 1 zero-job scrape after the failure, not 3
+        streaks = db.get_zero_job_streaks(min_streak=3)
+        assert len(streaks) == 0
+
+    def test_below_threshold_ignored(self, db):
+        db.record_scrape_result("Site", True, jobs_found=0)
+        db.record_scrape_result("Site", True, jobs_found=0)
+        streaks = db.get_zero_job_streaks(min_streak=3)
+        assert len(streaks) == 0
+
 
 class TestExport:
     def test_export_csv(self, db, tmp_path):

@@ -401,29 +401,27 @@ class JobDatabase:
         """Get sites that have failed their last N consecutive scrapes."""
         with self._connect() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT DISTINCT site_name FROM site_health")
-            all_sites = [row['site_name'] for row in cursor.fetchall()]
-
-            failing = []
-            for site_name in all_sites:
-                cursor.execute("""
-                    SELECT success, error_message, scrape_date, http_status
+            # Single query: rank each site's recent scrapes, then check if
+            # the most recent N are all failures.
+            cursor.execute("""
+                WITH ranked AS (
+                    SELECT site_name, success, error_message, scrape_date, http_status,
+                           ROW_NUMBER() OVER (PARTITION BY site_name ORDER BY scrape_date DESC) AS rn
                     FROM site_health
-                    WHERE site_name = ?
-                    ORDER BY scrape_date DESC
-                    LIMIT ?
-                """, (site_name, consecutive_failures))
+                )
+                SELECT site_name,
+                       COUNT(*) AS consecutive_failures,
+                       MAX(CASE WHEN rn = 1 THEN error_message END) AS last_error,
+                       MAX(CASE WHEN rn = 1 THEN scrape_date END) AS last_attempt,
+                       MAX(CASE WHEN rn = 1 THEN http_status END) AS last_http_status
+                FROM ranked
+                WHERE rn <= ?
+                GROUP BY site_name
+                HAVING COUNT(*) = ?
+                   AND SUM(CASE WHEN success THEN 1 ELSE 0 END) = 0
+            """, (consecutive_failures, consecutive_failures))
 
-                recent = cursor.fetchall()
-                if len(recent) >= consecutive_failures and all(not r['success'] for r in recent):
-                    failing.append({
-                        'site_name': site_name,
-                        'consecutive_failures': len(recent),
-                        'last_error': recent[0]['error_message'],
-                        'last_attempt': recent[0]['scrape_date'],
-                        'last_http_status': recent[0]['http_status'],
-                    })
-            return failing
+            return [dict(row) for row in cursor.fetchall()]
 
     def get_site_health_summary(self) -> List[Dict]:
         """Health summary for all sites over the last 7 days."""
@@ -447,35 +445,36 @@ class JobDatabase:
         """Get sites with N+ consecutive successful scrapes that found 0 jobs."""
         with self._connect() as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT DISTINCT site_name FROM site_health")
-            all_sites = [row['site_name'] for row in cursor.fetchall()]
-
-            streaks = []
-            for site_name in all_sites:
-                cursor.execute("""
-                    SELECT success, jobs_found, scrape_date
+            # Single query: rank each site's recent scrapes, find the first
+            # row that breaks the zero-job streak (failed or found jobs),
+            # then count how many came before it.
+            cursor.execute("""
+                WITH ranked AS (
+                    SELECT site_name, success, jobs_found, scrape_date,
+                           ROW_NUMBER() OVER (PARTITION BY site_name ORDER BY scrape_date DESC) AS rn
                     FROM site_health
-                    WHERE site_name = ?
-                    ORDER BY scrape_date DESC
-                    LIMIT 10
-                """, (site_name,))
-                recent = cursor.fetchall()
+                ),
+                first_break AS (
+                    SELECT site_name, MIN(rn) AS break_rn
+                    FROM ranked
+                    WHERE NOT (success AND jobs_found = 0)
+                    GROUP BY site_name
+                ),
+                streaks AS (
+                    SELECT r.site_name,
+                           COALESCE(fb.break_rn - 1, (SELECT MAX(rn) FROM ranked r2 WHERE r2.site_name = r.site_name)) AS zero_job_streak,
+                           MAX(CASE WHEN r.rn = 1 THEN r.scrape_date END) AS last_scrape
+                    FROM ranked r
+                    LEFT JOIN first_break fb ON r.site_name = fb.site_name
+                    WHERE r.rn = 1
+                    GROUP BY r.site_name
+                )
+                SELECT site_name, zero_job_streak, last_scrape
+                FROM streaks
+                WHERE zero_job_streak >= ?
+            """, (min_streak,))
 
-                # Count consecutive successful scrapes with 0 jobs
-                count = 0
-                for r in recent:
-                    if r['success'] and r['jobs_found'] == 0:
-                        count += 1
-                    else:
-                        break
-
-                if count >= min_streak:
-                    streaks.append({
-                        'site_name': site_name,
-                        'zero_job_streak': count,
-                        'last_scrape': recent[0]['scrape_date'],
-                    })
-            return streaks
+            return [dict(row) for row in cursor.fetchall()]
 
     def cleanup_old_health_records(self, days_to_keep: int = 30):
         with self._connect() as conn:
