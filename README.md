@@ -39,13 +39,16 @@ pip install playwright && playwright install chromium
 
 ### 2. Add job sites
 
-Edit `sites.csv`:
+Use `manage_sites.py` to add and review sites (handles dedup, URL testing, and staging):
 
-```csv
-site_name,url,active,keywords,scrape_details
-Democracy Fund,https://democracyfund.org/about/jobs/,yes,,no
-CSIS,https://careers.csis.org/,yes,,no
+```bash
+python manage_sites.py add "Democracy Fund" "https://democracyfund.org/about/jobs/" --test
+python manage_sites.py add "CSIS" "https://careers.csis.org/" --test
+python manage_sites.py review          # Review pending candidates
+python manage_sites.py approve 1,2     # Approve candidates by ID
 ```
+
+Sites are stored in `sites.csv` with these columns:
 
 | Column | Description |
 |--------|-------------|
@@ -224,10 +227,14 @@ Job-search/
 ├── salary_extractor.py  # Salary extraction from description text
 ├── database.py          # SQLite: jobs, site_parsers, site_health tables
 ├── feed_generator.py    # RSS 2.0 + HTML preview generation
+├── manage_sites.py      # Site discovery/staging/review pipeline
 ├── setup_site.py        # Interactive site configuration tool
+├── check_duplicates.py  # Duplicate detection utility
+├── validate_sites.py    # Site URL validation utility
 ├── scheduler.py         # Daily scheduling wrapper
 ├── config.json          # Configuration
 ├── sites.csv            # Sites to monitor (114+ active)
+├── candidates.csv       # Staging area for org candidates pending review
 ├── CLAUDE.md            # Project context for AI assistants
 ├── requirements.txt     # Python dependencies
 ├── pytest.ini           # Test configuration
@@ -237,6 +244,7 @@ Job-search/
 │   ├── test_feed_generator.py
 │   ├── test_ats_parsers.py
 │   ├── test_salary_extractor.py
+│   ├── test_manage_sites.py
 │   └── test_integration.py
 ├── jobs.db              # SQLite database (created on first run)
 ├── feed.xml             # Generated RSS feed

@@ -2,7 +2,7 @@
 
 ## What This Project Does
 
-Job search aggregator that scrapes 72+ nonprofit/foundation career pages and generates an RSS feed for Feedly. Runs daily via GitHub Actions; the entire workflow can be managed from a phone.
+Job search aggregator that scrapes 114+ nonprofit/foundation career pages and generates an RSS feed for Feedly. Runs daily via GitHub Actions; the entire workflow can be managed from a phone.
 
 ## Architecture
 
