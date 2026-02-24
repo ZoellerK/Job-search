@@ -4,7 +4,7 @@ A Python tool that scrapes job postings from multiple websites and generates an 
 
 ## Features
 
-- **Multi-source aggregation** — monitor 72+ career pages from a single feed
+- **Multi-source aggregation** — monitor 114+ career pages from a single feed
 - **ATS-specific parsers** — dedicated parsers for Greenhouse, Lever, Workable, Teamtailor, iCIMS, Taleo, Workday, ADP, and ApplicantPro (12 sites covered)
 - **Auto-detection** — automatically finds job listings on career pages without a dedicated parser
 - **Salary extraction** — regex-based extraction of compensation from job description text (`$60k-$80k`, `$120,000/year`, etc.)
@@ -20,7 +20,7 @@ A Python tool that scrapes job postings from multiple websites and generates an 
 - **Data export** — export jobs to CSV or JSON
 - **Structured logging** — configurable log level; logs to console + `job_aggregator.log`
 - **Config validation** — safe defaults for missing config keys; CSV validation catches empty URLs and duplicates
-- **Automated tests** — 128-test pytest suite with unit, integration, and mocked HTTP tests
+- **Automated tests** — 176-test pytest suite with unit, integration, and mocked HTTP tests
 - **GitHub Actions** — runs automatically in the cloud (no computer needed)
 
 ## Quick Start
@@ -155,7 +155,7 @@ Sites hosted on common Applicant Tracking Systems get dedicated parsers that ext
 | Teamtailor | Founders Pledge | title, URL, location, job type |
 | iCIMS | Brookings Institution | title, URL, location, job type |
 | Taleo | Freedom House | title, URL, location |
-| Workday | Gates Foundation | title, URL, location, posted date |
+| Workday | *(various)* | title, URL, location, posted date |
 | ADP | Rockefeller Foundation | title, URL, location |
 | ApplicantPro | Carnegie Endowment | title, URL, location, department |
 
@@ -212,7 +212,7 @@ See the `.github/workflows/` directory — runs automatically in the cloud. Edit
 python -m pytest tests/ -v
 ```
 
-128 tests covering database operations, scraper logic (with mocked HTTP), feed generation, ATS parsers, salary extraction, relevance scoring, site health, staleness tracking, cross-site dedup, data export, end-to-end integration, CSV validation, and config defaults.
+176 tests covering database operations, scraper logic (with mocked HTTP), feed generation, ATS parsers, salary extraction, relevance scoring, site health, staleness tracking, cross-site dedup, data export, end-to-end integration, CSV validation, and config defaults.
 
 ## Project Structure
 
@@ -227,11 +227,11 @@ Job-search/
 ├── setup_site.py        # Interactive site configuration tool
 ├── scheduler.py         # Daily scheduling wrapper
 ├── config.json          # Configuration
-├── sites.csv            # Sites to monitor (72+ active)
+├── sites.csv            # Sites to monitor (114+ active)
 ├── CLAUDE.md            # Project context for AI assistants
 ├── requirements.txt     # Python dependencies
 ├── pytest.ini           # Test configuration
-├── tests/               # Automated test suite (128 tests)
+├── tests/               # Automated test suite (176 tests)
 │   ├── test_database.py
 │   ├── test_scraper.py
 │   ├── test_feed_generator.py
