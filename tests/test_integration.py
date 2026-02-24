@@ -190,6 +190,32 @@ class TestFullPipeline:
         assert 'Research Analyst' not in all_text
 
 
+    def test_fetch_failure_recorded_as_failed(self, workspace):
+        """When the scraper can't fetch a page, health should record failure."""
+        def _mock_fail(url):
+            return None  # fetch failure
+
+        with patch('job_aggregator.JobScraper') as MockScraper:
+            instance = MockScraper.return_value
+            instance.auto_detect_jobs.side_effect = _mock_fail
+            instance.fetch_page.return_value = None
+
+            agg = JobAggregator(
+                config_file=workspace['config_path'],
+                sites_file=workspace['sites_path'],
+            )
+            results = agg.scrape_all()
+
+        assert results['successful_sites'] == 0
+        assert results['failed_sites'] == 2
+
+        # Health records should show failure
+        summary = agg.db.get_site_health_summary()
+        for s in summary:
+            assert s['failures'] > 0
+            assert s['successes'] == 0
+
+
 class TestCSVValidation:
     def test_missing_columns_returns_empty(self, workspace):
         # Write a CSV missing required columns

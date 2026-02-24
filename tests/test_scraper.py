@@ -68,10 +68,10 @@ class TestAutoDetectJobs:
         assert any('Program Director' in j['title'] for j in jobs)
 
     @patch.object(JobScraper, 'fetch_page')
-    def test_returns_empty_on_fetch_failure(self, mock_fetch, scraper):
+    def test_returns_none_on_fetch_failure(self, mock_fetch, scraper):
         mock_fetch.return_value = None
-        jobs = scraper.auto_detect_jobs("https://example.com/careers")
-        assert jobs == []
+        result = scraper.auto_detect_jobs("https://example.com/careers")
+        assert result is None
 
 
 class TestFetchPage:
@@ -270,3 +270,13 @@ class TestScrapeWithConfig:
         jobs = scraper.scrape_with_config("https://example.com/jobs", config)
         assert len(jobs) == 1
         assert jobs[0]['title'] == 'Data Analyst'
+
+    @patch.object(JobScraper, 'fetch_page')
+    def test_returns_none_on_fetch_failure(self, mock_fetch, scraper):
+        mock_fetch.return_value = None
+        config = {
+            'job_container': {'tag': 'div', 'class': 'opening'},
+            'title': {'tag': 'h2', 'class': 'title'},
+        }
+        result = scraper.scrape_with_config("https://example.com/jobs", config)
+        assert result is None

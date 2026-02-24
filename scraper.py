@@ -248,11 +248,15 @@ class JobScraper:
 
     # ── Public scraping methods (unchanged API) ───────────────────────
 
-    def auto_detect_jobs(self, url: str) -> List[Dict]:
-        """Attempt to automatically detect job listings on a page"""
+    def auto_detect_jobs(self, url: str) -> Optional[List[Dict]]:
+        """Attempt to automatically detect job listings on a page.
+
+        Returns None if the page could not be fetched (network/HTTP error),
+        or a list (possibly empty) if the page was fetched successfully.
+        """
         soup = self.fetch_page(url)
         if not soup:
-            return []
+            return None
 
         jobs = []
         seen_urls = set()
@@ -440,10 +444,11 @@ class JobScraper:
 
         return jobs
 
-    def scrape_with_config(self, url: str, parser_config: Dict) -> List[Dict]:
+    def scrape_with_config(self, url: str, parser_config: Dict) -> Optional[List[Dict]]:
+        """Scrape using saved parser config. Returns None on fetch failure."""
         soup = self.fetch_page(url)
         if not soup:
-            return []
+            return None
 
         jobs = []
         base_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}"

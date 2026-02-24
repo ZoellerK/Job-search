@@ -147,9 +147,13 @@ class JobAggregator:
 
         try:
             parser_config = self.db.get_parser_config(site_name)
+            fetch_failed = False
 
             if parser_config:
                 jobs = self.scraper.scrape_with_config(url, parser_config)
+                if jobs is None:
+                    fetch_failed = True
+                    jobs = []
             else:
                 # Try ATS-specific parser first, fall back to generic
                 ats = detect_ats(url)
@@ -160,13 +164,20 @@ class JobAggregator:
                         jobs = parse_ats_page(ats, soup, base)
                         if jobs:
                             logger.info("%s: ATS parser (%s) found %d jobs", site_name, ats, len(jobs))
+                        else:
+                            # ATS parser found nothing, try generic on same page
+                            jobs = self.scraper.auto_detect_jobs(url)
+                            if jobs is None:
+                                jobs = []
                     else:
+                        # Fetch failed — don't retry with auto_detect_jobs
+                        fetch_failed = True
                         jobs = []
-                    # Fall back to generic if ATS parser found nothing
-                    if not jobs:
-                        jobs = self.scraper.auto_detect_jobs(url)
                 else:
                     jobs = self.scraper.auto_detect_jobs(url)
+                    if jobs is None:
+                        fetch_failed = True
+                        jobs = []
 
             if scrape_details and jobs:
                 logger.info("Scraping detail pages for %s (%d jobs)", site_name, min(len(jobs), 20))
@@ -219,20 +230,21 @@ class JobAggregator:
             if seen_urls:
                 self.db.mark_jobs_seen(seen_urls)
 
-            # Record health
+            # Record health — mark as failure if the page couldn't be fetched
             self.db.record_scrape_result(
                 site_name=site_name,
-                success=True,
+                success=not fetch_failed,
                 jobs_found=len(jobs),
+                error_message="Failed to fetch page" if fetch_failed else None,
             )
 
             result = {
                 'site_name': site_name,
-                'success': True,
+                'success': not fetch_failed,
                 'new_jobs': new_jobs_count,
                 'total_found': len(jobs),
                 'dedup_skipped': dedup_skipped,
-                'error': None
+                'error': "Failed to fetch page" if fetch_failed else None,
             }
             if dedup_skipped:
                 logger.info("%s: %d new, %d dedup-skipped", site_name, new_jobs_count, dedup_skipped)
