@@ -390,9 +390,10 @@ class JobAggregator:
 
         # Check site health — alerts go into the feed summary
         health_alerts = self.check_site_health()
+        zero_streaks = self.db.get_zero_job_streaks(min_streak=3)
 
         # Generate RSS feed with summary + health alerts
-        self.generate_feed_with_summary(scrape_results, health_alerts)
+        self.generate_feed_with_summary(scrape_results, health_alerts, zero_streaks)
 
         # Generate HTML preview
         self.generate_preview()
@@ -403,7 +404,8 @@ class JobAggregator:
         logger.info("Update complete: %d new jobs found", scrape_results['total_new_jobs'])
 
     def generate_feed_with_summary(self, scrape_results: Dict,
-                                    health_alerts: List[Dict] = None):
+                                    health_alerts: List[Dict] = None,
+                                    zero_job_streaks: List[Dict] = None):
         """Generate RSS feed with optional scraping summary and health alerts."""
         max_items = self.config['output']['max_items']
         jobs = self.db.get_recent_jobs(limit=max_items)
@@ -414,10 +416,12 @@ class JobAggregator:
         stale_count = len(self.db.get_stale_jobs())
         include_summary = self.config['feed'].get('include_summary', True)
 
-        if include_summary and (scrape_results['total_new_jobs'] > 0 or health_alerts):
+        has_alerts = health_alerts or zero_job_streaks
+        if include_summary and (scrape_results['total_new_jobs'] > 0 or has_alerts):
             summary_job = self.feed_gen.build_summary_item(
                 scrape_results, health_alerts=health_alerts or [],
                 stale_count=stale_count,
+                zero_job_streaks=zero_job_streaks or [],
             )
             jobs = [summary_job] + jobs
             logger.info("Including summary + %d jobs in feed (%d stale excluded)", len(jobs) - 1, stale_count)
@@ -457,6 +461,15 @@ class JobAggregator:
                 logger.warning(
                     "  %s: %d failures, last error: %s",
                     site['site_name'], site['consecutive_failures'], site['last_error']
+                )
+
+        zero_streaks = self.db.get_zero_job_streaks(min_streak=3)
+        if zero_streaks:
+            logger.warning("--- Zero-job streaks (3+ consecutive 0-job scrapes) ---")
+            for site in zero_streaks:
+                logger.warning(
+                    "  %s: %d consecutive scrapes found 0 jobs",
+                    site['site_name'], site['zero_job_streak']
                 )
 
 

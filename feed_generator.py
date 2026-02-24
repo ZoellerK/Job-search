@@ -303,7 +303,8 @@ class RSSFeedGenerator:
 
     def build_summary_item(self, scrape_results: Dict,
                            health_alerts: List[Dict] = None,
-                           stale_count: int = 0) -> Dict:
+                           stale_count: int = 0,
+                           zero_job_streaks: List[Dict] = None) -> Dict:
         """Build a summary feed item from scraping results + health alerts."""
         # Rich HTML for content:encoded
         html_parts = []
@@ -338,6 +339,25 @@ class RSSFeedGenerator:
                 )
             html_parts.append("</ul></div>")
 
+        # Zero-job streaks — sites loading OK but finding nothing
+        if zero_job_streaks:
+            html_parts.append(
+                "<div style='background: #d1ecf1; border: 1px solid #0c5460; "
+                "padding: 12px 16px; border-radius: 4px; margin: 12px 0;'>"
+            )
+            html_parts.append(
+                "<strong style='color: #0c5460;'>Zero-Job Streaks</strong>"
+                "<p style='color: #0c5460; margin: 4px 0;'>"
+                "These sites load OK but found 0 jobs for 3+ consecutive scrapes "
+                "(page structure may have changed):</p><ul>"
+            )
+            for s in zero_job_streaks:
+                name = html.escape(s['site_name'])
+                html_parts.append(
+                    f"<li><strong>{name}</strong> — {s['zero_job_streak']} consecutive 0-job scrapes</li>"
+                )
+            html_parts.append("</ul></div>")
+
         sites_with_jobs = [r for r in scrape_results['site_results'] if r['success'] and r['new_jobs'] > 0]
         if sites_with_jobs:
             html_parts.append("<details><summary><strong>Sites with New Jobs</strong></summary>")
@@ -359,6 +379,9 @@ class RSSFeedGenerator:
         if health_alerts:
             alert_names = [a['site_name'] for a in health_alerts]
             plain_parts.append(f"Site Health Alerts: {', '.join(alert_names)}")
+        if zero_job_streaks:
+            streak_names = [s['site_name'] for s in zero_job_streaks]
+            plain_parts.append(f"Zero-Job Streaks: {', '.join(streak_names)}")
         if sites_with_jobs:
             top = sorted(sites_with_jobs, key=lambda x: x['new_jobs'], reverse=True)[:5]
             plain_parts.append(

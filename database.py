@@ -59,11 +59,19 @@ class JobDatabase:
                 "details_scraped BOOLEAN DEFAULT 0",
                 "last_seen_date TEXT",
                 "stale BOOLEAN DEFAULT 0",
+                "normalized_title TEXT",
             ]:
                 try:
                     cursor.execute(f"ALTER TABLE jobs ADD COLUMN {col_def}")
                 except sqlite3.OperationalError:
                     pass
+
+            # Backfill normalized_title for existing rows
+            cursor.execute("SELECT id, title FROM jobs WHERE normalized_title IS NULL AND title IS NOT NULL")
+            for row in cursor.fetchall():
+                nt = self._normalize_title(row['title'])
+                if nt:
+                    cursor.execute("UPDATE jobs SET normalized_title = ? WHERE id = ?", (nt, row['id']))
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS site_parsers (
@@ -109,6 +117,10 @@ class JobDatabase:
                 CREATE INDEX IF NOT EXISTS idx_jobs_site_discovered
                 ON jobs (site_name, discovered_date DESC)
             """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_jobs_normalized_title
+                ON jobs (normalized_title, site_name)
+            """)
 
             conn.commit()
 
@@ -119,16 +131,18 @@ class JobDatabase:
                 details_scraped: bool = False) -> bool:
         """Add a new job posting. Returns True if added, False if duplicate."""
         now = datetime.now(timezone.utc).isoformat()
+        normalized = self._normalize_title(title)
         with self._connect() as conn:
             try:
                 conn.execute("""
                     INSERT INTO jobs (site_name, url, title, description, location,
                                     posted_date, discovered_date, keywords, salary,
-                                    job_type, details_scraped, last_seen_date)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    job_type, details_scraped, last_seen_date,
+                                    normalized_title)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (site_name, url, title, description, location, posted_date,
                       now, keywords, salary,
-                      job_type, details_scraped, now))
+                      job_type, details_scraped, now, normalized))
                 conn.commit()
                 return True
             except sqlite3.IntegrityError:
@@ -234,17 +248,14 @@ class JobDatabase:
             cursor.execute("""
                 SELECT id, site_name, url, title
                 FROM jobs
-                WHERE site_name != ?
+                WHERE normalized_title = ?
+                AND site_name != ?
                 AND discovered_date > datetime('now', '-30 days')
-                ORDER BY discovered_date DESC
-                LIMIT 500
-            """, (site_name,))
+                LIMIT 1
+            """, (normalized, site_name))
 
-            for row in cursor.fetchall():
-                other_normalized = self._normalize_title(row['title'])
-                if other_normalized and normalized == other_normalized:
-                    return self._row_to_dict(row)
-        return None
+            row = cursor.fetchone()
+            return self._row_to_dict(row) if row else None
 
     @staticmethod
     def _normalize_title(title: str) -> str:
@@ -330,11 +341,13 @@ class JobDatabase:
             return
         now = datetime.now(timezone.utc).isoformat()
         with self._connect() as conn:
-            cursor = conn.cursor()
-            for url in urls:
-                cursor.execute(
-                    "UPDATE jobs SET last_seen_date = ?, stale = 0 WHERE url = ?",
-                    (now, url),
+            # Batch in chunks of 500 to stay within SQLite variable limits
+            for i in range(0, len(urls), 500):
+                chunk = urls[i:i + 500]
+                placeholders = ','.join('?' * len(chunk))
+                conn.execute(
+                    f"UPDATE jobs SET last_seen_date = ?, stale = 0 WHERE url IN ({placeholders})",
+                    [now] + chunk,
                 )
             conn.commit()
 
@@ -429,6 +442,40 @@ class JobDatabase:
                 ORDER BY failures DESC, site_name
             """)
             return self._rows_to_jobs(cursor.fetchall())
+
+    def get_zero_job_streaks(self, min_streak: int = 3) -> List[Dict]:
+        """Get sites with N+ consecutive successful scrapes that found 0 jobs."""
+        with self._connect() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT DISTINCT site_name FROM site_health")
+            all_sites = [row['site_name'] for row in cursor.fetchall()]
+
+            streaks = []
+            for site_name in all_sites:
+                cursor.execute("""
+                    SELECT success, jobs_found, scrape_date
+                    FROM site_health
+                    WHERE site_name = ?
+                    ORDER BY scrape_date DESC
+                    LIMIT 10
+                """, (site_name,))
+                recent = cursor.fetchall()
+
+                # Count consecutive successful scrapes with 0 jobs
+                count = 0
+                for r in recent:
+                    if r['success'] and r['jobs_found'] == 0:
+                        count += 1
+                    else:
+                        break
+
+                if count >= min_streak:
+                    streaks.append({
+                        'site_name': site_name,
+                        'zero_job_streak': count,
+                        'last_scrape': recent[0]['scrape_date'],
+                    })
+            return streaks
 
     def cleanup_old_health_records(self, days_to_keep: int = 30):
         with self._connect() as conn:

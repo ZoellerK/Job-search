@@ -9,7 +9,7 @@ on:
 
   push:
     branches:
-      - claude/job-posting-emailer-ULIIS
+      - main
     paths:
       - 'sites.csv'  # Run when sites.csv is updated
 
