@@ -91,6 +91,31 @@ class JobScraper:
         'by continuing to browse',
     )
 
+    # Link texts that indicate generic actions, not job titles
+    _GENERIC_LINK_TEXTS = frozenset({
+        'apply now', 'apply', 'view job', 'view position', 'learn more',
+        'read more', 'details', 'more info', 'find out more', 'download pdf',
+        'see full description and apply', 'complete form',
+        'view current openings', 'explore our job openings',
+        'submit position here',
+    })
+
+    # Keywords that suggest a URL/text is job-related
+    _JOB_URL_KEYWORDS = frozenset({
+        'job', 'position', 'career', 'opening', 'vacancy',
+        'role', 'opportunity', 'apply', 'hiring', 'employment',
+    })
+
+    # Keywords that suggest a link is navigational, not a job posting
+    _NAV_URL_KEYWORDS = frozenset({
+        'home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign',
+        'search', 'filter', 'sort', 'category', 'donate', 'subscribe',
+        'newsletter',
+    })
+
+    # CSS class pattern for location elements
+    _LOCATION_CLASS_RE = re.compile(r'location|city|office|remote|region', re.I)
+
     def __init__(self, user_agent: str = None, timeout: int = 30,
                  retry_attempts: int = 3, domain_delay: float = 1.0):
         self.user_agent = user_agent or "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
@@ -292,16 +317,8 @@ class JobScraper:
 
     def _extract_job_from_element(self, element, base_url: str) -> Dict:
         job = {}
-        generic_texts = [
-            'apply now', 'apply', 'view job', 'view position', 'learn more',
-            'read more', 'details', 'more info', 'find out more', 'download pdf',
-            'see full description and apply', 'complete form',
-            'view current openings', 'explore our job openings',
-            'submit position here',
-        ]
 
-        title_tags = ['h1', 'h2', 'h3', 'h4', 'a']
-        for tag in title_tags:
+        for tag in ('h1', 'h2', 'h3', 'h4', 'a'):
             title_elem = element.find(tag)
             if title_elem:
                 job['title'] = title_elem.get_text(strip=True)
@@ -309,23 +326,19 @@ class JobScraper:
 
         link = element.find('a', href=True)
         if link:
-            href = link['href']
-            job['url'] = urljoin(base_url, href)
+            job['url'] = urljoin(base_url, link['href'])
         elif job.get('title'):
             job['url'] = base_url
 
         if job.get('title') and job.get('url'):
-            if job['title'].lower() in generic_texts:
+            if job['title'].lower() in self._GENERIC_LINK_TEXTS:
                 url_title = self._extract_title_from_url(job['url'])
                 if url_title:
                     job['title'] = url_title
 
-        location_keywords = ['location', 'city', 'office', 'remote']
-        for keyword in location_keywords:
-            loc_elem = element.find(class_=re.compile(keyword, re.I))
-            if loc_elem:
-                job['location'] = loc_elem.get_text(strip=True)
-                break
+        loc_elem = element.find(class_=self._LOCATION_CLASS_RE)
+        if loc_elem:
+            job['location'] = loc_elem.get_text(strip=True)
 
         desc_elem = element.find('p') or element.find('div', class_=re.compile('desc', re.I))
         if desc_elem:
@@ -391,56 +404,49 @@ class JobScraper:
     def _extract_jobs_from_links(self, soup: BeautifulSoup, base_url: str) -> List[Dict]:
         jobs = []
         seen_urls = set()
-        job_keywords = ['job', 'position', 'career', 'opening', 'vacancy', 'role', 'opportunity', 'apply', 'hiring', 'employment']
-        exclude_keywords = ['home', 'about', 'contact', 'privacy', 'terms', 'login', 'sign', 'search', 'filter', 'sort', 'category', 'donate', 'subscribe', 'newsletter']
-        generic_texts = [
-            'apply now', 'apply', 'view job', 'view position', 'learn more',
-            'read more', 'details', 'more info', 'find out more', 'download pdf',
-            'see full description and apply', 'complete form',
-            'view current openings', 'explore our job openings',
-            'submit position here',
-        ]
 
-        links = soup.find_all('a', href=True)
-        for link in links:
+        for link in soup.find_all('a', href=True):
             href = link['href']
             text = link.get_text(strip=True)
             full_url = urljoin(base_url, href)
+            href_lower = href.lower()
+            text_lower = text.lower()
 
             if full_url in seen_urls:
                 continue
-            if any(exclude in href.lower() or exclude in text.lower() for exclude in exclude_keywords):
+            if any(kw in href_lower or kw in text_lower for kw in self._NAV_URL_KEYWORDS):
+                continue
+            if not any(kw in href_lower or kw in text_lower for kw in self._JOB_URL_KEYWORDS):
+                continue
+            if not text or not (5 < len(text) < 200):
                 continue
 
-            if any(keyword in href.lower() or keyword in text.lower() for keyword in job_keywords):
-                if text and 5 < len(text) < 200:
-                    parent = link.parent
-                    description = None
-                    location = None
+            title = text
+            if text_lower in self._GENERIC_LINK_TEXTS:
+                url_title = self._extract_title_from_url(full_url)
+                if url_title:
+                    title = url_title
+                else:
+                    continue
 
-                    if parent:
-                        desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary', re.I))
-                        if desc_elem:
-                            description = desc_elem.get_text(strip=True)[:2000]
-                        loc_elem = parent.find(class_=re.compile('location|city|region', re.I))
-                        if loc_elem:
-                            location = loc_elem.get_text(strip=True)
+            description = None
+            location = None
+            parent = link.parent
+            if parent:
+                desc_elem = parent.find('p') or parent.find('div', class_=re.compile('desc|summary', re.I))
+                if desc_elem:
+                    description = desc_elem.get_text(strip=True)[:2000]
+                loc_elem = parent.find(class_=self._LOCATION_CLASS_RE)
+                if loc_elem:
+                    location = loc_elem.get_text(strip=True)
 
-                    title = text
-                    if text.lower() in generic_texts:
-                        url_title = self._extract_title_from_url(full_url)
-                        if url_title:
-                            title = url_title
-                        else:
-                            continue  # skip if generic text and no URL title
-
-                    jobs.append({
-                        'title': title,
-                        'url': full_url,
-                        'description': description,
-                        'location': location
-                    })
-                    seen_urls.add(full_url)
+            jobs.append({
+                'title': title,
+                'url': full_url,
+                'description': description,
+                'location': location,
+            })
+            seen_urls.add(full_url)
 
         return jobs
 
@@ -523,6 +529,52 @@ class JobScraper:
 
         return jobs
 
+    # Pattern definitions for detail page field extraction.
+    # Each entry: (field_name, tags, patterns, min_len, max_len)
+    _DETAIL_FIELDS = [
+        ('location', ['span', 'div', 'p', 'li'], [
+            {'class': re.compile(r'location', re.I)},
+            {'id': re.compile(r'location', re.I)},
+            {'class': re.compile(r'job-location', re.I)},
+            {'class': re.compile(r'(office|city|region)', re.I)},
+        ], 5, 100),
+        ('salary', ['span', 'div', 'p'], [
+            {'class': re.compile(r'salary|compensation|pay', re.I)},
+            {'id': re.compile(r'salary|compensation', re.I)},
+        ], 5, 200),
+        ('job_type', ['span', 'div', 'p', 'li'], [
+            {'class': re.compile(r'job-?type|employment-?type', re.I)},
+            {'id': re.compile(r'job-?type', re.I)},
+        ], 0, 50),
+        ('posted_date', ['span', 'div', 'p', 'time'], [
+            {'class': re.compile(r'posted|date|publish', re.I)},
+            {'id': re.compile(r'posted|date', re.I)},
+        ], 5, 100),
+    ]
+
+    _DESC_PATTERNS = [
+        {'class': re.compile(r'(job-)?description', re.I)},
+        {'id': re.compile(r'(job-)?description', re.I)},
+        {'class': re.compile(r'job-details?', re.I)},
+        {'class': re.compile(r'job-content', re.I)},
+        {'class': re.compile(r'posting-content', re.I)},
+        {'class': re.compile(r'position-description', re.I)},
+    ]
+
+    @staticmethod
+    def _find_by_patterns(soup, tags, patterns, min_len=0, max_len=10000):
+        """Find the first element matching any pattern with valid text length."""
+        for pattern in patterns:
+            elem = soup.find(tags, **pattern)
+            if elem:
+                # Handle <time datetime="..."> specially
+                if elem.name == 'time' and elem.get('datetime'):
+                    return elem['datetime']
+                text = elem.get_text(strip=True)
+                if text and min_len < len(text) < max_len:
+                    return text
+        return None
+
     def scrape_job_details(self, job_url: str) -> Dict:
         soup = self.fetch_page(job_url)
         if not soup:
@@ -530,101 +582,46 @@ class JobScraper:
 
         details = {}
 
-        # Description
-        description = None
-        desc_patterns = [
-            {'class': re.compile(r'(job-)?description', re.I)},
-            {'id': re.compile(r'(job-)?description', re.I)},
-            {'class': re.compile(r'job-details?', re.I)},
-            {'class': re.compile(r'job-content', re.I)},
-            {'class': re.compile(r'posting-content', re.I)},
-            {'class': re.compile(r'position-description', re.I)},
-        ]
-
-        for pattern in desc_patterns:
-            desc_elem = soup.find(['div', 'section', 'article'], **pattern)
-            if desc_elem:
-                description = desc_elem.get_text(separator='\n', strip=True)
-                break
-
-        if not description:
-            main_content = soup.find('main') or soup.find(id='main') or soup.find(class_=re.compile('main', re.I))
-            if main_content:
-                text_blocks = main_content.find_all(['div', 'section', 'article'])
-                if text_blocks:
-                    largest = max(text_blocks, key=lambda x: len(x.get_text(strip=True)))
-                    if len(largest.get_text(strip=True)) > 100:
-                        description = largest.get_text(separator='\n', strip=True)
-
-        if not description:
-            paragraphs = soup.find_all('p')
-            if len(paragraphs) > 3:
-                description = '\n\n'.join(p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 20)
-
+        # Description — has special fallback logic
+        description = self._extract_description(soup)
         if description:
             description = self._sanitize_description(description)
         if description:
             details['description'] = description[:5000]
 
-        # Location
-        location_patterns = [
-            {'class': re.compile(r'location', re.I)},
-            {'id': re.compile(r'location', re.I)},
-            {'class': re.compile(r'job-location', re.I)},
-            {'class': re.compile(r'(office|city|region)', re.I)},
-        ]
-        for pattern in location_patterns:
-            loc_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
-            if loc_elem:
-                location_text = loc_elem.get_text(strip=True)
-                if location_text and 5 < len(location_text) < 100:
-                    details['location'] = location_text
-                    break
-
-        # Salary
-        salary_patterns = [
-            {'class': re.compile(r'salary|compensation|pay', re.I)},
-            {'id': re.compile(r'salary|compensation', re.I)},
-        ]
-        for pattern in salary_patterns:
-            salary_elem = soup.find(['span', 'div', 'p'], **pattern)
-            if salary_elem:
-                salary_text = salary_elem.get_text(strip=True)
-                if salary_text and 5 < len(salary_text) < 200:
-                    details['salary'] = salary_text
-                    break
-
-        # Job type
-        job_type_patterns = [
-            {'class': re.compile(r'job-?type|employment-?type', re.I)},
-            {'id': re.compile(r'job-?type', re.I)},
-        ]
-        for pattern in job_type_patterns:
-            type_elem = soup.find(['span', 'div', 'p', 'li'], **pattern)
-            if type_elem:
-                type_text = type_elem.get_text(strip=True)
-                if type_text and len(type_text) < 50:
-                    details['job_type'] = type_text
-                    break
-
-        # Posted date
-        date_patterns = [
-            {'class': re.compile(r'posted|date|publish', re.I)},
-            {'id': re.compile(r'posted|date', re.I)},
-        ]
-        for pattern in date_patterns:
-            date_elem = soup.find(['span', 'div', 'p', 'time'], **pattern)
-            if date_elem:
-                if date_elem.name == 'time' and date_elem.get('datetime'):
-                    details['posted_date'] = date_elem['datetime']
-                    break
-                else:
-                    date_text = date_elem.get_text(strip=True)
-                    if date_text and 5 < len(date_text) < 100:
-                        details['posted_date'] = date_text
-                        break
+        # Structured fields — all use the same pattern-matching logic
+        for field, tags, patterns, min_len, max_len in self._DETAIL_FIELDS:
+            value = self._find_by_patterns(soup, tags, patterns, min_len, max_len)
+            if value:
+                details[field] = value
 
         return details
+
+    def _extract_description(self, soup) -> Optional[str]:
+        """Extract job description with progressive fallbacks."""
+        # Try structured elements first
+        for pattern in self._DESC_PATTERNS:
+            elem = soup.find(['div', 'section', 'article'], **pattern)
+            if elem:
+                return elem.get_text(separator='\n', strip=True)
+
+        # Fallback: largest block in <main>
+        main_content = soup.find('main') or soup.find(id='main') or soup.find(class_=re.compile('main', re.I))
+        if main_content:
+            text_blocks = main_content.find_all(['div', 'section', 'article'])
+            if text_blocks:
+                largest = max(text_blocks, key=lambda x: len(x.get_text(strip=True)))
+                if len(largest.get_text(strip=True)) > 100:
+                    return largest.get_text(separator='\n', strip=True)
+
+        # Fallback: concatenate paragraphs
+        paragraphs = soup.find_all('p')
+        if len(paragraphs) > 3:
+            text = '\n\n'.join(p.get_text(strip=True) for p in paragraphs if len(p.get_text(strip=True)) > 20)
+            if text:
+                return text
+
+        return None
 
     def enrich_jobs_with_details(self, jobs: List[Dict], max_jobs: int = 50) -> List[Dict]:
         enriched_jobs = []

@@ -17,29 +17,31 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
+# Domain → ATS identifier mapping.  Adding a new ATS only requires a new
+# entry here (plus a parser function registered in _PARSERS below).
+_ATS_DOMAINS = {
+    'greenhouse.io': 'greenhouse',
+    'boards.greenhouse.io': 'greenhouse',
+    'lever.co': 'lever',
+    'jobs.lever.co': 'lever',
+    'apply.workable.com': 'workable',
+    'teamtailor.com': 'teamtailor',
+    'icims.com': 'icims',
+    'tbe.taleo.net': 'taleo',
+    'taleo.net': 'taleo',
+    'myworkdayjobs.com': 'workday',
+    'workforcenow.adp.com': 'adp',
+    'applicantpro.com': 'applicantpro',
+}
+
+
 def detect_ats(url: str) -> Optional[str]:
     """Return the ATS identifier for *url*, or None if unrecognised."""
     host = urlparse(url).netloc.lower()
-    path = urlparse(url).path.lower()
-
-    if 'greenhouse.io' in host or 'boards.greenhouse.io' in host:
-        return 'greenhouse'
-    if 'lever.co' in host or 'jobs.lever.co' in host:
-        return 'lever'
-    if 'apply.workable.com' in host:
-        return 'workable'
-    if 'teamtailor.com' in host:
-        return 'teamtailor'
-    if 'icims.com' in host:
-        return 'icims'
-    if 'tbe.taleo.net' in host or 'taleo.net' in host:
-        return 'taleo'
-    if 'myworkdayjobs.com' in host:
-        return 'workday'
-    if 'workforcenow.adp.com' in host:
-        return 'adp'
-    if 'applicantpro.com' in host:
-        return 'applicantpro'
+    # Check exact host first, then check if host ends with a known domain
+    for domain, ats in _ATS_DOMAINS.items():
+        if host == domain or host.endswith('.' + domain):
+            return ats
     return None
 
 

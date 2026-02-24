@@ -156,12 +156,24 @@ class RSSFeedGenerator:
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ", encoding='utf-8').decode('utf-8')
 
+    # Metadata keyword mappings: category label → trigger terms.
+    # Checked against combined title + description + location + job_type.
+    _METADATA_KEYWORDS = {
+        'Remote': ['remote', 'work from home', 'wfh', 'telecommute'],
+        'Hybrid': ['hybrid', 'flexible'],
+        'On-site': ['on-site', 'onsite', 'in-office', 'office-based'],
+        'Full-time': ['full-time', 'full time', 'fulltime'],
+        'Part-time': ['part-time', 'part time', 'parttime'],
+        'Contract': ['contract', 'contractor'],
+        'Internship': ['internship', 'intern'],
+        'Volunteer': ['volunteer'],
+        'Senior': ['senior', 'sr.', 'lead', 'principal', 'staff'],
+        'Junior': ['junior', 'jr.', 'entry level', 'entry-level'],
+        'Leadership': ['director', 'vp', 'vice president', 'head of', 'chief'],
+    }
+
     def _extract_job_metadata(self, job: Dict) -> List[str]:
         """Extract smart metadata from job for better Feedly categorization"""
-        categories = []
-
-        # Combine title, description, location, and job_type for text analysis
-        # Use 'or' to handle None values (job.get() returns None if key exists with None value)
         search_text = ' '.join([
             (job.get('title') or '').lower(),
             (job.get('description') or '').lower(),
@@ -169,35 +181,11 @@ class RSSFeedGenerator:
             (job.get('job_type') or '').lower()
         ])
 
-        # Work arrangement
-        if any(term in search_text for term in ['remote', 'work from home', 'wfh', 'telecommute']):
-            categories.append('Remote')
-        if any(term in search_text for term in ['hybrid', 'flexible']):
-            categories.append('Hybrid')
-        if any(term in search_text for term in ['on-site', 'onsite', 'in-office', 'office-based']):
-            categories.append('On-site')
+        categories = [
+            label for label, terms in self._METADATA_KEYWORDS.items()
+            if any(term in search_text for term in terms)
+        ]
 
-        # Employment type
-        if any(term in search_text for term in ['full-time', 'full time', 'fulltime']):
-            categories.append('Full-time')
-        if any(term in search_text for term in ['part-time', 'part time', 'parttime']):
-            categories.append('Part-time')
-        if any(term in search_text for term in ['contract', 'contractor']):
-            categories.append('Contract')
-        if any(term in search_text for term in ['internship', 'intern']):
-            categories.append('Internship')
-        if any(term in search_text for term in ['volunteer']):
-            categories.append('Volunteer')
-
-        # Seniority level
-        if any(term in search_text for term in ['senior', 'sr.', 'lead', 'principal', 'staff']):
-            categories.append('Senior')
-        if any(term in search_text for term in ['junior', 'jr.', 'entry level', 'entry-level']):
-            categories.append('Junior')
-        if any(term in search_text for term in ['director', 'vp', 'vice president', 'head of', 'chief']):
-            categories.append('Leadership')
-
-        # Relevance scoring
         relevance = self._score_relevance(job)
         if relevance:
             categories.append(relevance)
