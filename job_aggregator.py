@@ -266,6 +266,8 @@ class JobAggregator:
                 'dedup_skipped': 0,
                 'error': str(e)
             }
+        finally:
+            self.scraper.close_session()
 
     def scrape_all(self) -> Dict:
         sites = self.load_sites()
@@ -380,7 +382,7 @@ class JobAggregator:
         deleted = self.db.cleanup_old_jobs(days_to_keep=days_to_keep)
         if deleted:
             logger.info("Deleted %d jobs older than %d days", deleted, days_to_keep)
-        self.db.cleanup_old_health_records(days_to_keep=30)
+        self.db.cleanup_old_health_records(days_to_keep=days_to_keep)
         stale = self.db.mark_stale_jobs(stale_after_days=stale_after_days)
         if stale:
             logger.info("Flagged %d stale jobs (not seen in %d+ days)", stale, stale_after_days)

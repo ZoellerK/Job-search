@@ -66,12 +66,13 @@ class JobDatabase:
                 except sqlite3.OperationalError:
                     pass
 
-            # Backfill normalized_title for existing rows
+            # Backfill normalized_title for existing rows (batched)
             cursor.execute("SELECT id, title FROM jobs WHERE normalized_title IS NULL AND title IS NOT NULL")
-            for row in cursor.fetchall():
-                nt = self._normalize_title(row['title'])
-                if nt:
-                    cursor.execute("UPDATE jobs SET normalized_title = ? WHERE id = ?", (nt, row['id']))
+            backfill = [(self._normalize_title(row['title']), row['id'])
+                        for row in cursor.fetchall()
+                        if self._normalize_title(row['title'])]
+            if backfill:
+                cursor.executemany("UPDATE jobs SET normalized_title = ? WHERE id = ?", backfill)
 
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS site_parsers (

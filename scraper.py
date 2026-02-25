@@ -45,6 +45,12 @@ class DomainThrottler:
             self._backoff[domain] = min(current * 2, 60.0)
             logger.warning("429 from %s — backing off to %.1fs", domain, self._backoff[domain])
 
+    def record_success(self, domain: str):
+        """Reset back-off for a domain after a successful request."""
+        with self._lock:
+            if self._backoff[domain] > 0:
+                self._backoff[domain] = 0.0
+
 
 class JobScraper:
     """Scrapes job postings from websites"""
@@ -131,6 +137,13 @@ class JobScraper:
             self._local.session.headers.update({'User-Agent': self.user_agent})
         return self._local.session
 
+    def close_session(self):
+        """Close the thread-local requests session, releasing sockets."""
+        session = getattr(self._local, 'session', None)
+        if session:
+            session.close()
+            del self._local.session
+
     def fetch_page(self, url: str, use_js: bool = False) -> Optional[BeautifulSoup]:
         """
         Fetch and parse a web page with retries.
@@ -157,7 +170,10 @@ class JobScraper:
                     self.throttler.record_429(domain)
                     logger.warning("Attempt %d: 429 Too Many Requests for %s", attempt + 1, url)
                     if attempt < self.retry_attempts - 1:
-                        retry_after = int(response.headers.get('Retry-After', 2 ** (attempt + 1)))
+                        try:
+                            retry_after = int(response.headers.get('Retry-After', 2 ** (attempt + 1)))
+                        except (ValueError, TypeError):
+                            retry_after = 2 ** (attempt + 1)
                         time.sleep(min(retry_after, 30))
                     continue
 
@@ -172,6 +188,7 @@ class JobScraper:
                     return (None, 404)
 
                 response.raise_for_status()
+                self.throttler.record_success(domain)
                 soup = BeautifulSoup(response.content, 'lxml')
 
                 # Heuristic: if page looks empty, try Playwright

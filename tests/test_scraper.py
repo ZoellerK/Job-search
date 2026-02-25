@@ -149,6 +149,63 @@ class TestDomainThrottler:
         throttler.record_429("slow.com")
         assert throttler._backoff["slow.com"] == 4.0
 
+    def test_success_resets_backoff(self):
+        throttler = DomainThrottler(default_delay=1.0)
+        throttler.record_429("slow.com")
+        throttler.record_429("slow.com")
+        assert throttler._backoff["slow.com"] == 4.0
+        throttler.record_success("slow.com")
+        assert throttler._backoff["slow.com"] == 0.0
+
+    def test_success_noop_without_prior_429(self):
+        throttler = DomainThrottler(default_delay=1.0)
+        throttler.record_success("clean.com")
+        assert throttler._backoff["clean.com"] == 0.0
+
+
+class TestRetryAfterParsing:
+    @patch('scraper.requests.Session')
+    def test_non_numeric_retry_after_does_not_crash(self, mock_session_cls):
+        """RFC 7231 allows Retry-After as an HTTP-date; we should not crash."""
+        scraper = JobScraper(timeout=5, retry_attempts=2, domain_delay=0.0)
+        mock_session = MagicMock()
+        resp_429 = _make_response("", 429)
+        resp_429.headers = {'Retry-After': 'Wed, 21 Oct 2025 07:28:00 GMT'}
+        resp_ok = _make_response("<html><body>OK</body></html>")
+        mock_session.get.side_effect = [resp_429, resp_ok]
+        scraper._local.session = mock_session
+
+        soup = scraper.fetch_page("https://example.com")
+        assert soup is not None
+
+    @patch('scraper.requests.Session')
+    def test_numeric_retry_after_is_respected(self, mock_session_cls):
+        scraper = JobScraper(timeout=5, retry_attempts=2, domain_delay=0.0)
+        mock_session = MagicMock()
+        resp_429 = _make_response("", 429)
+        resp_429.headers = {'Retry-After': '1'}
+        resp_ok = _make_response("<html><body>OK</body></html>")
+        mock_session.get.side_effect = [resp_429, resp_ok]
+        scraper._local.session = mock_session
+
+        soup = scraper.fetch_page("https://example.com")
+        assert soup is not None
+
+
+class TestSessionCleanup:
+    def test_close_session_releases_resources(self):
+        scraper = JobScraper(timeout=5, retry_attempts=1, domain_delay=0.0)
+        # Force creation of a session
+        session = scraper._get_session()
+        assert hasattr(scraper._local, 'session')
+        scraper.close_session()
+        assert not hasattr(scraper._local, 'session')
+
+    def test_close_session_noop_when_no_session(self):
+        scraper = JobScraper(timeout=5, retry_attempts=1, domain_delay=0.0)
+        # Should not raise
+        scraper.close_session()
+
 
 class TestIsLikelyJobTitle:
     def test_rejects_nav_links(self):

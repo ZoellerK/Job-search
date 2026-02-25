@@ -87,6 +87,22 @@ class TestCrossSiteDedup:
         match = db.find_similar_job("Intern", "SiteB")
         assert match is None  # Too short to reliably match
 
+    def test_backfill_normalized_title(self, tmp_path):
+        """Rows inserted without normalized_title get backfilled on next init."""
+        db_path = str(tmp_path / "backfill.db")
+        db = JobDatabase(db_path)
+        # Insert a row then NULL out the normalized_title to simulate old schema
+        db.add_job("S", "https://x.com/1", "Senior Program Manager")
+        with db._connect() as conn:
+            conn.execute("UPDATE jobs SET normalized_title = NULL")
+            conn.commit()
+        # Re-init triggers backfill
+        db2 = JobDatabase(db_path)
+        with db2._connect() as conn:
+            row = conn.execute("SELECT normalized_title FROM jobs WHERE url = ?",
+                               ("https://x.com/1",)).fetchone()
+        assert row['normalized_title'] == "senior program manager"
+
 
 class TestSiteHealth:
     def test_record_and_retrieve(self, db):
