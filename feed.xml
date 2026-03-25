@@ -5,10 +5,10 @@
     <link>https://zoellerk.github.io/Job-search/feed.xml</link>
     <description>RSS feed of job postings aggregated from multiple sources - optimized for Feedly</description>
     <language>en</language>
-    <lastBuildDate>Tue, 24 Mar 2026 09:50:28 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 09:46:58 +0000</lastBuildDate>
     <atom:link href="https://zoellerk.github.io/Job-search/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Update - 34 New Jobs Found - System Update</title>
+      <title>Update - 38 New Jobs Found - System Update</title>
       <link>https://zoellerk.github.io/Job-search/feed.xml</link>
       <guid isPermaLink="true">https://zoellerk.github.io/Job-search/feed.xml</guid>
       <source url="https://zoellerk.github.io/Job-search/feed.xml">System Update</source>
@@ -16,10 +16,581 @@
       <dc:creator>System Update</dc:creator>
       <description>System Update
 
-&lt;h3&gt;Update Summary&lt;/h3&gt; &lt;p&gt;&lt;strong&gt;New Jobs Found:&lt;/strong&gt; 34&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Sites Checked:&lt;/strong&gt; 88/88&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Stale Listings Hidden:&lt;/strong&gt; 100 (not seen in 30+ days)&lt;/p&gt; &lt;details&gt;&lt;s...</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 System Update&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;&amp;lt;h3&amp;gt;Update Summary&amp;lt;/h3&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;New Jobs Found:&amp;lt;/strong&amp;gt; 34&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Sites Checked:&amp;lt;/strong&amp;gt; 88/88&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Stale Listings Hidden:&amp;lt;/strong&amp;gt; 100 (not seen in 30+ days)&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;details&amp;gt;&amp;lt;summary&amp;gt;&amp;lt;strong&amp;gt;Sites with New Jobs&amp;lt;/strong&amp;gt;&amp;lt;/summary&amp;gt;&lt;br&gt;&amp;lt;ul&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Idealist&amp;lt;/strong&amp;gt;: 19 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;PAC.org&amp;lt;/strong&amp;gt;: 10 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;BC Corporate Citizenship&amp;lt;/strong&amp;gt;: 3 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Democracy Forward&amp;lt;/strong&amp;gt;: 1 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;GiveWell&amp;lt;/strong&amp;gt;: 1 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;/ul&amp;gt;&amp;lt;/details&amp;gt;&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://zoellerk.github.io/Job-search/feed.xml&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 24 Mar 2026 09:50:28 +0000</pubDate>
+&lt;h3&gt;Update Summary&lt;/h3&gt; &lt;p&gt;&lt;strong&gt;New Jobs Found:&lt;/strong&gt; 38&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Sites Checked:&lt;/strong&gt; 88/88&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Stale Listings Hidden:&lt;/strong&gt; 100 (not seen in 30+ days)&lt;/p&gt; &lt;details&gt;&lt;s...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 System Update&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;&amp;lt;h3&amp;gt;Update Summary&amp;lt;/h3&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;New Jobs Found:&amp;lt;/strong&amp;gt; 38&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Sites Checked:&amp;lt;/strong&amp;gt; 88/88&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Stale Listings Hidden:&amp;lt;/strong&amp;gt; 100 (not seen in 30+ days)&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;details&amp;gt;&amp;lt;summary&amp;gt;&amp;lt;strong&amp;gt;Sites with New Jobs&amp;lt;/strong&amp;gt;&amp;lt;/summary&amp;gt;&lt;br&gt;&amp;lt;ul&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Idealist&amp;lt;/strong&amp;gt;: 20 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;PAC.org&amp;lt;/strong&amp;gt;: 17 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Protect Democracy&amp;lt;/strong&amp;gt;: 1 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;/ul&amp;gt;&amp;lt;/details&amp;gt;&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://zoellerk.github.io/Job-search/feed.xml&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:58 +0000</pubDate>
       <category>System Update</category>
+    </item>
+    <item>
+      <title>Senior Account Executive, Health &amp; Life Science Communications - PAC.org</title>
+      <link>https://pac.org/job/senior-account-executive-health-life-science-communications</link>
+      <guid isPermaLink="true">https://pac.org/job/senior-account-executive-health-life-science-communications</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/senior-account-executive-health-life-science-communications&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Consultant, Financial Services Public Affairs Consultancy, Brussels - PAC.org</title>
+      <link>https://pac.org/job/consultant-financial-services-public-affairs-consultancy-brussels</link>
+      <guid isPermaLink="true">https://pac.org/job/consultant-financial-services-public-affairs-consultancy-brussels</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted May 30, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/consultant-financial-services-public-affairs-consultancy-brussels&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+    </item>
+    <item>
+      <title>Senior Account Executive, Issues &amp; Crisis - PAC.org</title>
+      <link>https://pac.org/job/senior-account-executive-issues-crisis</link>
+      <guid isPermaLink="true">https://pac.org/job/senior-account-executive-issues-crisis</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 24, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/senior-account-executive-issues-crisis&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Government Affairs Associate, Judiciary &amp; Democracy - PAC.org</title>
+      <link>https://pac.org/job/government-affairs-associate-judiciary-democracy</link>
+      <guid isPermaLink="true">https://pac.org/job/government-affairs-associate-judiciary-democracy</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted June 23, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/government-affairs-associate-judiciary-democracy&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Director, Strategic Communications &amp; Projects - PAC.org</title>
+      <link>https://pac.org/job/director-strategic-communications-projects</link>
+      <guid isPermaLink="true">https://pac.org/job/director-strategic-communications-projects</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/director-strategic-communications-projects&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Specialist, Communications &amp; Digital Media - PAC.org</title>
+      <link>https://pac.org/job/specialist-communications-digital-media</link>
+      <guid isPermaLink="true">https://pac.org/job/specialist-communications-digital-media</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/specialist-communications-digital-media&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+    </item>
+    <item>
+      <title>Senior Public Affairs Officer - PAC.org</title>
+      <link>https://pac.org/job/senior-public-affairs-officer</link>
+      <guid isPermaLink="true">https://pac.org/job/senior-public-affairs-officer</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted May 30, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/senior-public-affairs-officer&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Communications Lead – (NGEN0176.1) - PAC.org</title>
+      <link>https://pac.org/job/communications-lead-ngen0176-1</link>
+      <guid isPermaLink="true">https://pac.org/job/communications-lead-ngen0176-1</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/communications-lead-ngen0176-1&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Communications Specialist – (NGEN0177.1) - PAC.org</title>
+      <link>https://pac.org/job/communications-specialist-ngen0177-1</link>
+      <guid isPermaLink="true">https://pac.org/job/communications-specialist-ngen0177-1</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/communications-specialist-ngen0177-1&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+    </item>
+    <item>
+      <title>Lead Content Manager – Marketing And Communications - PAC.org</title>
+      <link>https://pac.org/job/lead-content-manager-marketing-and-communications</link>
+      <guid isPermaLink="true">https://pac.org/job/lead-content-manager-marketing-and-communications</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/lead-content-manager-marketing-and-communications&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Global Corporate Relations Manager - PAC.org</title>
+      <link>https://pac.org/job/global-corporate-relations-manager</link>
+      <guid isPermaLink="true">https://pac.org/job/global-corporate-relations-manager</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted June 24, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/global-corporate-relations-manager&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Executive Director - PAC.org</title>
+      <link>https://pac.org/job/executive-director-35</link>
+      <guid isPermaLink="true">https://pac.org/job/executive-director-35</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted June 13, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/executive-director-35&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Director of Policy - PAC.org</title>
+      <link>https://pac.org/job/director-of-policy-13</link>
+      <guid isPermaLink="true">https://pac.org/job/director-of-policy-13</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 24, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/director-of-policy-13&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Media Relations Officer - PAC.org</title>
+      <link>https://pac.org/job/media-relations-officer-2</link>
+      <guid isPermaLink="true">https://pac.org/job/media-relations-officer-2</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/media-relations-officer-2&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Senior Policy Associate (SPA) - PAC.org</title>
+      <link>https://pac.org/job/senior-policy-associate-spa</link>
+      <guid isPermaLink="true">https://pac.org/job/senior-policy-associate-spa</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 24, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/senior-policy-associate-spa&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Account Manager - PAC.org</title>
+      <link>https://pac.org/job/account-manager-2</link>
+      <guid isPermaLink="true">https://pac.org/job/account-manager-2</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 31, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/account-manager-2&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Director, Regulatory Affairs - PAC.org</title>
+      <link>https://pac.org/job/director-regulatory-affairs-14</link>
+      <guid isPermaLink="true">https://pac.org/job/director-regulatory-affairs-14</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted March 24, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/director-regulatory-affairs-14&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:56 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Engineering Manager Elections Ai For Democracy Action Lab - Protect Democracy</title>
+      <link>https://protectdemocracy.org/o/engineering-manager-elections-ai-for-democracy-action-lab</link>
+      <guid isPermaLink="true">https://protectdemocracy.org/o/engineering-manager-elections-ai-for-democracy-action-lab</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Protect Democracy</source>
+      <author>Protect Democracy</author>
+      <dc:creator>Protect Democracy</dc:creator>
+      <description>Protect Democracy</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Protect Democracy&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://protectdemocracy.org/o/engineering-manager-elections-ai-for-democracy-action-lab&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:53 +0000</pubDate>
+      <category>Protect Democracy</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Bilingual Spanish English Tenant OrganizerHousing Rights Committee of San FranciscoOn-siteSan Francisco, CAFull TimeUSD $36.54 / hourPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d12e05706e514e58b55b158b84c4c4ed-bilingual-spanish-english-tenant-organizer-housing-rights-committee-of-san-francisco-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d12e05706e514e58b55b158b84c4c4ed-bilingual-spanish-english-tenant-organizer-housing-rights-committee-of-san-francisco-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d12e05706e514e58b55b158b84c4c4ed-bilingual-spanish-english-tenant-organizer-housing-rights-committee-of-san-francisco-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>DIRECTOR OF COMMUNICATIONSAlliance for Middle East PeaceRemoteAnywhereFull TimeUSD $75,000 - $100,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/f92ead52e548449aac542f40bf365f1e-director-of-communications-alliance-for-middle-east-peace-washington</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/f92ead52e548449aac542f40bf365f1e-director-of-communications-alliance-for-middle-east-peace-washington</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/f92ead52e548449aac542f40bf365f1e-director-of-communications-alliance-for-middle-east-peace-washington&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Software EngineerAlliance FoundationHybridSan Francisco, CAFull TimeUSD $90,000 - $150,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d44301faacf843bba00bacc7993f2347-software-engineer-alliance-foundation-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d44301faacf843bba00bacc7993f2347-software-engineer-alliance-foundation-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d44301faacf843bba00bacc7993f2347-software-engineer-alliance-foundation-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>DIRECTOR OF DEVELOPMENTAsian Pacific Islander Legal OutreachHybridCalifornia, USFull TimeUSD $80,000 - $130,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/b5b436b7ceb1419b9ff6482633a47757-director-of-development-asian-pacific-islander-legal-outreach-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/b5b436b7ceb1419b9ff6482633a47757-director-of-development-asian-pacific-islander-legal-outreach-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/b5b436b7ceb1419b9ff6482633a47757-director-of-development-asian-pacific-islander-legal-outreach-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Family Resident Services CoordinatorInnovative Housing, Inc.On-sitePortland, ORFull TimeAt least USD $55,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/5578846f18d942eca5f4072a3444e5a0-family-resident-services-coordinator-innovative-housing-inc-portland</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/5578846f18d942eca5f4072a3444e5a0-family-resident-services-coordinator-innovative-housing-inc-portland</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/5578846f18d942eca5f4072a3444e5a0-family-resident-services-coordinator-innovative-housing-inc-portland&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Marketing &amp; Communications CoordinatorAmerican Alpine ClubRemoteUnited StatesFull TimeUSD $54,000 - $63,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/c0755cf8f28247ef8140a0a6b6135222-marketing-communications-coordinator-american-alpine-club-golden</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/c0755cf8f28247ef8140a0a6b6135222-marketing-communications-coordinator-american-alpine-club-golden</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/c0755cf8f28247ef8140a0a6b6135222-marketing-communications-coordinator-american-alpine-club-golden&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Senior Attorney for Pro Bono - Esperanza Immigrant Rights ProjectCatholic Charities of Los Angeles, IncOn-siteLos Angeles, CAFull TimeUSD $70,304 - $90,271 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/904fe85760624284936012db7d3f50f1-senior-attorney-for-pro-bono-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/904fe85760624284936012db7d3f50f1-senior-attorney-for-pro-bono-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/904fe85760624284936012db7d3f50f1-senior-attorney-for-pro-bono-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>DIRECTOR OF PROGRAMSBottom LineHybridHouston, TXFull TimeUSD $95,000 - $98,000 / yearPosted 12 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d44bf453bc754cef80f25acdfdb21f8b-director-of-programs-bottom-line-houston</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d44bf453bc754cef80f25acdfdb21f8b-director-of-programs-bottom-line-houston</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d44bf453bc754cef80f25acdfdb21f8b-director-of-programs-bottom-line-houston&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Leadership</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Lead HUD Tenant Rights CounselorHousing Rights Committee of San FranciscoOn-siteSan Francisco, CAFull TimeUSD $80,000 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/37119f7013ca460bbd86cbdd586abf89-lead-hud-tenant-rights-counselor-housing-rights-committee-of-san-francisco-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/37119f7013ca460bbd86cbdd586abf89-lead-hud-tenant-rights-counselor-housing-rights-committee-of-san-francisco-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/37119f7013ca460bbd86cbdd586abf89-lead-hud-tenant-rights-counselor-housing-rights-committee-of-san-francisco-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Pasantía Remota | Diseñador/a Gráfico/a &amp; Web — LolabL'autre amerique latineRemoteAnywhereContract/Freelance/ yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/e968804345a345a0a843c4eb9af8eb3e-pasantia-remota-disenadora-graficoa-web-lolab-lautre-amerique-latine-paris</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/e968804345a345a0a843c4eb9af8eb3e-pasantia-remota-disenadora-graficoa-web-lolab-lautre-amerique-latine-paris</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/e968804345a345a0a843c4eb9af8eb3e-pasantia-remota-disenadora-graficoa-web-lolab-lautre-amerique-latine-paris&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Contract</category>
+    </item>
+    <item>
+      <title>Coordiandor/a de ComunicaciónWorld Vision MéxicoHybridCiudad de México, CDMX, MexicoFull TimeMXN 21,377 / monthPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/a4fc5c9f250d402a93548675ea2d950d-coordiandora-de-comunicacion-world-vision-mexico-ciudad-de-mexico</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/a4fc5c9f250d402a93548675ea2d950d-coordiandora-de-comunicacion-world-vision-mexico-ciudad-de-mexico</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/a4fc5c9f250d402a93548675ea2d950d-coordiandora-de-comunicacion-world-vision-mexico-ciudad-de-mexico&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Legal Assistant - Esperanza Immigrant Rights ProjectCatholic Charities of Los Angeles, IncOn-siteLos Angeles, CAFull TimeUSD $18.42 - $23.08 / hourPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/cfc0d124168e418d80632eb84e40dc63-legal-assistant-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/cfc0d124168e418d80632eb84e40dc63-legal-assistant-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/cfc0d124168e418d80632eb84e40dc63-legal-assistant-esperanza-immigrant-rights-project-catholic-charities-of-los-angeles-inc-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Director, State PolicyBlack Women's Health ImperativeRemoteUnited StatesFull TimeUSD $88,000 - $100,000 / yearPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/96e664b706e1465e8397f5fe89c9f571-director-state-policy-black-womens-health-imperative-washington</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/96e664b706e1465e8397f5fe89c9f571-director-state-policy-black-womens-health-imperative-washington</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/96e664b706e1465e8397f5fe89c9f571-director-state-policy-black-womens-health-imperative-washington&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Leadership</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Development ManagerRecovery BeyondHybridWashington, USFull TimeUSD $70,000 - $85,000 / yearPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/2d895509eadd4aed84358564a2092b11-development-manager-recovery-beyond-issaquah</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/2d895509eadd4aed84358564a2092b11-development-manager-recovery-beyond-issaquah</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/2d895509eadd4aed84358564a2092b11-development-manager-recovery-beyond-issaquah&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Institutional Giving ManagerRed Hook InitiativeHybridBrooklyn, NYFull TimeUSD $75,000 - $85,000 / yearPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/0014fc04f887412aa52fe6212c6f6524-institutional-giving-manager-red-hook-initiative-brooklyn</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/0014fc04f887412aa52fe6212c6f6524-institutional-giving-manager-red-hook-initiative-brooklyn</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/0014fc04f887412aa52fe6212c6f6524-institutional-giving-manager-red-hook-initiative-brooklyn&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Development ManagerLiving Coast Discovery CenterOn-siteChula Vista, CAFull TimeAt least USD $30 / hourPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d7298bf6bc1f4bd18b3a48bf2f9d85af-development-manager-living-coast-discovery-center-chula-vista</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d7298bf6bc1f4bd18b3a48bf2f9d85af-development-manager-living-coast-discovery-center-chula-vista</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d7298bf6bc1f4bd18b3a48bf2f9d85af-development-manager-living-coast-discovery-center-chula-vista&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Senior Android EngineerThe Tor ProjectRemoteAnywhereFull TimeUSD $120,000 - $150,000 / yearPosted 4 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/7bb6a3c65a514f93925940e405a2928b-senior-android-engineer-the-tor-project-winchester</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/7bb6a3c65a514f93925940e405a2928b-senior-android-engineer-the-tor-project-winchester</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/7bb6a3c65a514f93925940e405a2928b-senior-android-engineer-the-tor-project-winchester&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Lead Women Empowerment, Digital Literacy &amp; Financial Inclusion, MumbaiGround ZeroOn-siteMumbai, IndiaFull TimeINR 2,200,000 - 3,000,000 / yearPosted 2 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/3ac77d1fccb94776b4002e367dd141ce-lead-women-empowerment-digital-literacy-financial-inclusion-mumbai-ground-zero-mumbai</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/3ac77d1fccb94776b4002e367dd141ce-lead-women-empowerment-digital-literacy-financial-inclusion-mumbai-ground-zero-mumbai</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/3ac77d1fccb94776b4002e367dd141ce-lead-women-empowerment-digital-literacy-financial-inclusion-mumbai-ground-zero-mumbai&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Program Lead, PunjabGround ZeroOn-sitePunjab, IndiaFull TimeINR 1,400,000 - 1,500,000 / yearPosted 2 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/21e694c80677482abb3b379593e7186e-program-lead-punjab-ground-zero-punjab</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/21e694c80677482abb3b379593e7186e-program-lead-punjab-ground-zero-punjab</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/21e694c80677482abb3b379593e7186e-program-lead-punjab-ground-zero-punjab&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Lead- Teaching and Learning (ECCE), MumbaiGround ZeroOn-siteMumbai, IndiaFull TimeINR 2,000,000 - 3,000,000 / yearPosted 2 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/277a942fdca4412f9082da3f03d58542-lead-teaching-and-learning-ecce-mumbai-ground-zero-mumbai</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/277a942fdca4412f9082da3f03d58542-lead-teaching-and-learning-ecce-mumbai-ground-zero-mumbai</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/277a942fdca4412f9082da3f03d58542-lead-teaching-and-learning-ecce-mumbai-ground-zero-mumbai&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Wed, 25 Mar 2026 09:46:36 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
     </item>
     <item>
       <title>Email us - Democracy Forward</title>
@@ -924,475 +1495,6 @@ The technical storage or access is strictly necessary for the legitimate purpose
       <dc:creator>OnPurpose Careers</dc:creator>
       <description>OnPurpose Careers</description>
       <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.gener8tor.com/careers?gh_jid=5795380004?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://rainforesttrust.applicantpro.com/jobs/4021886-605953.html?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://rainforesttrust.applicantpro.com/jobs/4021886-605953.html?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://rainforesttrust.applicantpro.com/jobs/4021886-605953.html?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Wp Content - OnPurpose Careers</title>
-      <link>https://societyfp.org/wp-content/uploads/2026/03/2026-Manager-of-Complex-Family-Planning.pdf?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://societyfp.org/wp-content/uploads/2026/03/2026-Manager-of-Complex-Family-Planning.pdf?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://societyfp.org/wp-content/uploads/2026/03/2026-Manager-of-Complex-Family-Planning.pdf?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://www.pih.org/employment?p=job/oK3PzfwV&amp;nl=1?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.pih.org/employment?p=job/oK3PzfwV&amp;nl=1?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.pih.org/employment?p=job/oK3PzfwV&amp;amp;nl=1?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://climate-defiance.breezy.hr/p/6262a1d68be3-director-of-individual-giving?state=published?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://climate-defiance.breezy.hr/p/6262a1d68be3-director-of-individual-giving?state=published?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://climate-defiance.breezy.hr/p/6262a1d68be3-director-of-individual-giving?state=published?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://nationalmathstars.org/careers/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://nationalmathstars.org/careers/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://nationalmathstars.org/careers/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Recruitment.Html - OnPurpose Careers</title>
-      <link>https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?ccId=19000101_000001&amp;cid=4544c9aa-a970-4cac-91e2-a71692163c8f&amp;jobId=482587&amp;lang=en_US&amp;source=CC2&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?ccId=19000101_000001&amp;cid=4544c9aa-a970-4cac-91e2-a71692163c8f&amp;jobId=482587&amp;lang=en_US&amp;source=CC2&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?ccId=19000101_000001&amp;amp;cid=4544c9aa-a970-4cac-91e2-a71692163c8f&amp;amp;jobId=482587&amp;amp;lang=en_US&amp;amp;source=CC2&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://core-ventures.app.loxo.co/job/NTM0LXJsdzFjbDc2eG9qenl2Yzg?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://core-ventures.app.loxo.co/job/NTM0LXJsdzFjbDc2eG9qenl2Yzg?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://core-ventures.app.loxo.co/job/NTM0LXJsdzFjbDc2eG9qenl2Yzg?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>We Are Hiring - OnPurpose Careers</title>
-      <link>https://creativefundraisingadvisors.com/we-are-hiring/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://creativefundraisingadvisors.com/we-are-hiring/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://creativefundraisingadvisors.com/we-are-hiring/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Zocalohealth - OnPurpose Careers</title>
-      <link>https://job-boards.greenhouse.io/zocalohealth/jobs/5152296008?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://job-boards.greenhouse.io/zocalohealth/jobs/5152296008?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://job-boards.greenhouse.io/zocalohealth/jobs/5152296008?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://www.on-ramps.com/jobs/3624?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.on-ramps.com/jobs/3624?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.on-ramps.com/jobs/3624?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Senior Vice President Services - OnPurpose Careers</title>
-      <link>https://gobelgroup.com/jobs/senior-vice-president-services/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://gobelgroup.com/jobs/senior-vice-president-services/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://gobelgroup.com/jobs/senior-vice-president-services/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Senior</category>
-      <category>Leadership</category>
-    </item>
-    <item>
-      <title>Partner Impact Jr - OnPurpose Careers</title>
-      <link>https://tntp.wd5.myworkdayjobs.com/TNTP/job/United-States/Partner--Impact_JR-2097?source=onpurposecareers</link>
-      <guid isPermaLink="true">https://tntp.wd5.myworkdayjobs.com/TNTP/job/United-States/Partner--Impact_JR-2097?source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://tntp.wd5.myworkdayjobs.com/TNTP/job/United-States/Partner--Impact_JR-2097?source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://leaderfit.catsone.com/careers/20424-General/jobs/16782651-Executive-Director-Coffee-Connectors?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://leaderfit.catsone.com/careers/20424-General/jobs/16782651-Executive-Director-Coffee-Connectors?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://leaderfit.catsone.com/careers/20424-General/jobs/16782651-Executive-Director-Coffee-Connectors?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://wetestify.org/jobs?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://wetestify.org/jobs?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://wetestify.org/jobs?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://edia.app/careers?ashby_jid=091779d5-d43f-4d6b-86bc-05643d8a67d7&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://edia.app/careers?ashby_jid=091779d5-d43f-4d6b-86bc-05643d8a67d7&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://edia.app/careers?ashby_jid=091779d5-d43f-4d6b-86bc-05643d8a67d7&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://careers.frontlineeducation.com/referrals/d641ad1a-6805-4b8c-8697-9b10bd06516c?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://careers.frontlineeducation.com/referrals/d641ad1a-6805-4b8c-8697-9b10bd06516c?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://careers.frontlineeducation.com/referrals/d641ad1a-6805-4b8c-8697-9b10bd06516c?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Deputy Director - OnPurpose Careers</title>
-      <link>https://www.bliscollective.org/deputy-director?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.bliscollective.org/deputy-director?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.bliscollective.org/deputy-director?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://simpsonscarborough.bamboohr.com/careers/145?source=onpurposecareers</link>
-      <guid isPermaLink="true">https://simpsonscarborough.bamboohr.com/careers/145?source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://simpsonscarborough.bamboohr.com/careers/145?source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Wp Content - OnPurpose Careers</title>
-      <link>https://societyfp.org/wp-content/uploads/2026/02/2026-Director-of-Clinical-Guidance-and-Education.pdf?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://societyfp.org/wp-content/uploads/2026/02/2026-Director-of-Clinical-Guidance-and-Education.pdf?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://societyfp.org/wp-content/uploads/2026/02/2026-Director-of-Clinical-Guidance-and-Education.pdf?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Coefficientgiving - OnPurpose Careers</title>
-      <link>https://jobs.ashbyhq.com/coefficientgiving/854ca12a-5a10-47f9-9a59-c44e188e1568?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://jobs.ashbyhq.com/coefficientgiving/854ca12a-5a10-47f9-9a59-c44e188e1568?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://jobs.ashbyhq.com/coefficientgiving/854ca12a-5a10-47f9-9a59-c44e188e1568?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://job-boards.greenhouse.io/trails/jobs/4662749006?gh_src=08joke0h6us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://job-boards.greenhouse.io/trails/jobs/4662749006?gh_src=08joke0h6us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://job-boards.greenhouse.io/trails/jobs/4662749006?gh_src=08joke0h6us&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Senior Director Of Programs Impact - OnPurpose Careers</title>
-      <link>https://www.oneearth.org/careers/senior-director-of-programs-impact/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.oneearth.org/careers/senior-director-of-programs-impact/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.oneearth.org/careers/senior-director-of-programs-impact/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Senior</category>
-      <category>Leadership</category>
-      <category>Relevance: High</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://job-boards.greenhouse.io/life360/jobs/8465151002?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://job-boards.greenhouse.io/life360/jobs/8465151002?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://job-boards.greenhouse.io/life360/jobs/8465151002?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Council On Foundations - OnPurpose Careers</title>
-      <link>https://apply.workable.com/council-on-foundations/j/55AC0998E3/?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://apply.workable.com/council-on-foundations/j/55AC0998E3/?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://apply.workable.com/council-on-foundations/j/55AC0998E3/?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Senior Associate Value Based Care And Population Health Healthcare Jr100703 - OnPurpose Careers</title>
-      <link>https://thinkbrg.wd5.myworkdayjobs.com/BRG_External_Career_Site/job/Remote---USA/Senior-Associate---Value-Based-Care-and-Population-Health---Healthcare_JR100703?source=onpurposecareers</link>
-      <guid isPermaLink="true">https://thinkbrg.wd5.myworkdayjobs.com/BRG_External_Career_Site/job/Remote---USA/Senior-Associate---Value-Based-Care-and-Population-Health---Healthcare_JR100703?source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://thinkbrg.wd5.myworkdayjobs.com/BRG_External_Career_Site/job/Remote---USA/Senior-Associate---Value-Based-Care-and-Population-Health---Healthcare_JR100703?source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Senior</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://reach-out-and-read.breezy.hr/p/b46e924a8302-senior-development-manager-northeast?state=published&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://reach-out-and-read.breezy.hr/p/b46e924a8302-senior-development-manager-northeast?state=published&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://reach-out-and-read.breezy.hr/p/b46e924a8302-senior-development-manager-northeast?state=published&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://thehumaneleague.org/single-offer-career?gh_jid=7729496&amp;gh_src=22oqmsb71us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://thehumaneleague.org/single-offer-career?gh_jid=7729496&amp;gh_src=22oqmsb71us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://thehumaneleague.org/single-offer-career?gh_jid=7729496&amp;amp;gh_src=22oqmsb71us&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://themaxfoundation.bamboohr.com/careers/135?source=aWQ9Nw%3D%3D&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://themaxfoundation.bamboohr.com/careers/135?source=aWQ9Nw%3D%3D&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://themaxfoundation.bamboohr.com/careers/135?source=aWQ9Nw%3D%3D&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Head Of Philanthropy - OnPurpose Careers</title>
-      <link>https://recruiting.paylocity.com/recruiting/jobs/Details/3997874/Animal-Legal-Defense-Fund/Head-of-Philanthropy?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://recruiting.paylocity.com/recruiting/jobs/Details/3997874/Animal-Legal-Defense-Fund/Head-of-Philanthropy?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://recruiting.paylocity.com/recruiting/jobs/Details/3997874/Animal-Legal-Defense-Fund/Head-of-Philanthropy?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>State Democracy Project Executive Director - OnPurpose Careers</title>
-      <link>https://grossmansolutions.applytojob.com/apply/m8F2bBHOY2/State-Democracy-Project-Executive-Director?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://grossmansolutions.applytojob.com/apply/m8F2bBHOY2/State-Democracy-Project-Executive-Director?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://grossmansolutions.applytojob.com/apply/m8F2bBHOY2/State-Democracy-Project-Executive-Director?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Fannie E Rippel Foundation - OnPurpose Careers</title>
-      <link>https://apply.workable.com/fannie-e-rippel-foundation/j/AE926A03C1/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://apply.workable.com/fannie-e-rippel-foundation/j/AE926A03C1/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://apply.workable.com/fannie-e-rippel-foundation/j/AE926A03C1/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Open Roles - OnPurpose Careers</title>
-      <link>https://meritamerica.org/join-our-team/open-roles/?gh_jid=5819842004&amp;gh_src=rhmvwr3u4us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://meritamerica.org/join-our-team/open-roles/?gh_jid=5819842004&amp;gh_src=rhmvwr3u4us&amp;utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://meritamerica.org/join-our-team/open-roles/?gh_jid=5819842004&amp;amp;gh_src=rhmvwr3u4us&amp;amp;utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://nfyi.org/careers/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://nfyi.org/careers/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://nfyi.org/careers/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Associate Social Impact - OnPurpose Careers</title>
-      <link>https://leverforchange.org/associate-social-impact/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://leverforchange.org/associate-social-impact/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://leverforchange.org/associate-social-impact/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://www.trailheadstrat.com/careers?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.trailheadstrat.com/careers?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.trailheadstrat.com/careers?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>Development Officer - OnPurpose Careers</title>
-      <link>https://youthengagementfund.org/job-postings/development-officer/?utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://youthengagementfund.org/job-postings/development-officer/?utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://youthengagementfund.org/job-postings/development-officer/?utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Apply Now - OnPurpose Careers</title>
-      <link>https://www.fsf.org/news/2026-job-opportunity-fsf-engineering-and-certification-manager?utm_medium=referral&amp;utm_source=onpurposecareers</link>
-      <guid isPermaLink="true">https://www.fsf.org/news/2026-job-opportunity-fsf-engineering-and-certification-manager?utm_medium=referral&amp;utm_source=onpurposecareers</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.fsf.org/news/2026-job-opportunity-fsf-engineering-and-certification-manager?utm_medium=referral&amp;amp;utm_source=onpurposecareers&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
-      <category>OnPurpose Careers</category>
-    </item>
-    <item>
-      <title>1Xsp Yxvo Dlfqiujcdegyj9Ihgapyc6Jpzzm Egfwk8 - OnPurpose Careers</title>
-      <link>https://docs.google.com/document/d/1Xsp-YXvo_DlfQiUjcDEgYJ9iHGApyc6jPzZM-eGfwK8/preview?tab=t.0</link>
-      <guid isPermaLink="true">https://docs.google.com/document/d/1Xsp-YXvo_DlfQiUjcDEgYJ9iHGApyc6jPzZM-eGfwK8/preview?tab=t.0</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">OnPurpose Careers</source>
-      <author>OnPurpose Careers</author>
-      <dc:creator>OnPurpose Careers</dc:creator>
-      <description>OnPurpose Careers</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 OnPurpose Careers&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://docs.google.com/document/d/1Xsp-YXvo_DlfQiUjcDEgYJ9iHGApyc6jPzZM-eGfwK8/preview?tab=t.0&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
       <pubDate>Mon, 23 Mar 2026 09:56:58 +0000</pubDate>
       <category>OnPurpose Careers</category>
     </item>
