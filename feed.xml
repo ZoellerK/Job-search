@@ -5,10 +5,10 @@
     <link>https://zoellerk.github.io/Job-search/feed.xml</link>
     <description>RSS feed of job postings aggregated from multiple sources - optimized for Feedly</description>
     <language>en</language>
-    <lastBuildDate>Wed, 01 Apr 2026 10:03:02 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 02 Apr 2026 09:55:18 +0000</lastBuildDate>
     <atom:link href="https://zoellerk.github.io/Job-search/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Update - 36 New Jobs Found - System Update</title>
+      <title>Update - 32 New Jobs Found - System Update</title>
       <link>https://zoellerk.github.io/Job-search/feed.xml</link>
       <guid isPermaLink="true">https://zoellerk.github.io/Job-search/feed.xml</guid>
       <source url="https://zoellerk.github.io/Job-search/feed.xml">System Update</source>
@@ -16,10 +16,491 @@
       <dc:creator>System Update</dc:creator>
       <description>System Update
 
-&lt;h3&gt;Update Summary&lt;/h3&gt; &lt;p&gt;&lt;strong&gt;New Jobs Found:&lt;/strong&gt; 36&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Sites Checked:&lt;/strong&gt; 88/88&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Stale Listings Hidden:&lt;/strong&gt; 100 (not seen in 30+ days)&lt;/p&gt; &lt;details&gt;&lt;s...</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 System Update&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;&amp;lt;h3&amp;gt;Update Summary&amp;lt;/h3&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;New Jobs Found:&amp;lt;/strong&amp;gt; 36&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Sites Checked:&amp;lt;/strong&amp;gt; 88/88&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Stale Listings Hidden:&amp;lt;/strong&amp;gt; 100 (not seen in 30+ days)&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;details&amp;gt;&amp;lt;summary&amp;gt;&amp;lt;strong&amp;gt;Sites with New Jobs&amp;lt;/strong&amp;gt;&amp;lt;/summary&amp;gt;&lt;br&gt;&amp;lt;ul&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Idealist&amp;lt;/strong&amp;gt;: 18 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;PAC.org&amp;lt;/strong&amp;gt;: 17 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Democracy Forward&amp;lt;/strong&amp;gt;: 1 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;/ul&amp;gt;&amp;lt;/details&amp;gt;&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://zoellerk.github.io/Job-search/feed.xml&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Wed, 01 Apr 2026 10:03:02 +0000</pubDate>
+&lt;h3&gt;Update Summary&lt;/h3&gt; &lt;p&gt;&lt;strong&gt;New Jobs Found:&lt;/strong&gt; 32&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Sites Checked:&lt;/strong&gt; 88/88&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Stale Listings Hidden:&lt;/strong&gt; 100 (not seen in 30+ days)&lt;/p&gt; &lt;details&gt;&lt;s...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 System Update&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;&amp;lt;h3&amp;gt;Update Summary&amp;lt;/h3&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;New Jobs Found:&amp;lt;/strong&amp;gt; 32&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Sites Checked:&amp;lt;/strong&amp;gt; 88/88&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Stale Listings Hidden:&amp;lt;/strong&amp;gt; 100 (not seen in 30+ days)&amp;lt;/p&amp;gt;&lt;br&gt;&amp;lt;details&amp;gt;&amp;lt;summary&amp;gt;&amp;lt;strong&amp;gt;Sites with New Jobs&amp;lt;/strong&amp;gt;&amp;lt;/summary&amp;gt;&lt;br&gt;&amp;lt;ul&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Idealist&amp;lt;/strong&amp;gt;: 20 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;PAC.org&amp;lt;/strong&amp;gt;: 11 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Democracy Forward&amp;lt;/strong&amp;gt;: 1 new&amp;lt;/li&amp;gt;&lt;br&gt;&amp;lt;/ul&amp;gt;&amp;lt;/details&amp;gt;&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://zoellerk.github.io/Job-search/feed.xml&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
       <category>System Update</category>
+    </item>
+    <item>
+      <title>VP, Social – Emerging Platforms - PAC.org</title>
+      <link>https://pac.org/job/vp-social-emerging-platforms</link>
+      <guid isPermaLink="true">https://pac.org/job/vp-social-emerging-platforms</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted November 18, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/vp-social-emerging-platforms&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+    </item>
+    <item>
+      <title>Legislative Director, State &amp; Regional Advocacy - PAC.org</title>
+      <link>https://pac.org/job/legislative-director-state-regional-advocacy</link>
+      <guid isPermaLink="true">https://pac.org/job/legislative-director-state-regional-advocacy</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted September 23, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/legislative-director-state-regional-advocacy&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Vice President, Government Affairs - PAC.org</title>
+      <link>https://pac.org/job/vice-president-government-affairs-13</link>
+      <guid isPermaLink="true">https://pac.org/job/vice-president-government-affairs-13</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted June 23, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/vice-president-government-affairs-13&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+    </item>
+    <item>
+      <title>Litigation Counsel / Senior Litigation Counsel - PAC.org</title>
+      <link>https://pac.org/job/litigation-counsel-senior-litigation-counsel</link>
+      <guid isPermaLink="true">https://pac.org/job/litigation-counsel-senior-litigation-counsel</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted April 7, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/litigation-counsel-senior-litigation-counsel&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+    </item>
+    <item>
+      <title>Policy Counsel / Senior Policy Counsel - PAC.org</title>
+      <link>https://pac.org/job/policy-counsel-senior-policy-counsel</link>
+      <guid isPermaLink="true">https://pac.org/job/policy-counsel-senior-policy-counsel</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted April 7, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/policy-counsel-senior-policy-counsel&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Communications Coordinator, Foreign Policy (Job ID: 2026-3837) - PAC.org</title>
+      <link>https://pac.org/job/communications-coordinator-foreign-policy-job-id-2026-3837</link>
+      <guid isPermaLink="true">https://pac.org/job/communications-coordinator-foreign-policy-job-id-2026-3837</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted November 18, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/communications-coordinator-foreign-policy-job-id-2026-3837&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Defense Spectrum Policy Lead - PAC.org</title>
+      <link>https://pac.org/job/defense-spectrum-policy-lead</link>
+      <guid isPermaLink="true">https://pac.org/job/defense-spectrum-policy-lead</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted April 7, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/defense-spectrum-policy-lead&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Communications Coordinator - PAC.org</title>
+      <link>https://pac.org/job/communications-coordinator-17</link>
+      <guid isPermaLink="true">https://pac.org/job/communications-coordinator-17</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted November 18, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/communications-coordinator-17&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Manager, Accreditation and Quality Assurance Engagement - PAC.org</title>
+      <link>https://pac.org/job/manager-accreditation-and-quality-assurance-engagement</link>
+      <guid isPermaLink="true">https://pac.org/job/manager-accreditation-and-quality-assurance-engagement</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted April 7, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/manager-accreditation-and-quality-assurance-engagement&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Maritime Policy Analyst - PAC.org</title>
+      <link>https://pac.org/job/maritime-policy-analyst</link>
+      <guid isPermaLink="true">https://pac.org/job/maritime-policy-analyst</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted April 7, 2026&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/maritime-policy-analyst&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Director, State Affairs &amp; Policy - PAC.org</title>
+      <link>https://pac.org/job/director-state-affairs-policy</link>
+      <guid isPermaLink="true">https://pac.org/job/director-state-affairs-policy</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">PAC.org</source>
+      <author>PAC.org</author>
+      <dc:creator>PAC.org</dc:creator>
+      <description>PAC.org
+
+The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 PAC.org | 📅 Posted June 23, 2025&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;The technical storage or access is strictly necessary for the legitimate purpose of enabling the use of a specific service explicitly requested by the subscriber or user, or for the sole purpose of carrying out the transmission of a communication over an electronic communications network.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://pac.org/job/director-state-affairs-policy&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:18 +0000</pubDate>
+      <category>PAC.org</category>
+      <category>Leadership</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Email us - Democracy Forward</title>
+      <link>https://democracyforward.org/cdn-cgi/l/email-protection#a9c0c7cfc6e9cdccc4c6cadbc8cad0cfc6dbdec8dbcd87c6dbce</link>
+      <guid isPermaLink="true">https://democracyforward.org/cdn-cgi/l/email-protection#a9c0c7cfc6e9cdccc4c6cadbc8cad0cfc6dbdec8dbcd87c6dbce</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Democracy Forward</source>
+      <author>Democracy Forward</author>
+      <dc:creator>Democracy Forward</dc:creator>
+      <description>Democracy Forward
+
+Democracy Forward operates with the highest standards of ethics and integrity. Our IMPACT values ground our work, ensuring that we approach our work and community with inclusion, mission-focus, par...</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Democracy Forward&lt;/div&gt;&lt;div style='font-size: 15px;'&gt;&lt;p style='line-height: 1.7; color: #333;'&gt;Democracy Forward operates with the highest standards of ethics and integrity. Our IMPACT values ground our work, ensuring that we approach our work and community with inclusion, mission-focus, partnership and collaboration, accountability and excellence, courage and tenacity. Our legal professionals are bound by codes of professional ethics and operate with the highest standards of professional ethics.&lt;/p&gt;&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://democracyforward.org/cdn-cgi/l/email-protection#a9c0c7cfc6e9cdccc4c6cadbc8cad0cfc6dbdec8dbcd87c6dbce&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:55:15 +0000</pubDate>
+      <category>Democracy Forward</category>
+    </item>
+    <item>
+      <title>Director of Operations, Government AffairsBaby2BabyOn-siteLos Angeles, CAFull TimeUSD $110,000 - $140,000 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d9f7330d0d814a948f656872f8027add-director-of-operations-government-affairs-baby2baby-los-angeles</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d9f7330d0d814a948f656872f8027add-director-of-operations-government-affairs-baby2baby-los-angeles</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d9f7330d0d814a948f656872f8027add-director-of-operations-government-affairs-baby2baby-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Leadership</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Program Manager, NY (Contract)Baby2BabyRemoteNew York, USFull TimeUSD $65,000 - $78,000 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/f6c1b928189745daaae3cba1184339b4-program-manager-ny-contract-baby2baby-los-angeles</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/f6c1b928189745daaae3cba1184339b4-program-manager-ny-contract-baby2baby-los-angeles</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/f6c1b928189745daaae3cba1184339b4-program-manager-ny-contract-baby2baby-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Contract</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>Supervising AttorneyThe Immigrant Law Center of MinnesotaHybridSaint Paul, MNFull TimeAt least USD $88,531 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/a0405f6d47d04c7283ab508e0a054660-supervising-attorney-the-immigrant-law-center-of-minnesota-saint-paul</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/a0405f6d47d04c7283ab508e0a054660-supervising-attorney-the-immigrant-law-center-of-minnesota-saint-paul</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/a0405f6d47d04c7283ab508e0a054660-supervising-attorney-the-immigrant-law-center-of-minnesota-saint-paul&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Finance ManagerSt. James School PhiladelphiaOn-sitePhiladelphia, PAFull TimeUSD $85,000 - $105,000 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/5c852f8280124debbe875fc4cebed604-finance-manager-st-james-school-philadelphia-philadelphia</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/5c852f8280124debbe875fc4cebed604-finance-manager-st-james-school-philadelphia-philadelphia</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/5c852f8280124debbe875fc4cebed604-finance-manager-st-james-school-philadelphia-philadelphia&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Customer Organizer for Progressive UnionUNITE HERE!On-siteWashington, DCFull TimeUSD $60,000 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/a2c5bfc515234afcb4d3d051ebd77c10-customer-organizer-for-progressive-union-unite-here-washington</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/a2c5bfc515234afcb4d3d051ebd77c10-customer-organizer-for-progressive-union-unite-here-washington</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/a2c5bfc515234afcb4d3d051ebd77c10-customer-organizer-for-progressive-union-unite-here-washington&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Administrative AssistantAmerican Indian College FundOn-siteDenver, COFull TimeUSD $50,000 - $61,400 / yearPosted 11 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/1b64c9a2672c44cead9bf5e9d9db9499-administrative-assistant-american-indian-college-fund-denver</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/1b64c9a2672c44cead9bf5e9d9db9499-administrative-assistant-american-indian-college-fund-denver</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/1b64c9a2672c44cead9bf5e9d9db9499-administrative-assistant-american-indian-college-fund-denver&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:58 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Programs Operations Specialist (remote)Wiki EducationRemoteUnited StatesFull TimeUSD $80,000 - $90,000 / yearPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/cf2973f113274295bafd0dcc698f8104-programs-operations-specialist-remote-wiki-education-chico</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/cf2973f113274295bafd0dcc698f8104-programs-operations-specialist-remote-wiki-education-chico</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/cf2973f113274295bafd0dcc698f8104-programs-operations-specialist-remote-wiki-education-chico&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:57 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Finance + Systems Manager (Nonprofit)Underground MinistriesHybridMount Vernon, WAFull TimeUSD $32 - $40 / hourPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/4a6e90c004f6417db158db126666d510-finance-systems-manager-nonprofit-underground-ministries-mount-vernon</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/4a6e90c004f6417db158db126666d510-finance-systems-manager-nonprofit-underground-ministries-mount-vernon</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/4a6e90c004f6417db158db126666d510-finance-systems-manager-nonprofit-underground-ministries-mount-vernon&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:57 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Part-Time Literacy TutorThe Blosser Center for Dyslexia ResourcesHybridOregon, USPart TimeAt least USD $30 / hourPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/fc78f364f3214156ad6d8296ed760cf5-part-time-literacy-tutor-the-blosser-center-for-dyslexia-resources-portland</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/fc78f364f3214156ad6d8296ed760cf5-part-time-literacy-tutor-the-blosser-center-for-dyslexia-resources-portland</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/fc78f364f3214156ad6d8296ed760cf5-part-time-literacy-tutor-the-blosser-center-for-dyslexia-resources-portland&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Part-time</category>
+    </item>
+    <item>
+      <title>Encuestador/a - Zona Coapilla-OcotepecWorld Vision MéxicoOn-siteCoapilla, Chis., MexicoFull TimeMXN 11,072 / monthPosted 10 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/753b20dbb3dc458ca93a407536663d6e-encuestadora-zona-coapilla-ocotepec-world-vision-mexico-coapilla</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/753b20dbb3dc458ca93a407536663d6e-encuestadora-zona-coapilla-ocotepec-world-vision-mexico-coapilla</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/753b20dbb3dc458ca93a407536663d6e-encuestadora-zona-coapilla-ocotepec-world-vision-mexico-coapilla&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Community OrganizerRising JuntosHybridRichmond, CAFull TimeUSD $60,000 - $70,000 / yearPosted 9 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/d7e92ebfafc24ec380ab9be528d6daf1-community-organizer-rising-juntos-richmond</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d7e92ebfafc24ec380ab9be528d6daf1-community-organizer-rising-juntos-richmond</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d7e92ebfafc24ec380ab9be528d6daf1-community-organizer-rising-juntos-richmond&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>CAA Advocacy ManagerAsian Americans for Civil Rights and Equality (AACRE)HybridSan Francisco, CAFull TimeUSD $103,438 - $108,000 / yearPosted 9 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/cf695b01571f4bbfb8f394b71f2f9e81-caa-advocacy-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/cf695b01571f4bbfb8f394b71f2f9e81-caa-advocacy-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/cf695b01571f4bbfb8f394b71f2f9e81-caa-advocacy-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: High</category>
+    </item>
+    <item>
+      <title>ControllerFood ForwardHybridLos Angeles, CAFull TimeAt least USD $100,000 / yearPosted 9 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/0a64608dd6b24dcf920703f1b6becc2d-controller-food-forward-los-angeles</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/0a64608dd6b24dcf920703f1b6becc2d-controller-food-forward-los-angeles</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/0a64608dd6b24dcf920703f1b6becc2d-controller-food-forward-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+    </item>
+    <item>
+      <title>Administrative &amp; Political Compliance ManagerAsian Americans for Civil Rights and Equality (AACRE)HybridSan Francisco, CAFull TimeUSD $103,000 - $108,000 / yearPosted 9 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/fd4201034b17413486f08be6cb688198-administrative-political-compliance-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/fd4201034b17413486f08be6cb688198-administrative-political-compliance-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/fd4201034b17413486f08be6cb688198-administrative-political-compliance-manager-asian-americans-for-civil-rights-and-equality-aacre-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Part Time Development Manager (Remote)SUNSAR MAYA INCRemoteUnited StatesContract/FreelanceUSD $30 - $35 / hourPosted 8 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/01ac24f2fd4f4b58bb92b366f425ba32-part-time-development-manager-remote-sunsar-maya-inc-san-francisco</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/01ac24f2fd4f4b58bb92b366f425ba32-part-time-development-manager-remote-sunsar-maya-inc-san-francisco</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/01ac24f2fd4f4b58bb92b366f425ba32-part-time-development-manager-remote-sunsar-maya-inc-san-francisco&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Remote</category>
+      <category>Part-time</category>
+      <category>Contract</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Executive Assistant &amp; Office ManagerSquashSmartsHybridPhiladelphia, PAFull TimeUSD $70,000 - $80,000 / yearPosted 8 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/0d193bb8609b4b0981cfccaa44670ade-executive-assistant-office-manager-squashsmarts-philadelphia</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/0d193bb8609b4b0981cfccaa44670ade-executive-assistant-office-manager-squashsmarts-philadelphia</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/0d193bb8609b4b0981cfccaa44670ade-executive-assistant-office-manager-squashsmarts-philadelphia&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>HR Manager, KolkataGround ZeroOn-siteKolkata, IndiaFull TimeINR 1,200,000 - 1,500,000 / yearPosted 3 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/7884e3c5e8f244499d3b93613ded724a-hr-manager-kolkata-ground-zero-kolkata</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/7884e3c5e8f244499d3b93613ded724a-hr-manager-kolkata-ground-zero-kolkata</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/7884e3c5e8f244499d3b93613ded724a-hr-manager-kolkata-ground-zero-kolkata&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Project Lead - Youth Employability Program (21st Century Skills Initiative), MumbaiGround ZeroOn-siteMumbai, IndiaFull TimeINR 2,500,000 - 3,000,000 / yearPosted 3 hours ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/dcb14fb3bfb2425091c90ea6217018e6-project-lead-youth-employability-program-21st-century-skills-initiative-mumbai-ground-zero-mumbai</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/dcb14fb3bfb2425091c90ea6217018e6-project-lead-youth-employability-program-21st-century-skills-initiative-mumbai-ground-zero-mumbai</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/dcb14fb3bfb2425091c90ea6217018e6-project-lead-youth-employability-program-21st-century-skills-initiative-mumbai-ground-zero-mumbai&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>On Purpose Associate - A leadership programme for social &amp; environmental impactOn PurposeHybridLondon, England, United KingdomContract/FreelanceGBP 27,010 / yearPosted 1 hour ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/2642994a3069467fba1f783c70e94efd-on-purpose-associate-a-leadership-programme-for-social-environmental-impact-on-purpose-london</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/2642994a3069467fba1f783c70e94efd-on-purpose-associate-a-leadership-programme-for-social-environmental-impact-on-purpose-london</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/2642994a3069467fba1f783c70e94efd-on-purpose-associate-a-leadership-programme-for-social-environmental-impact-on-purpose-london&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>Hybrid</category>
+      <category>Contract</category>
+      <category>Senior</category>
+      <category>Relevance: Medium</category>
+    </item>
+    <item>
+      <title>Finance &amp; HR Admin ManagerTactical TechOn-siteBerlin, BE, GermanyFull TimeEUR 46,000 / yearPosted 10 minutes ago - Idealist</title>
+      <link>https://www.idealist.org/en/nonprofit-job/c5dca1fdbf554f8195d1b3d645bf67e4-finance-hr-admin-manager-tactical-tech-berlin</link>
+      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/c5dca1fdbf554f8195d1b3d645bf67e4-finance-hr-admin-manager-tactical-tech-berlin</guid>
+      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
+      <author>Idealist</author>
+      <dc:creator>Idealist</dc:creator>
+      <description>Idealist</description>
+      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/c5dca1fdbf554f8195d1b3d645bf67e4-finance-hr-admin-manager-tactical-tech-berlin&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
+      <pubDate>Thu, 02 Apr 2026 09:54:56 +0000</pubDate>
+      <category>Idealist</category>
+      <category>On-site</category>
+      <category>Full-time</category>
+      <category>Relevance: Medium</category>
     </item>
     <item>
       <title>Environmental Regulatory Compliance Specialist - PAC.org</title>
@@ -1016,455 +1497,6 @@ InvestmentsPosted: March 30, 2026</description>
       <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4381931193/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
       <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
       <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Deloitte - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4308767619/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4308767619/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4308767619/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>McCain Foods - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4382141995/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4382141995/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4382141995/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Removall Carbon - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4391855556/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4391855556/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4391855556/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Henkel - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4392592124/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4392592124/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4392592124/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Princess Polly - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4392962986/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4392962986/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4392962986/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>ACOR Consultants - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4373554083/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4373554083/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4373554083/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Pomeroy - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4389729967/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4389729967/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4389729967/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Leggett &amp; Platt - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4389773564/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4389773564/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4389773564/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Oxfam America - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4389276471/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4389276471/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4389276471/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>OneDigital - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4388477725/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4388477725/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4388477725/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Zekelman Industries - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4390654796/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4390654796/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4390654796/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Octave - BC Corporate Citizenship</title>
-      <link>https://www.linkedin.com/jobs/view/4390956856/</link>
-      <guid isPermaLink="true">https://www.linkedin.com/jobs/view/4390956856/</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.linkedin.com/jobs/view/4390956856/&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Director of Civic HealthCFLeadsRemoteUnited StatesFull TimeUSD $107,712 - $128,500 / yearPosted 12 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/ea9bac8d6e344efbbb0a0829d2e60964-director-of-civic-health-cfleads-boston</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/ea9bac8d6e344efbbb0a0829d2e60964-director-of-civic-health-cfleads-boston</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/ea9bac8d6e344efbbb0a0829d2e60964-director-of-civic-health-cfleads-boston&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Remote</category>
-      <category>Full-time</category>
-      <category>Senior</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Director of Fundraising and CommunicationsJewish Social Services of MadisonOn-siteMadison, WIFull TimeUp to USD $75,000 / yearPosted 12 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/b70e8c607de44e94996c3598cca875ac-director-of-fundraising-and-communications-jewish-social-services-of-madison-madison</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/b70e8c607de44e94996c3598cca875ac-director-of-fundraising-and-communications-jewish-social-services-of-madison-madison</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/b70e8c607de44e94996c3598cca875ac-director-of-fundraising-and-communications-jewish-social-services-of-madison-madison&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Full-time</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Farmers Market ManagerGrow Amsterdam NYOn-siteAmsterdam, NYPart TimeUSD $25 / hourPosted 12 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/d297f749ae934c7f9d8dbc9c78f15dee-farmers-market-manager-grow-amsterdam-ny-amsterdam</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d297f749ae934c7f9d8dbc9c78f15dee-farmers-market-manager-grow-amsterdam-ny-amsterdam</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d297f749ae934c7f9d8dbc9c78f15dee-farmers-market-manager-grow-amsterdam-ny-amsterdam&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Part-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Director of Technology Operations – Washington, D.C. (Hybrid)BoardSourceHybridWashington, DCFull TimeUSD $131,000 - $160,000 / yearPosted 12 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/2f777f27404347a7a0fe644e2cc9f4ca-director-of-technology-operations-washington-dc-hybrid-boardsource-washington</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/2f777f27404347a7a0fe644e2cc9f4ca-director-of-technology-operations-washington-dc-hybrid-boardsource-washington</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/2f777f27404347a7a0fe644e2cc9f4ca-director-of-technology-operations-washington-dc-hybrid-boardsource-washington&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Development CoordinatorShalom BayitHybridBerkeley, CAFull TimeUSD $27 - $32 / hourPosted 12 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/12456ce9f0584e71a71093d43f301a5a-development-coordinator-shalom-bayit-berkeley</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/12456ce9f0584e71a71093d43f301a5a-development-coordinator-shalom-bayit-berkeley</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/12456ce9f0584e71a71093d43f301a5a-development-coordinator-shalom-bayit-berkeley&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Senior Residential AidePhipps NeighborhoodsOn-siteQueens County, NYFull TimeUSD $45,000 - $50,000 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/668186b136df4ba7af5f56323bdf7dc1-senior-residential-aide-phipps-neighborhoods-queens-county</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/668186b136df4ba7af5f56323bdf7dc1-senior-residential-aide-phipps-neighborhoods-queens-county</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/668186b136df4ba7af5f56323bdf7dc1-senior-residential-aide-phipps-neighborhoods-queens-county&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Full-time</category>
-      <category>Senior</category>
-    </item>
-    <item>
-      <title>Program Associate, Grantmaking OperationsInatai FoundationRemoteWashington, USFull TimeUSD $72,000 - $87,000 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/d0a0b790ef1b4ad9aa3fdae33e1f58a5-program-associate-grantmaking-operations-inatai-foundation-seattle</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/d0a0b790ef1b4ad9aa3fdae33e1f58a5-program-associate-grantmaking-operations-inatai-foundation-seattle</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/d0a0b790ef1b4ad9aa3fdae33e1f58a5-program-associate-grantmaking-operations-inatai-foundation-seattle&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Remote</category>
-      <category>Full-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Chief Advancement OfficerClassical KINGOn-siteSeattle, WAFull TimeUSD $180,000 - $200,000 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/56f96115ddfc430c87f23b295d4ec7d7-chief-advancement-officer-classical-king-seattle</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/56f96115ddfc430c87f23b295d4ec7d7-chief-advancement-officer-classical-king-seattle</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/56f96115ddfc430c87f23b295d4ec7d7-chief-advancement-officer-classical-king-seattle&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Full-time</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Director - New YorkThe Posse Foundation, Inc.HybridNew York, NYFull TimeUSD $115,000 - $125,000 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/8ddc10f09c2d4dcbb485cbfc9b3bcc25-director-new-york-the-posse-foundation-inc-new-york</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/8ddc10f09c2d4dcbb485cbfc9b3bcc25-director-new-york-the-posse-foundation-inc-new-york</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/8ddc10f09c2d4dcbb485cbfc9b3bcc25-director-new-york-the-posse-foundation-inc-new-york&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Director of Equity &amp; InclusionNorthwest HarvestHybridSeattle, WAFull TimeUSD $131,060 - $174,310 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/c144f0e665414fb5b2cbd7b3174ab413-director-of-equity-inclusion-northwest-harvest-seattle</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/c144f0e665414fb5b2cbd7b3174ab413-director-of-equity-inclusion-northwest-harvest-seattle</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/c144f0e665414fb5b2cbd7b3174ab413-director-of-equity-inclusion-northwest-harvest-seattle&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Leadership</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Associate Clinical Coordinator of the Family Support ProgramOUR HOUSE Grief Support CenterHybridLos Angeles, CAFull TimeUSD $65,000 - $75,000 / yearPosted 11 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/aab81c70efed47abb0812205f230cfd3-associate-clinical-coordinator-of-the-family-support-program-our-house-grief-support-center-los-angeles</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/aab81c70efed47abb0812205f230cfd3-associate-clinical-coordinator-of-the-family-support-program-our-house-grief-support-center-los-angeles</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/aab81c70efed47abb0812205f230cfd3-associate-clinical-coordinator-of-the-family-support-program-our-house-grief-support-center-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Grants &amp; Contracts Coordinator – Development/Administration WorkgroupLegal Aid Foundation of Los AngelesHybridLos Angeles, CAFull TimeUSD $70,500 - $90,000 / yearPosted 10 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/60c0b178d5334330a909aa550162102e-grants-contracts-coordinator-developmentadministration-workgroup-legal-aid-foundation-of-los-angeles-los-angeles</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/60c0b178d5334330a909aa550162102e-grants-contracts-coordinator-developmentadministration-workgroup-legal-aid-foundation-of-los-angeles-los-angeles</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/60c0b178d5334330a909aa550162102e-grants-contracts-coordinator-developmentadministration-workgroup-legal-aid-foundation-of-los-angeles-los-angeles&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Contract</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Coordinator, Development OperationsDC Public Education FundHybridWashington, DCFull TimeUSD $68,000 - $76,000 / yearPosted 9 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/623edf4500234f5285aec8ba5b962556-coordinator-development-operations-dc-public-education-fund-washington</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/623edf4500234f5285aec8ba5b962556-coordinator-development-operations-dc-public-education-fund-washington</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/623edf4500234f5285aec8ba5b962556-coordinator-development-operations-dc-public-education-fund-washington&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Community Lunch Kitchen Support Team MemberCommunity Lunch on Capitol HillOn-siteSeattle, WAPart TimeUSD $23 - $26 / hourPosted 9 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/7d46c963d95e49d2b94eb365b4e79b22-community-lunch-kitchen-support-team-member-community-lunch-on-capitol-hill-seattle</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/7d46c963d95e49d2b94eb365b4e79b22-community-lunch-kitchen-support-team-member-community-lunch-on-capitol-hill-seattle</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/7d46c963d95e49d2b94eb365b4e79b22-community-lunch-kitchen-support-team-member-community-lunch-on-capitol-hill-seattle&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Part-time</category>
-    </item>
-    <item>
-      <title>Individual Gifts Officer, ChicagoAnti-Defamation LeagueHybridChicago, ILFull TimePosted 9 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/e010445532914a658b6874ccd4da06e3-individual-gifts-officer-chicago-anti-defamation-league-chicago</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/e010445532914a658b6874ccd4da06e3-individual-gifts-officer-chicago-anti-defamation-league-chicago</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/e010445532914a658b6874ccd4da06e3-individual-gifts-officer-chicago-anti-defamation-league-chicago&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>RESIDENT DIRECTOR(S) A Transformative Leadership Opportunity!SIMSBURY ABC PROGRAMOn-siteSimsbury, CTFull TimePosted 8 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/34a5134201334b0c8e2621f244b6ee52-resident-directors-a-transformative-leadership-opportunity-simsbury-abc-program-simsbury</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/34a5134201334b0c8e2621f244b6ee52-resident-directors-a-transformative-leadership-opportunity-simsbury-abc-program-simsbury</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/34a5134201334b0c8e2621f244b6ee52-resident-directors-a-transformative-leadership-opportunity-simsbury-abc-program-simsbury&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Full-time</category>
-      <category>Senior</category>
-      <category>Leadership</category>
-      <category>Relevance: High</category>
-    </item>
-    <item>
-      <title>Senior Site Success Manager.City BureauHybridChicago, ILFull TimeUSD $80,000 / yearPosted 7 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/bc64f303b38a470c99a056c26147ac9e-senior-site-success-manager-city-bureau-chicago</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/bc64f303b38a470c99a056c26147ac9e-senior-site-success-manager-city-bureau-chicago</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/bc64f303b38a470c99a056c26147ac9e-senior-site-success-manager-city-bureau-chicago&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>Hybrid</category>
-      <category>Full-time</category>
-      <category>Senior</category>
-      <category>Relevance: Medium</category>
-    </item>
-    <item>
-      <title>Capital One - BC Corporate Citizenship</title>
-      <link>https://www.capitalonecareers.com/job/mclean/senior-associate-community-impact-and-investment/1732/93197137264</link>
-      <guid isPermaLink="true">https://www.capitalonecareers.com/job/mclean/senior-associate-community-impact-and-investment/1732/93197137264</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.capitalonecareers.com/job/mclean/senior-associate-community-impact-and-investment/1732/93197137264&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Biogen - BC Corporate Citizenship</title>
-      <link>https://biibhr.wd3.myworkdayjobs.com/external/job/Cambridge-MA/Sr-Associate--CoLab-and-Community-Relations_REQ22931</link>
-      <guid isPermaLink="true">https://biibhr.wd3.myworkdayjobs.com/external/job/Cambridge-MA/Sr-Associate--CoLab-and-Community-Relations_REQ22931</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">BC Corporate Citizenship</source>
-      <author>BC Corporate Citizenship</author>
-      <dc:creator>BC Corporate Citizenship</dc:creator>
-      <description>BC Corporate Citizenship</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 BC Corporate Citizenship&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://biibhr.wd3.myworkdayjobs.com/external/job/Cambridge-MA/Sr-Associate--CoLab-and-Community-Relations_REQ22931&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>BC Corporate Citizenship</category>
-    </item>
-    <item>
-      <title>Senior Partnerships Manager (Central Texas)Skillpoint AllianceOn-siteAustin, TXFull TimeUSD $68,000 - $75,000 / yearPosted 6 hours ago - Idealist</title>
-      <link>https://www.idealist.org/en/nonprofit-job/b8f95241458a47a5811329db2954b4c3-senior-partnerships-manager-central-texas-skillpoint-alliance-austin</link>
-      <guid isPermaLink="true">https://www.idealist.org/en/nonprofit-job/b8f95241458a47a5811329db2954b4c3-senior-partnerships-manager-central-texas-skillpoint-alliance-austin</guid>
-      <source url="https://zoellerk.github.io/Job-search/feed.xml">Idealist</source>
-      <author>Idealist</author>
-      <dc:creator>Idealist</dc:creator>
-      <description>Idealist</description>
-      <content:encoded>&lt;div style='background: #667eea; color: white; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 14px;'&gt;🏢 Idealist&lt;/div&gt;&lt;div style='margin-top: 24px; text-align: center; padding: 16px; background: #f8f9fa; border-radius: 4px;'&gt;&lt;a href=&quot;https://www.idealist.org/en/nonprofit-job/b8f95241458a47a5811329db2954b4c3-senior-partnerships-manager-central-texas-skillpoint-alliance-austin&quot; style='background: #667eea; color: white; padding: 10px 24px; text-decoration: none; border-radius: 4px; display: inline-block; font-weight: 600;'&gt;Apply for this Position&lt;/a&gt;&lt;/div&gt;</content:encoded>
-      <pubDate>Tue, 31 Mar 2026 09:58:40 +0000</pubDate>
-      <category>Idealist</category>
-      <category>On-site</category>
-      <category>Full-time</category>
-      <category>Senior</category>
-      <category>Relevance: Medium</category>
     </item>
   </channel>
 </rss>
