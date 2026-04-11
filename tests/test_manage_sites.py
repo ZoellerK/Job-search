@@ -376,6 +376,54 @@ class TestClearProcessed:
         assert candidates[0]['name'] == "Org C"
 
 
+class TestRemoveSite:
+    def test_remove_existing_site(self, site_env):
+        ret = manage_sites.cmd_remove(["Test Foundation"])
+        assert ret == 0
+        with open(site_env['sites_csv']) as f:
+            content = f.read()
+        assert "Test Foundation" not in content
+        rejected = site_env['rejected_txt'].read_text()
+        assert "Test Foundation" in rejected
+        assert "https://test.org/careers" in rejected
+
+    def test_remove_case_insensitive(self, site_env):
+        ret = manage_sites.cmd_remove(["test foundation"])
+        assert ret == 0
+        with open(site_env['sites_csv']) as f:
+            content = f.read()
+        assert "Test Foundation" not in content
+
+    def test_remove_nonexistent_fails(self, site_env):
+        ret = manage_sites.cmd_remove(["Nonexistent Org"])
+        assert ret == 1
+        # sites.csv should be untouched
+        with open(site_env['sites_csv']) as f:
+            content = f.read()
+        assert "Test Foundation" in content
+
+    def test_remove_no_reject_skips_rejected_file(self, site_env):
+        original_rejected = site_env['rejected_txt'].read_text()
+        ret = manage_sites.cmd_remove(["Test Foundation", "--no-reject"])
+        assert ret == 0
+        with open(site_env['sites_csv']) as f:
+            content = f.read()
+        assert "Test Foundation" not in content
+        assert site_env['rejected_txt'].read_text() == original_rejected
+
+    def test_remove_preserves_other_sites(self, site_env):
+        # Add a second site
+        with open(site_env['sites_csv'], 'a') as f:
+            f.write("Other Org,https://other.org/jobs,yes,,no\n")
+        ret = manage_sites.cmd_remove(["Test Foundation"])
+        assert ret == 0
+        with open(site_env['sites_csv']) as f:
+            content = f.read()
+        assert "Test Foundation" not in content
+        assert "Other Org" in content
+        assert "https://other.org/jobs" in content
+
+
 class TestURLDedup:
     """Test that URL-based dedup works in check_duplicates.py too."""
 

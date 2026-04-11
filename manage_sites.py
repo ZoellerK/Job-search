@@ -653,6 +653,49 @@ def cmd_reject(args):
     return 0
 
 
+def cmd_remove(args):
+    """Remove a site from sites.csv and add it to rejected_sites.txt."""
+    if not args:
+        print("Usage: python manage_sites.py remove <name> [--no-reject]")
+        return 1
+
+    name = args[0]
+    add_to_rejected = '--no-reject' not in args
+
+    if not os.path.exists(SITES_FILE):
+        print(f"Error: {SITES_FILE} not found")
+        return 1
+
+    with open(SITES_FILE, 'r', newline='') as f:
+        reader = csv.DictReader(f)
+        fieldnames = reader.fieldnames
+        rows = list(reader)
+
+    name_lower = name.lower()
+    matches = [r for r in rows if r.get('site_name', '').lower() == name_lower]
+    if not matches:
+        print(f"Error: no site named '{name}' found in {SITES_FILE}")
+        return 1
+    if len(matches) > 1:
+        print(f"Warning: {len(matches)} rows match '{name}' - removing all")
+
+    kept = [r for r in rows if r.get('site_name', '').lower() != name_lower]
+
+    with open(SITES_FILE, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator='\n')
+        writer.writeheader()
+        writer.writerows(kept)
+
+    if add_to_rejected:
+        for m in matches:
+            _append_to_rejected(m['site_name'], m.get('url', ''))
+
+    print(f"Removed {len(matches)} row(s) for '{name}' from {SITES_FILE}")
+    if add_to_rejected:
+        print(f"Added to {REJECTED_FILE} to prevent re-addition")
+    return 0
+
+
 def cmd_status(args):
     """Show candidate counts by status."""
     candidates = _read_candidates()
@@ -823,6 +866,7 @@ COMMANDS = {
     'process': cmd_process,
     'approve': cmd_approve,
     'reject': cmd_reject,
+    'remove': cmd_remove,
     'status': cmd_status,
     'patterns': cmd_patterns,
     'clear': cmd_clear_processed,
@@ -850,6 +894,8 @@ def main():
         print("      Quick-approve candidates by ID number")
         print("  reject <id> [id ...]")
         print("      Quick-reject candidates by ID number")
+        print("  remove <name> [--no-reject]")
+        print("      Remove a site from sites.csv (adds to rejected_sites.txt unless --no-reject)")
         print()
         print("Analysis:")
         print("  status    Show candidate counts by status")
