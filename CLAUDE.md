@@ -11,6 +11,9 @@ job_aggregator.py    — Main orchestrator + CLI (entry point)
 scraper.py           — HTTP scraping (requests + optional Playwright)
 ats_parsers.py       — Dedicated parsers for Greenhouse, Lever, Workable, Teamtailor, iCIMS, Taleo, Workday, ADP, ApplicantPro
 salary_extractor.py  — Regex-based salary extraction from description text
+job_filter.py        — Heuristic filter rejecting non-job pages (nav links, donate pages, articles)
+ats_sweep.py         — Google Custom Search API sweep across ATS platforms (needs GOOGLE_PSE_API_KEY/GOOGLE_PSE_CX env)
+digest_generator.py  — Daily markdown digest + optional ntfy.sh push (NTFY_TOPIC env)
 database.py          — SQLite with jobs, site_parsers, site_health tables
 feed_generator.py    — RSS 2.0 + HTML preview (Feedly-optimized)
 manage_sites.py      — Site discovery/staging/review pipeline (replaces manual CSV editing)
@@ -39,8 +42,10 @@ candidates.csv       — Staging area for org candidates pending review
 ## Common Tasks
 
 ```bash
-python job_aggregator.py update     # Full cycle: scrape + feed + preview
+python job_aggregator.py update     # Full cycle: scrape + sweep + feed + preview
 python job_aggregator.py scrape     # Scrape only
+python job_aggregator.py sweep      # Google ATS platform sweep only
+python job_aggregator.py digest 24  # Write digest.md of new jobs (last N hours)
 python job_aggregator.py feed       # Regenerate feed from DB
 python job_aggregator.py health     # Site health summary
 python job_aggregator.py stale      # Show stale job listings
@@ -58,6 +63,8 @@ All in `config.json`:
 - `feed.relevance_keywords` — custom high/medium keyword lists for scoring
 - `feed.include_summary` — include scrape summary in feed (default true)
 - `output.max_items` — max jobs in RSS feed (default 100)
+- `sweep.queries` / `sweep.platforms` — keyword groups and ATS sites for the Google sweep
+- `sweep.enabled` — toggle the sweep (also requires env credentials; see PUSH_SETUP.md)
 
 ## ATS Parsers
 

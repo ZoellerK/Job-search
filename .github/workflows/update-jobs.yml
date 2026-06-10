@@ -17,6 +17,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 jobs:
   update-jobs:
@@ -42,8 +43,31 @@ jobs:
 
     - name: Run job aggregator
       timeout-minutes: 30
+      env:
+        # ATS-wide Google sweep — runs only when these secrets exist
+        GOOGLE_PSE_API_KEY: ${{ secrets.GOOGLE_PSE_API_KEY }}
+        GOOGLE_PSE_CX: ${{ secrets.GOOGLE_PSE_CX }}
       run: |
         python job_aggregator.py update
+
+    - name: Generate daily digest
+      env:
+        # Optional: direct phone push via ntfy.sh
+        NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+      run: |
+        # 25h window so the daily 9 AM run never misses jobs from cron jitter
+        python job_aggregator.py digest 25
+
+    - name: Post digest as GitHub issue
+      if: ${{ hashFiles('digest.md') != '' }}
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh label create digest --color BFD4F2 --description "Daily job digest" --force || true
+        gh issue create \
+          --title "Job digest — $(date -u '+%Y-%m-%d')" \
+          --body-file digest.md \
+          --label digest
 
     - name: Commit and push changes
       run: |

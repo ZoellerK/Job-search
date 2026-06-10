@@ -7,9 +7,10 @@ Scrapes job postings from multiple sources and generates RSS feed
 import csv
 import json
 import logging
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict
 
 from database import JobDatabase
@@ -17,6 +18,9 @@ from scraper import JobScraper
 from feed_generator import RSSFeedGenerator
 from salary_extractor import extract_salary
 from ats_parsers import detect_ats, parse_ats_page
+from job_filter import filter_jobs
+from digest_generator import build_digest, build_ntfy_message, send_ntfy
+from ats_sweep import ATSSweeper
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +108,21 @@ class JobAggregator:
             relevance_keywords=self.config['feed'].get('relevance_keywords'),
         )
 
+        # ATS-wide Google sweep — only active when API credentials are set
+        self.sweeper = None
+        sweep_cfg = self.config.get('sweep', {})
+        if sweep_cfg.get('enabled'):
+            api_key = os.environ.get('GOOGLE_PSE_API_KEY')
+            cx = os.environ.get('GOOGLE_PSE_CX')
+            if api_key and cx:
+                self.sweeper = ATSSweeper(
+                    api_key, cx, sweep_cfg,
+                    timeout=self.config['scraping']['timeout'],
+                )
+            else:
+                logger.info(
+                    "ATS sweep skipped: GOOGLE_PSE_API_KEY / GOOGLE_PSE_CX not set")
+
     def load_sites(self) -> List[Dict]:
         sites = []
         required_columns = {'site_name', 'url', 'active'}
@@ -171,6 +190,13 @@ class JobAggregator:
             if scrape_details and jobs:
                 logger.info("Scraping detail pages for %s (%d jobs)", site_name, min(len(jobs), 20))
                 jobs = self.scraper.enrich_jobs_with_details(jobs, max_jobs=20)
+
+            # Drop obvious non-job pages (nav links, donate pages, articles)
+            jobs, junk = filter_jobs(jobs)
+            if junk:
+                logger.info("%s: filtered %d non-job links", site_name, len(junk))
+                for j in junk:
+                    logger.debug("  filtered: %r (%s)", j.get('title'), j['filter_reason'])
 
             # Extract salary from description text when no explicit salary field
             for job in jobs:
@@ -312,11 +338,76 @@ class JobAggregator:
             'site_results': site_results
         }
 
+    def _get_filtered_jobs(self, limit: int) -> List[Dict]:
+        """Recent jobs from the DB with junk and stale entries removed."""
+        # Over-fetch so junk already stored in the DB doesn't shrink output
+        jobs = self.db.get_recent_jobs(limit=limit * 3)
+        jobs = [j for j in jobs if not j.get('stale')]
+        jobs, junk = filter_jobs(jobs)
+        if junk:
+            logger.info("Excluded %d non-job entries from output", len(junk))
+        return jobs[:limit]
+
+    def run_sweep(self) -> Dict:
+        """Run the Google ATS sweep and store new postings.
+
+        Returns a dict shaped like a scrape_site result so it can be
+        appended to the scrape summary.
+        """
+        result = {
+            'site_name': 'ATS Sweep (Google)',
+            'success': True,
+            'new_jobs': 0,
+            'total_found': 0,
+            'dedup_skipped': 0,
+            'error': None,
+        }
+        if not self.sweeper:
+            return result
+
+        try:
+            jobs = self.sweeper.sweep()
+            result['total_found'] = len(jobs)
+
+            jobs, junk = filter_jobs(jobs)
+            if junk:
+                logger.info("Sweep: filtered %d non-job results", len(junk))
+
+            for job in jobs:
+                existing = self.db.find_similar_job(job['title'], job['site_name'])
+                if existing:
+                    result['dedup_skipped'] += 1
+                    continue
+                added = self.db.add_job(
+                    site_name=job['site_name'],
+                    url=job['url'],
+                    title=job['title'],
+                    description=job.get('description'),
+                    keywords=job.get('keywords'),
+                )
+                if added:
+                    result['new_jobs'] += 1
+
+            self.db.mark_jobs_seen([j['url'] for j in jobs])
+            self.db.record_scrape_result(
+                site_name='ATS Sweep (Google)', success=True, jobs_found=len(jobs))
+            logger.info(
+                "Sweep: %d new jobs (%d results, %d dedup-skipped)",
+                result['new_jobs'], result['total_found'], result['dedup_skipped'])
+        except Exception as e:
+            logger.error("ATS sweep failed: %s", e, exc_info=True)
+            self.db.record_scrape_result(
+                site_name='ATS Sweep (Google)', success=False, error_message=str(e))
+            result['success'] = False
+            result['error'] = str(e)
+
+        return result
+
     def generate_feed(self, max_items: int = None) -> str:
         if max_items is None:
             max_items = self.config['output']['max_items']
 
-        jobs = self.db.get_recent_jobs(limit=max_items)
+        jobs = self._get_filtered_jobs(max_items)
         logger.info("Generating RSS feed with %d jobs", len(jobs))
 
         output_file = self.config['output']['feed_file']
@@ -326,7 +417,7 @@ class JobAggregator:
         return output_file
 
     def generate_preview(self) -> str:
-        jobs = self.db.get_recent_jobs(limit=50)
+        jobs = self._get_filtered_jobs(50)
         output_file = "preview.html"
         self.feed_gen.generate_html_preview(jobs, output_file)
         logger.info("HTML preview saved to %s", output_file)
@@ -376,6 +467,16 @@ class JobAggregator:
         # Scrape all sites
         scrape_results = self.scrape_all()
 
+        # Platform-wide ATS sweep (when configured) feeds the same summary
+        if self.sweeper:
+            sweep_result = self.run_sweep()
+            scrape_results['site_results'].append(sweep_result)
+            scrape_results['total_new_jobs'] += sweep_result['new_jobs']
+            if sweep_result['success']:
+                scrape_results['successful_sites'] += 1
+            else:
+                scrape_results['failed_sites'] += 1
+
         # Check site health — alerts go into the feed summary
         health_alerts = self.check_site_health()
 
@@ -394,10 +495,7 @@ class JobAggregator:
                                     health_alerts: List[Dict] = None):
         """Generate RSS feed with optional scraping summary and health alerts."""
         max_items = self.config['output']['max_items']
-        jobs = self.db.get_recent_jobs(limit=max_items)
-
-        # Exclude stale jobs from the feed
-        jobs = [j for j in jobs if not j.get('stale')]
+        jobs = self._get_filtered_jobs(max_items)
 
         stale_count = len(self.db.get_stale_jobs())
         include_summary = self.config['feed'].get('include_summary', True)
@@ -415,6 +513,46 @@ class JobAggregator:
         output_file = self.config['output']['feed_file']
         self.feed_gen.generate_feed(jobs, output_file)
         logger.info("RSS feed saved to %s", output_file)
+
+    def generate_digest(self, hours: int = 24, output_file: str = "digest.md") -> int:
+        """Build a markdown digest of new jobs and optionally push via ntfy.
+
+        Writes output_file only when there are new (filtered) jobs, so the
+        CI workflow can use the file's existence as its trigger. Returns
+        the number of jobs in the digest.
+        """
+        since = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+        jobs = self.db.get_new_jobs_since(since)
+        jobs = [j for j in jobs if not j.get('stale')]
+        jobs, junk = filter_jobs(jobs)
+
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+        if not jobs:
+            logger.info("No new jobs in the last %dh — no digest generated", hours)
+            return 0
+
+        dashboard_url = self.config['feed']['link'].rsplit('/', 1)[0] + '/'
+        digest_md = build_digest(
+            jobs, hours=hours, filtered_count=len(junk),
+            dashboard_url=dashboard_url,
+            score_fn=self.feed_gen._score_relevance,
+        )
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(digest_md)
+        logger.info("Digest with %d jobs saved to %s (%d junk filtered)",
+                    len(jobs), output_file, len(junk))
+
+        ntfy_topic = os.environ.get('NTFY_TOPIC')
+        if ntfy_topic:
+            send_ntfy(
+                ntfy_topic,
+                title=f"{len(jobs)} new job{'s' if len(jobs) != 1 else ''} found",
+                message=build_ntfy_message(jobs),
+                click_url=dashboard_url,
+            )
+        return len(jobs)
 
     def export(self, output_file: str, fmt: str = "csv",
                limit: int = None, site_name: str = None):
@@ -486,6 +624,22 @@ def main():
                 if len(sys.argv) > 3:
                     output = sys.argv[3]
                 aggregator.export(output, fmt=fmt)
+            elif command == "sweep":
+                if not aggregator.sweeper:
+                    logger.error(
+                        "Sweep not configured: set GOOGLE_PSE_API_KEY and "
+                        "GOOGLE_PSE_CX environment variables")
+                    sys.exit(1)
+                aggregator.run_sweep()
+            elif command == "digest":
+                hours = 24
+                if len(sys.argv) > 2:
+                    try:
+                        hours = int(sys.argv[2])
+                    except ValueError:
+                        logger.error("Invalid hours value: %s", sys.argv[2])
+                        sys.exit(1)
+                aggregator.generate_digest(hours=hours)
             elif command == "stale":
                 stale_days = aggregator.config.get('cleanup', {}).get('stale_after_days', 30)
                 stale_jobs = aggregator.db.get_stale_jobs()
@@ -502,7 +656,9 @@ def main():
                 print("  feed    - Generate RSS feed from database")
                 print("  preview - Generate HTML preview")
                 print("  stats   - Show database statistics")
-                print("  update  - Run full update (scrape + feed + preview)")
+                print("  update  - Run full update (scrape + sweep + feed + preview)")
+                print("  sweep   - Run Google ATS platform sweep only")
+                print("  digest [hours] - Write markdown digest of new jobs")
                 print("  health  - Show site health summary")
                 print("  stale   - Show stale job listings")
                 print("  export [csv|json] [filename] - Export jobs")

@@ -28,5 +28,46 @@
   "cleanup": {
     "days_to_keep": 90,
     "stale_after_days": 30
+  },
+  "sweep": {
+    "enabled": true,
+    "date_restrict": "d2",
+    "results_per_query": 10,
+    "max_api_calls": 90,
+    "queries": {
+      "Policy & International": [
+        "Foreign Policy", "International Relations", "International Policy",
+        "International Affairs", "International Development", "Global Policy",
+        "Public Policy", "Government Affairs", "Government Relations",
+        "Public Affairs", "Global Engagement"
+      ],
+      "Partnerships & Social Impact": [
+        "Program Officer", "Stakeholder Engagement", "External Affairs",
+        "Corporate Affairs", "Social Responsibility", "Corporate Citizenship",
+        "Corporate Philanthropy", "Corporate Foundation", "Corporate Giving",
+        "Social Impact", "Social Good"
+      ],
+      "Democracy & Transatlantic": [
+        "Pro-democracy", "Democratic backsliding", "Democratic resilience",
+        "Democracy promotion", "Democracy", "Election integrity", "Voting rights",
+        "Authoritarianism", "Anti-authoritarian", "Transatlantic", "Liberal democracy",
+        "Civic infrastructure"
+      ]
+    },
+    "platforms": [
+      {"name": "Greenhouse", "site": "greenhouse.io"},
+      {"name": "Lever", "site": "jobs.lever.co"},
+      {"name": "Ashby", "site": "jobs.ashbyhq.com"},
+      {"name": "Workable", "site": "apply.workable.com"},
+      {"name": "SmartRecruiters", "site": "jobs.smartrecruiters.com", "exclude": ["Domino's", "AccorHotels"]},
+      {"name": "Workday", "site": "myworkdayjobs.com"},
+      {"name": "iCIMS", "site": "icims.com"},
+      {"name": "Paylocity", "site": "paylocity.com"},
+      {"name": "UKG/UltiPro", "site": "ultipro.com"},
+      {"name": "Jobvite", "site": "jobs.jobvite.com"},
+      {"name": "NEOGOV", "site": "governmentjobs.com"},
+      {"name": "ApplyToJob", "site": "applytojob.com"},
+      {"name": "Indeed", "site": "www.indeed.com/viewjob"}
+    ]
   }
 }

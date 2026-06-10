@@ -4,6 +4,7 @@
 # Generated files (but allow docs/ folder for GitHub Pages)
 /feed.xml
 /preview.html
+/digest.md
 
 # Python
 __pycache__/
